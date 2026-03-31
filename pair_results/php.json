@@ -1,0 +1,90 @@
+[
+  {
+    "year": 2025,
+    "podium": [
+      {"rank": 1, "players": ["Mateja Iveta", "Neven Trgovec"]},
+      {"rank": 2, "players": ["Sara Librenjak", "Krešimir Sučević Međeral"]},
+      {"rank": 3, "players": ["Karla Knežević", "Ivan Jurić"]}
+    ]
+  },
+  {
+    "year": 2024,
+    "podium": [
+      {"rank": 1, "players": ["Mateja Iveta", "Neven Trgovec"]},
+      {"rank": 2, "players": ["Helena Buranji", "Krešimir Sučević Međeral"]},
+      {"rank": 3, "players": ["Ana Žele", "Mladen Vukorepa"]}
+    ]
+  },
+  {
+    "year": 2023,
+    "podium": [
+      {"rank": 1, "players": ["Ana Pašalić", "Krešimir Sučević Međeral"]},
+      {"rank": 2, "players": ["Marijana Jakovašić", "Dražen Nemet"]},
+      {"rank": 3, "players": ["Morana Zibar", "Nikola Lazić"]}
+    ]
+  },
+  {
+    "year": 2022,
+    "podium": [
+      {"rank": 1, "players": ["Sara Librenjak", "Krešimir Sučević Međeral"]},
+      {"rank": 2, "players": ["Maja Rogulj", "Krešimir Štimac"]},
+      {"rank": 3, "players": ["Morana Zibar", "Nikola Lazić"]}
+    ]
+  },
+  {
+    "year": 2021,
+    "podium": [
+      {"rank": 1, "players": ["Sara Librenjak", "Krešimir Sučević Međeral"]},
+      {"rank": 2, "players": ["Maja Rogulj", "Krešimir Štimac"]},
+      {"rank": 3, "players": ["Marijana Jakovašić", "Dražen Nemet"]}
+    ]
+  },
+  {
+    "year": 2020,
+    "podium": [
+      {"rank": 1, "players": ["Maja Rogulj", "Krešimir Štimac"]},
+      {"rank": 2, "players": ["Marijana Jakovašić", "Dražen Nemet"]},
+      {"rank": 3, "players": ["Ivana Bašić", "Ivan Jurić"]}
+    ]
+  },
+  {
+    "year": 2019,
+    "podium": [
+      {"rank": 1, "players": ["Marijana Jakovašić", "Mladen Vukorepa"]},
+      {"rank": 2, "players": ["Ena Šarić", "Perica Živanović"]},
+      {"rank": 3, "players": ["Maja Rogulj", "Krešimir Štimac"]}
+    ]
+  },
+  {
+    "year": 2018,
+    "podium": [
+      {"rank": 1, "players": ["Ena Šarić", "Perica Živanović"]},
+      {"rank": 2, "players": ["Marijana Jakovašić", "Dean Kotiga"]},
+      {"rank": 3, "players": ["Maja Rogulj", "Krešimir Štimac"]}
+    ]
+  },
+  {
+    "year": 2017,
+    "podium": [
+      {"rank": 1, "players": ["Marijana Jakovašić", "Dean Kotiga"]},
+      {"rank": 2, "players": ["Petra Lypolt", "Krešimir Sučević Međeral"]},
+      {"rank": 3, "players": ["Lana Molvarec", "Perica Živanović"]}
+    ]
+  },
+  {
+    "year": 2016,
+    "podium": [
+      {"rank": 1, "players": ["Maja Rogulj", "Krešimir Štimac"]},
+      {"rank": 2, "players": ["Ena Šarić", "Ivan Vlahek"]},
+      {"rank": 3, "players": ["Morana Zibar", "Nikola Lazić"]}
+    ]
+  },
+  {
+    "year": 2015,
+    "podium": [
+      {"rank": 1, "players": ["Dorjana Širola", "Dean Kotiga"]},
+      {"rank": 2, "players": ["Lana Molvarec", "Mladen Vukorepa"]},
+      {"rank": 3, "players": ["Maja Rogulj", "Krešimir Štimac"]}
+    ]
+  }
+]

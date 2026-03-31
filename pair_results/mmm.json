@@ -1,0 +1,74 @@
+[
+  {
+    "year": 2017,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Ivan Andonov", "Neven Milijić"]},
+      {"rank": 3, "players": ["Krešimir Štimac", "Mladen Vukorepa"]}
+    ]
+  },
+  {
+    "year": 2018,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Lovro Ljubičić", "Ivan Vlahek"]},
+      {"rank": 3, "players": ["Neven Milijić", "Ivan Jurić"]}
+    ]
+  },
+  {
+    "year": 2019,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Dražen Nemet", "Marijana Jakovašić"]},
+      {"rank": 3, "players": ["Ivan Jurić", "Lovro Jurišić"]}
+    ]
+  },
+  {
+    "year": 2020,
+    "podium": [
+      {"rank": 1, "players": ["Karlo Plazina", "Mladen Vukorepa"]},
+      {"rank": 2, "players": ["Krešimir Sučević Međeral", "Mario Kovač"]},
+      {"rank": 3, "players": ["Tomislav Bleiziffer", "Domagoj Pozderac"]}
+    ]
+  },
+  {
+    "year": 2021,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Ivan Vulić", "Neven Trgovec"]},
+      {"rank": 3, "players": ["Domagoj Pozderac", "Tomislav Bleiziffer"]}
+    ]
+  },
+  {
+    "year": 2022,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Ivan Jurić", "Lovro Jurišić"]},
+      {"rank": 3, "players": ["Neven Trgovec", "Ivan Vulić"]}
+    ]
+  },
+  {
+    "year": 2023,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Lovro Jurišić", "Ivan Jurić"]},
+      {"rank": 3, "players": ["Domagoj Pozderac", "Neven Trgovec"]}
+    ]
+  },
+  {
+    "year": 2024,
+    "podium": [
+      {"rank": 1, "players": ["Sven Marcelić", "Dragan Gulam"]},
+      {"rank": 2, "players": ["Domagoj Pozderac", "Neven Trgovec"]},
+      {"rank": 3, "players": ["Željko Pavić", "Ante Uzelac"]}
+    ]
+  },
+  {
+    "year": 2025,
+    "podium": [
+      {"rank": 1, "players": ["Domagoj Pozderac", "Neven Trgovec"]},
+      {"rank": 2, "players": ["Ivan Jurić", "Lovro Jurišić"]},
+      {"rank": 3, "players": ["Mia Miošić", "Lucian Šošić"]}
+    ]
+  }
+]

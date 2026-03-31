@@ -1,0 +1,90 @@
+[
+  {
+    "year": 2025,
+    "podium": [
+      {"rank": 1, "team": "Crni sljezov kolačić", "members": ["Šime Gverić", "Mateja Iveta", "Karlo Plazina", "Krešimir Štimac", "Neven Trgovec"]},
+      {"rank": 2, "team": "Perlice", "members": ["Lukša Benić", "Dean Kotiga", "Neven Trgovec", "Toni Velić", "Elio Verbanac", "Mladen Vukorepa"]},
+      {"rank": 3, "team": "KviZDe", "members": ["Lovro Jurišić", "Duško Lakić", "Sven Marcelić", "Paško Sorić", "Roko Sven Surać"]}
+    ]
+  },
+  {
+    "year": 2024,
+    "podium": [
+      {"rank": 1, "team": "Perlice", "members": ["Lukša Benić", "Dean Kotiga", "Neven Trgovec", "Toni Velić", "Mladen Vukorepa"]},
+      {"rank": 2, "team": "I tim", "members": ["Tomislav Berić", "Krešimir Sučević Međeral", "Rudi Mrazović", "Ante Spahija", "Josip Zaninović"]},
+      {"rank": 3, "team": "KviZDe", "members": ["Dragan Gulam", "Ivan Jurić", "Lovro Jurišić", "Duško Lakić", "Roko Sven Surać"]}
+    ]
+  },
+  {
+    "year": 2023,
+    "podium": [
+      {"rank": 1, "team": "Prvoplasirani", "members": ["Lukša Benić", "Dean Kotiga", "Nikola Pezić", "Neven Trgovec", "Mladen Vukorepa"]},
+      {"rank": 2, "team": "Kraken Mare", "members": ["Borko Barić", "Šime Gverić", "Josip Kelava", "Dražen Nemet", "Ana Žele"]},
+      {"rank": 3, "team": "KviZDe", "members": ["Dragan Gulam", "Ivan Jurić", "Lovro Jurišić", "Duško Lakić", "Roko Sven Surać"]}
+    ]
+  },
+  {
+    "year": 2022,
+    "podium": [
+      {"rank": 1, "team": "Perlice", "members": ["Lukša Benić", "Nikola Pezić", "Neven Trgovec", "Toni Velić", "Mladen Vukorepa"]},
+      {"rank": 2, "team": "KviZDe", "members": ["Dragan Gulam", "Ivan Jurić", "Lovro Jurišić", "Duško Lakić", "Roko Sven Surać"]},
+      {"rank": 3, "team": "TBA", "members": ["Fabijan Čorak", "Šime Gverić", "Lovro Marinović", "Rudi Mrazović", "Stipe Vukšić"]}
+    ]
+  },
+  {
+    "year": 2021,
+    "podium": [
+      {"rank": 1, "team": "Perlice", "members": ["Dean Kotiga", "Nikola Pezić", "Neven Trgovec", "Toni Velić", "Mladen Vukorepa"]},
+      {"rank": 2, "team": "A Tim", "members": ["Krešimir Sučević Međeral", "Rudi Mrazović", "Marko Ožegović", "Maja Rogulj", "Krešimir Štimac"]},
+      {"rank": 3, "team": "Ugroze", "members": ["Robert Cerović", "Ernad Grubišić", "Vedran Kos", "Nikola Lazić", "Perica Živanović"]}
+    ]
+  },
+  {
+    "year": 2019,
+    "podium": [
+      {"rank": 1, "team": "Perlice", "members": ["Lukša Benić", "Dean Kotiga", "Nikola Pezić", "Neven Trgovec", "Mladen Vukorepa"]},
+      {"rank": 2, "team": "K.u.K. Improvisatoren", "members": ["Tomislav Berić", "Kristo Kristić", "Krešimir Sučević Međeral", "Maja Rogulj", "Krešimir Štimac"]},
+      {"rank": 3, "team": "Vječni sjaj nepobjedivog Kuma", "members": ["Šime Gverić", "Ivan Jurić", "Karlo Plazina", "Ivan Vulić", "Perica Živanović"]}
+    ]
+  },
+  {
+    "year": 2018,
+    "podium": [
+      {"rank": 1, "team": "K.u.K. Improvisatoren", "members": ["Kristo Kristić", "Krešimir Sučević Međeral", "Marko Ožegović", "Maja Rogulj", "Krešimir Štimac"]},
+      {"rank": 2, "team": "Perlice", "members": ["Tomislav Ćurin", "Dean Kotiga", "Nikola Pezić", "Neven Trgovec", "Mladen Vukorepa"]},
+      {"rank": 3, "team": "Kumova slama", "members": ["Ivan Jurić", "Lovro Ljubičić", "Ena Šarić", "Ivan Šunde", "Perica Živanović"]}
+    ]
+  },
+  {
+    "year": 2017,
+    "podium": [
+      {"rank": 1, "team": "Kumova slama", "members": ["Ivan Jurić", "Neven Milijić", "Ena Šarić", "Ivan Vlahek", "Perica Živanović"]},
+      {"rank": 2, "team": "K.u.K. Improvisatoren", "members": ["Krešimir Sučević Međeral", "Rudi Mrazović", "Marko Ožegović", "Maja Rogulj", "Krešimir Štimac"]},
+      {"rank": 3, "team": "Perlice", "members": ["Lukša Benić", "Dean Kotiga", "Nikola Pezić", "Neven Trgovec", "Mladen Vukorepa"]}
+    ]
+  },
+  {
+    "year": 2016,
+    "podium": [
+      {"rank": 1, "team": "Perlice", "members": ["Lukša Benić", "Tomislav Ćurin", "Dean Kotiga", "Nikola Pezić", "Mladen Vukorepa"]},
+      {"rank": 2, "team": "Kraljevina Srba, Hrvata i patuljaka", "members": ["Ivan Andonov", "Mario Kovač", "Žarko Stevanović", "Ena Šarić", "Ivan Vlahek"]},
+      {"rank": 3, "team": "K.u.K. Improvisatoren", "members": ["Daniel Letica", "Krešimir Sučević Međeral", "Marko Ožegović", "Maja Rogulj", "Krešimir Štimac"]}
+    ]
+  },
+  {
+    "year": 2015,
+    "podium": [
+      {"rank": 1, "team": "Perlice", "members": ["Tomislav Ćurin", "Dean Kotiga", "Nikola Pezić", "Toni Velić", "Mladen Vukorepa"]},
+      {"rank": 2, "team": "Mlađi referenti", "members": ["Ernad Grubišić", "Vedran Kos", "Nikola Lazić", "Neven Milijić", "David Rajlić"]},
+      {"rank": 3, "team": "Improvizatori", "members": ["Nikola Badrov", "Daniel Letica", "Marko Ožegović", "Mak Vujanović", "Krunoslav Vukelić"]}
+    ]
+  },
+  {
+    "year": 2014,
+    "podium": [
+      {"rank": 1, "team": "Belzebube", "members": ["Petra Lypolt", "Kristo Kristić", "Ena Šarić", "Ivan Vlahek"]},
+      {"rank": 2, "team": "Perlice", "members": ["Lukša Benić", "Dean Kotiga", "Nikola Pezić", "Mladen Vukorepa"]},
+      {"rank": 3, "team": "RiZvan Paša", "members": ["Alex Humski", "Lucijan Kostrenčić", "Božidar Marjanović", "Dorjana Širola"]}
+    ]
+  }
+]

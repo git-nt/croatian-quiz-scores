@@ -1,0 +1,18 @@
+[
+  {
+    "year": 2024,
+    "podium": [
+      {"rank": 1, "team": "kbc sir", "members": ["Šime Gverić", "Mateja Iveta", "Domagoj Pozderac", "Neven Trgovec"]},
+      {"rank": 2, "team": "KviZDe", "members": ["Lovro Jurišić", "Ivan Jurić", "Duško Lakić", "Josip Paškov"]},
+      {"rank": 3, "team": "Prevare", "members": ["Goran Vesić", "Krešimir Melnik", "Filip Znaor", "Šimo Širanović"]}
+    ]
+  },
+  {
+    "year": 2025,
+    "podium": [
+      {"rank": 1, "team": "kbc sir", "members": ["Šime Gverić", "Mateja Iveta", "Domagoj Pozderac", "Neven Trgovec"]},
+      {"rank": 2, "team": "Pita od bakelita", "members": ["Borko Barić", "Ivan Jurić", "Mario Kovač", "Dražen Nemet"]},
+      {"rank": 3, "team": "KviZDe", "members": ["Dragan Gulam", "Lovro Jurišić", "Duško Lakić", "Roko Sven Surać"]}
+    ]
+  }
+]

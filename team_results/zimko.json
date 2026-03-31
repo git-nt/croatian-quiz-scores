@@ -1,0 +1,26 @@
+[
+  {
+    "year": 2019,
+    "podium": [
+      {"rank": 1, "team": "B tim", "members": ["Maja Rogulj", "Marko Ožegović", "Rudi Mrazović", "Krešimir Sučević Međeral"]},
+      {"rank": 2, "team": "Prstići", "members": ["Tomislav Bleiziffer", "Perica Živanović", "Dean Kotiga", "Mladen Vukorepa"]},
+      {"rank": 3, "team": "Njemački landrasi", "members": ["Neven Milijić", "Alen Franjić", "Marko Laginja", "Ruben Finderle"]}
+    ]
+  },
+  {
+    "year": 2020,
+    "podium": [
+      {"rank": 1, "team": "Prstići", "members": ["Lukša Benić", "Dean Kotiga", "Mladen Vukorepa", "Perica Živanović"]},
+      {"rank": 2, "team": "E tim", "members": ["Karlo Lugomer", "Krešimir Sučević Međeral", "Rudi Mrazović", "Maja Rogulj"]},
+      {"rank": 3, "team": "Johnny, Kare, Kina iiii mali Zeus", "members": ["Šime Gverić", "Lovro Jurišić", "Karlo Plazina", "Neven Trgovec"]}
+    ]
+  },
+  {
+    "year": 2022,
+    "podium": [
+      {"rank": 1, "team": "Prstići", "members": ["Lukša Benić", "Lovro Jurišić", "Dean Kotiga", "Mladen Vukorepa"]},
+      {"rank": 2, "team": "G tim", "members": ["Marko Laginja", "Karlo Lugomer", "Rudi Mrazović", "Krešimir Sučević Međeral"]},
+      {"rank": 3, "team": "Johnny, Kare, Kina iiii mali Zeus", "members": ["Šime Gverić", "Karlo Plazina", "Neven Trgovec", "Ivan Vulić"]}
+    ]
+  }
+]

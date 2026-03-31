@@ -362,6 +362,34 @@ table.standings-detail tbody tr.row-finalist:nth-child(even) td {
   list-style: none;
 }
 
+.edp-block {
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+ul.edp-podium {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: fit-content;
+  margin: 0 auto;
+  text-align: left;
+}
+
+li.edp-team {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.edp-members {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 td.cell-blank {
   background: repeating-linear-gradient(
     135deg,
@@ -380,9 +408,48 @@ td.cell-blank {
   text-align: center;
 }
 
-.tournament-hero h2,
-.tournament-hero h3 {
+.tournament-hero h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.event-date-line {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+}
+.event-list-date {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  padding-right: 1rem;
+}
+
+.event-section-heading {
   text-align: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+.event-section-heading::before,
+.event-section-heading::after {
+  content: '';
+  flex: 1;
+  max-width: 60px;
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
 }
 
 ul.podium-list {
@@ -393,6 +460,19 @@ ul.podium-list {
 
 ul.podium-list li {
   padding: 0.15rem 0;
+}
+
+ul.event-podium-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem auto 0;
+  width: fit-content;
+  text-align: left;
+}
+
+ul.event-podium-list li {
+  padding: 0.25rem 0;
+  font-size: 1rem;
 }
 
 .scroll-x {
@@ -408,12 +488,19 @@ ul.podium-list li {
 
 /* ── Medal box (Wikipedia-style) ── */
 
+.medal-box-wrap {
+  text-align: center;
+}
+
 .medal-box {
-  max-width: 15rem;
+  display: inline-block;
+  min-width: 15rem;
+  max-width: 100%;
   border: 1px solid var(--border);
   border-radius: 6px;
   overflow: hidden;
-  margin: 1rem auto 1.5rem;
+  margin: 1rem 0 1.5rem;
+  text-align: left;
 }
 
 .medal-box-header {
@@ -753,6 +840,20 @@ th.tl-series-defunct {
   width: 100%;
 }
 
+.acc-outer-item {
+  margin-bottom: 0.6rem;
+}
+
+.acc-outer-head {
+  background: #c8cdd5 !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+.acc-outer-body {
+  padding: 0.5rem 0 0.25rem;
+}
+
 .acc-category-label {
   font-size: 0.8rem;
   font-weight: 700;
@@ -811,7 +912,12 @@ th.tl-series-defunct {
 }
 
 .acc-body li {
+  display: flex;
+  align-items: stretch;
   border-bottom: 1px solid var(--border);
+}
+.acc-body li a {
+  flex: 1;
 }
 
 .acc-body li:last-child {

@@ -1,0 +1,26 @@
+[
+  {
+    "year": 2019,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Neven Milijić", "Neven Trgovec"]},
+      {"rank": 3, "players": ["Lovro Ljubičić", "Ivan Vlahek"]}
+    ]
+  },
+  {
+    "year": 2020,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Neven Milijić", "Neven Trgovec"]},
+      {"rank": 3, "players": ["Šime Gverić", "Karlo Plazina"]}
+    ]
+  },
+  {
+    "year": 2022,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Ivan Vulić"]},
+      {"rank": 2, "players": ["Domagoj Pozderac", "Neven Trgovec"]},
+      {"rank": 3, "players": ["Lovro Marinović", "Stipe Vukšić"]}
+    ]
+  }
+]

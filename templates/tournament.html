@@ -6,22 +6,46 @@
   <h2>{{ t.label }}</h2>
   {% set bl = blurb_for_key(t.key) %}
   {% if bl %}<p class="muted">{{ bl }}</p>{% endif %}
-  <h3>Podium</h3>
+  {% set di = event_date_for(t.key) %}
+  {% if di %}<p class="event-date-line">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</p>{% endif %}
+  {% if not team_only %}
+  <h3 class="event-section-heading">Individual Quiz</h3>
   {% if podium %}
-  <ul class="podium-list">
+  <ul class="event-podium-list">
     {% for pname, r in podium %}
-    <li>
-      {% if r == 1 %}🥇{% elif r == 2 %}🥈{% else %}🥉{% endif %}
-      <a href="{{ base_url }}/players/{{ player_slug(pname) }}/">{{ pname }}</a>
-    </li>
+    <li>{% if r == 1 %}🥇{% elif r == 2 %}🥈{% else %}🥉{% endif %} <a href="{{ base_url }}/players/{{ player_slug(pname) }}/">{{ pname }}</a></li>
     {% endfor %}
   </ul>
   {% else %}
   <p class="muted">No top-3 placements for this event.</p>
   {% endif %}
+  {% endif %}
 </div>
 
-<h3 class="text-center">Full ranking</h3>
+{% if pair_entry %}
+<div class="tournament-hero" style="margin-top:0.5rem;">
+  <h3 class="event-section-heading">Pairs Quiz</h3>
+  <ul class="event-podium-list">
+    {% for slot in pair_entry.podium %}
+    <li>{% if slot.rank == 1 %}🥇{% elif slot.rank == 2 %}🥈{% else %}🥉{% endif %} {% for p in slot.players %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% if not loop.last %} / {% endif %}{% endfor %}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if team_entry %}
+<div class="tournament-hero" style="margin-top:0.5rem;">
+  <h3 class="event-section-heading">Team Quiz</h3>
+  <ul class="event-podium-list">
+    {% for slot in team_entry.podium %}
+    <li>{% if slot.rank == 1 %}🥇{% elif slot.rank == 2 %}🥈{% else %}🥉{% endif %} <strong>{{ slot.team }}</strong><span class="muted small"> ({% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %})</span></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if not team_only %}
+<h3 class="event-section-heading">{% if is_live_event %}Individual Quiz — {% endif %}Full ranking</h3>
 {% if has_sheet and rows %}
 {% if placement_only %}
 <p class="muted small text-center">Placements only ({{ rows|length }} listed) — no scores in the source yet.</p>
@@ -67,5 +91,6 @@
 <p class="muted">No results loaded for this event.</p>
 {% else %}
 <p class="muted">No rows to show.</p>
+{% endif %}
 {% endif %}
 {% endblock %}
