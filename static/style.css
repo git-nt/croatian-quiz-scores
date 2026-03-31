@@ -1,0 +1,853 @@
+:root {
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --border: #d1d5db;
+  --text: #111827;
+  --muted: #5c6570;
+  --gold: #b45309;
+  --silver: #475569;
+  --bronze: #9a3412;
+  --accent: #1d4ed8;
+  --link: #1d4ed8;
+  --finalist-bg: rgba(37, 99, 235, 0.1);
+  --finalist-bg-hover: rgba(37, 99, 235, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  font-size: 15px;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.player-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.player-picker-label {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+select.player-select {
+  min-width: min(100%, 22rem);
+  max-width: 100%;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  height: 220px;
+  margin: 0.5rem auto 1.5rem;
+}
+
+/* Centres the legend, table, and series key as one left-aligned block */
+.history-block {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+table.data.player-history {
+  width: auto;
+}
+
+table.data.player-history th,
+table.data.player-history td {
+  white-space: nowrap;
+}
+
+/* Event column wider, numeric columns uniform and tight */
+table.data.player-history td:first-child,
+table.data.player-history th:first-child {
+  min-width: 11rem;
+}
+
+table.data.player-history td.num,
+table.data.player-history th.num {
+  width: 4.5rem;
+  min-width: 4.5rem;
+}
+
+table.player-history td.num,
+table.player-history th.num {
+  width: 5rem;
+}
+
+
+.wrap {
+  margin: 0 auto;
+  padding: 1.25rem clamp(1.5rem, 5vw, 5rem) 3rem;
+  text-align: center;
+}
+
+/* Only table cells and accordion items need left-alignment */
+.wrap table th,
+.wrap table td,
+.wrap .acc-head,
+.wrap .acc-body li {
+  text-align: left;
+}
+
+header.site {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+header.site h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.45rem;
+  font-weight: 650;
+}
+
+header.site h1 a {
+  color: var(--text);
+}
+
+header.site p.lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+nav.top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  font-size: 0.88rem;
+}
+
+nav.top a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+nav.top a:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+nav.top a.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin: 1.75rem 0 0.65rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+h1.player-name {
+  font-size: 1.9rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0.5rem 0 1.25rem;
+  color: var(--text);
+}
+
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  background: var(--surface);
+}
+
+.players-list-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+table.data.players-list {
+  width: auto;
+  min-width: 26rem;
+}
+
+table.data.players-list td:first-child,
+table.data.players-list th:first-child {
+  width: 16rem;
+  max-width: 16rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+table.data th,
+table.data td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.55rem;
+  text-align: left;
+}
+
+table.data th {
+  background: #e8eaee;
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+table.data tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+table.data td.num,
+table.data th.num {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  width: 4rem;
+}
+
+table.data th .th-hint {
+  display: block;
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+th.th-group {
+  text-align: center;
+  border-bottom: none;
+}
+
+th.th-sub {
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--muted);
+  border-top: none;
+  padding-top: 0.1rem;
+  padding-bottom: 0.3rem;
+}
+
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+th.sortable:hover {
+  background: #e4e7ec;
+}
+
+th.sort-active {
+  color: var(--accent);
+}
+
+th.sortable .sort-arrow {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+table.data.standings-detail {
+  width: auto !important;
+  margin: 0 auto;
+}
+
+table.standings-detail td.num,
+table.standings-detail th.num {
+  width: 5rem;
+}
+
+tr.row-finalist td {
+  background: var(--finalist-bg);
+}
+
+tr.row-finalist:hover td {
+  background: var(--finalist-bg-hover);
+}
+
+table.standings-detail tbody tr.row-finalist:nth-child(even) td {
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.rank-1 {
+  background: rgba(232, 197, 71, 0.35) !important;
+  color: var(--gold);
+  font-weight: 600;
+}
+.rank-2 {
+  background: rgba(148, 163, 184, 0.35) !important;
+  color: var(--silver);
+  font-weight: 600;
+}
+.rank-3 {
+  background: rgba(198, 125, 78, 0.28) !important;
+  color: var(--bronze);
+  font-weight: 600;
+}
+.rank-final {
+  background: rgba(37, 99, 235, 0.28) !important;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.event-block {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.event-block h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+.event-block .sub {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.event-block ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+td.cell-blank {
+  background: repeating-linear-gradient(
+    135deg,
+    #e4e7ec,
+    #e4e7ec 2px,
+    #edf0f4 2px,
+    #edf0f4 8px
+  ) !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.tournament-hero {
+  text-align: center;
+}
+
+.tournament-hero h2,
+.tournament-hero h3 {
+  text-align: center;
+}
+
+ul.podium-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul.podium-list li {
+  padding: 0.15rem 0;
+}
+
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* ── Medal box (Wikipedia-style) ── */
+
+.medal-box {
+  max-width: 15rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1rem auto 1.5rem;
+}
+
+.medal-box-header {
+  background: #e8eaee;
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-align: center;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.medal-section-label {
+  background: var(--bg);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-align: center;
+  padding: 0.3rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+table.medal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  background: var(--surface);
+}
+
+table.medal-table td {
+  padding: 2px 0.6rem;
+  border-top: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+table.medal-table tr:first-child td {
+  border-top: none;
+}
+
+td.medal-icon {
+  width: 2.4rem;
+  text-align: center;
+  padding: 4px 0.4rem;
+}
+
+span.medal-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+span.medal-chip.medal-1 {
+  color: #92710a;
+  background: rgba(232, 197, 71, 0.4);
+}
+
+span.medal-chip.medal-2 {
+  color: #475569;
+  background: rgba(148, 163, 184, 0.4);
+}
+
+span.medal-chip.medal-3 {
+  color: #9a3412;
+  background: rgba(198, 125, 78, 0.35);
+}
+
+td.medal-event {
+  white-space: nowrap;
+  text-align: center;
+  width: 100%;
+}
+
+/* ── Legend ── */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem 0.9rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  white-space: nowrap;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 0.2rem;
+}
+
+.legend-swatch.tl-gold {
+  background: rgba(232, 197, 71, 0.45);
+}
+.legend-swatch.tl-silver {
+  background: rgba(148, 163, 184, 0.45);
+}
+.legend-swatch.tl-bronze {
+  background: rgba(198, 125, 78, 0.38);
+}
+.legend-swatch.tl-final,
+.legend-swatch.rank-final {
+  background: rgba(37, 99, 235, 0.28);
+}
+.legend-swatch.tl-no-event {
+  background: #e2e4e8;
+}
+
+.legend-dash {
+  color: var(--muted);
+  font-weight: 500;
+  margin-right: 0.1rem;
+}
+
+ul.series-key {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.6rem;
+  line-height: 1.7;
+}
+
+/* ── Performance timeline grid ── */
+
+table.tl-grid {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  width: auto;
+  table-layout: fixed;
+  margin: 0 auto;
+}
+
+table.tl-grid th.tl-year {
+  text-align: center;
+  font-size: 0.78rem;
+  padding: 0.35rem 0.3rem;
+  width: 3rem;          /* every year column is exactly the same width */
+}
+
+table.tl-grid th.tl-series {
+  text-align: left;
+  white-space: nowrap;
+  width: 8rem;          /* series name column — fixed, never expands */
+  max-width: 8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 0.75rem;
+  font-size: 0.85rem;
+}
+
+td.tl-cell {
+  text-align: center;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  padding: 0.35rem 0.3rem;
+  width: 3rem;          /* same fixed width as year header */
+}
+
+td.tl-cell a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+td.tl-cell a:hover {
+  text-decoration: underline;
+}
+
+table.tl-grid th,
+table.tl-grid td {
+  text-align: center;
+}
+
+table.tl-grid th.tl-series,
+table.tl-grid th.tl-series-defunct,
+table.tl-grid th.tl-divider-label {
+  text-align: left;
+}
+
+td.tl-no-event {
+  background: #e2e4e8;
+  color: #e2e4e8;
+}
+
+td.tl-absent {
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 400;
+}
+
+td.tl-played {
+  background: var(--surface);
+  color: var(--text);
+}
+
+td.tl-gold {
+  background: rgba(232, 197, 71, 0.45);
+  color: var(--gold);
+}
+
+td.tl-silver {
+  background: rgba(148, 163, 184, 0.45);
+  color: var(--silver);
+}
+
+td.tl-bronze {
+  background: rgba(198, 125, 78, 0.38);
+  color: var(--bronze);
+}
+
+td.tl-final {
+  background: rgba(37, 99, 235, 0.28);
+  color: var(--accent);
+}
+
+tr.tl-spacer td {
+  border: none;
+  background: var(--bg);
+  height: 0.6rem;
+  padding: 0;
+}
+
+tr.tl-divider td,
+tr.tl-divider th {
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  border-right: 1px solid var(--border);
+}
+
+th.tl-divider-label {
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 0.65rem 0.55rem 0.25rem;
+  background: var(--bg);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+th.tl-series-defunct {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── Tabs ── */
+
+.tab-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 1.25rem;
+}
+
+.tab-btn {
+  padding: 0.5rem 1.1rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  font-size: 0.92rem;
+  font-family: inherit;
+  color: var(--muted);
+  transition: color 0.1s;
+}
+
+.tab-btn:hover {
+  color: var(--text);
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Series pill filter ── */
+.pill-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: -0.5rem 0 1rem;
+}
+
+.pill-btn {
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: none;
+  font-size: 0.8rem;
+  font-family: inherit;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+}
+
+.pill-btn:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.pill-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Series accordion (Events page) ── */
+
+.series-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 1rem auto 0;
+  max-width: 32rem;
+  width: 100%;
+}
+
+.acc-category-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--border);
+  padding: 0.45rem 0.9rem;
+  border-radius: 4px;
+  margin-top: 0.8rem;
+}
+
+.acc-item {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.acc-head {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.65rem 0.9rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+}
+
+.acc-head:hover {
+  background: #e8eaee;
+}
+
+.acc-sub {
+  flex: 1;
+  font-weight: 400;
+}
+
+.acc-arrow {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.acc-body {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+
+.acc-body li {
+  border-bottom: 1px solid var(--border);
+}
+
+.acc-body li:last-child {
+  border-bottom: none;
+}
+
+.acc-body li a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem 0.6rem 1.2rem;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.acc-body li a::after {
+  content: '↗';
+  font-size: 0.8rem;
+  color: var(--muted);
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.acc-body li a:hover {
+  background: #edf2ff;
+  border-left-color: var(--accent);
+  color: var(--accent);
+}
+
+.acc-body li a:hover::after {
+  opacity: 1;
+}
+

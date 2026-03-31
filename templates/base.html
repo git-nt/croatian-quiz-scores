@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}{{ title }}{% endblock %} · Croatian Quiz Events</title>
+  <link rel="stylesheet" href="{{ base_url }}/static/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <h1><a href="{{ base_url }}/">Croatian Quiz Events</a></h1>
+      <p class="lead">Placements and medals are calculated from the published results for each open.</p>
+      <nav class="top">
+        <a href="{{ base_url }}/" data-exact="1">Players</a>
+        <a href="{{ base_url }}/medals/">Medalists</a>
+        <a href="{{ base_url }}/events/">Events</a>
+      </nav>
+    </header>
+    <main>
+      {% block body %}{% endblock %}
+    </main>
+  </div>
+  {% block extra_scripts %}{% endblock %}
+<script>
+(function () {
+  var path = window.location.pathname.replace(/\/$/, '');
+  document.querySelectorAll('nav.top a').forEach(function (a) {
+    var href = a.getAttribute('href').replace(/\/$/, '');
+    if (path === href) a.classList.add('active');
+    else if (!a.dataset.exact && href && path.startsWith(href + '/')) a.classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>

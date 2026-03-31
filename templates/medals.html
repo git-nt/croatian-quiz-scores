@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}Medalists{% endblock %}
+{% block body %}
+<h2>Medalists</h2>
+<p class="muted small">Only players with at least one podium finish. Counts come from official placements at each event (1st = gold, 2nd = silver, 3rd = bronze).</p>
+
+{% macro medal_table(medal_rows) %}
+{% if medal_rows %}
+<div class="scroll-x players-list-wrap">
+<table class="data players-list">
+  <thead>
+    <tr>
+      <th>Player</th>
+      <th class="num rank-1">G</th>
+      <th class="num rank-2">S</th>
+      <th class="num rank-3">B</th>
+      <th class="num">Σ</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for name, g, s, b, t in medal_rows %}
+    <tr>
+      <td><a href="{{ base_url }}/players/{{ player_slug(name) }}/">{{ name }}</a></td>
+      <td class="num">{{ g }}</td>
+      <td class="num">{{ s }}</td>
+      <td class="num">{{ b }}</td>
+      <td class="num"><strong>{{ t }}</strong></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="muted">No podium finishes recorded.</p>
+{% endif %}
+{% endmacro %}
+
+<div class="tabs" id="medal-tabs">
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="all">All</button>
+    <button class="tab-btn" data-tab="live">Live Events</button>
+    <button class="tab-btn" data-tab="hks">HKS</button>
+  </div>
+
+  <div class="tab-panel" data-panel="all">
+    <p class="muted small">All events combined (Live Events + HKS).</p>
+    {{ medal_table(medals_all) }}
+  </div>
+
+  <div class="tab-panel" data-panel="live" hidden>
+    <div class="pill-bar">
+      <button class="pill-btn active" data-series="">All</button>
+      {% for s in series if s.category == "live" %}
+      <button class="pill-btn" data-series="{{ s.code }}">{{ s.name }}</button>
+      {% endfor %}
+    </div>
+    <div data-series-panel="">
+      <p class="muted small">Live open events only: SOVA, MMM, Osijek Open, ZIMKO, OVaKO.</p>
+      {{ medal_table(medals_live) }}
+    </div>
+    {% for s in series if s.category == "live" %}
+    <div data-series-panel="{{ s.code }}" hidden>
+      <p class="muted small">{{ s.name }} — {{ s.blurb }}.</p>
+      {{ medal_table(medals_by_series[s.code]) }}
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="tab-panel" data-panel="hks" hidden>
+    <div class="pill-bar">
+      <button class="pill-btn active" data-series="">All</button>
+      {% for s in series if s.category == "hks" %}
+      <button class="pill-btn" data-series="{{ s.code }}">{{ s.name }}</button>
+      {% endfor %}
+    </div>
+    <div data-series-panel="">
+      <p class="muted small">HKS events only: Croatian Open, WQC.</p>
+      {{ medal_table(medals_hks) }}
+    </div>
+    {% for s in series if s.category == "hks" %}
+    <div data-series-panel="{{ s.code }}" hidden>
+      <p class="muted small">{{ s.name }}{% if s.name != s.blurb %} — {{ s.blurb }}{% endif %}.</p>
+      {{ medal_table(medals_by_series[s.code]) }}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<h2 id="podium-heading">Podium by event</h2>
+{% for t, podium in events_medals %}
+<div class="event-block" data-cat="{{ 'hks' if is_hks_event(t.key) else 'live' }}" data-series="{{ series_code_from_key(t.key) }}">
+  <h3><a href="{{ base_url }}/events/{{ t.key }}/">{{ t.label }}</a></h3>
+  {% set bl = blurb_for_key(t.key) %}
+  {% if bl %}<p class="sub">{{ bl }}</p>{% endif %}
+  {% if podium %}
+  <ul class="small">
+    {% for pname, r in podium %}
+    <li>{% if r == 1 %}🥇{% elif r == 2 %}🥈{% else %}🥉{% endif %} <a href="{{ base_url }}/players/{{ player_slug(pname) }}/">{{ pname }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted small">No top-3 placements for this event.</p>
+  {% endif %}
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+(function () {
+  var tabs = document.getElementById('medal-tabs');
+  if (!tabs) return;
+
+  function filterPodiums(cat, series) {
+    document.querySelectorAll('.event-block').forEach(function (block) {
+      var catMatch = cat === 'all' || block.dataset.cat === cat;
+      var seriesMatch = !series || block.dataset.series === series;
+      block.hidden = !(catMatch && seriesMatch);
+    });
+  }
+
+  tabs.addEventListener('click', function (e) {
+    // Main tab switch
+    var tabBtn = e.target.closest('.tab-btn');
+    if (tabBtn) {
+      tabs.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+      tabs.querySelectorAll('.tab-panel').forEach(function (p) { p.hidden = true; });
+      tabBtn.classList.add('active');
+      var panel = tabs.querySelector('[data-panel="' + tabBtn.dataset.tab + '"]');
+      panel.hidden = false;
+      // Reset pills in this panel to "All"
+      panel.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.series === ''); });
+      panel.querySelectorAll('[data-series-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-series-panel') !== ''; });
+      filterPodiums(tabBtn.dataset.tab, '');
+      return;
+    }
+
+    // Pill click
+    var pillBtn = e.target.closest('.pill-btn');
+    if (pillBtn) {
+      var pillBar = pillBtn.closest('.pill-bar');
+      pillBar.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
+      pillBtn.classList.add('active');
+      var panel = pillBtn.closest('.tab-panel');
+      var code = pillBtn.dataset.series;
+      panel.querySelectorAll('[data-series-panel]').forEach(function (p) {
+        p.hidden = p.getAttribute('data-series-panel') !== code;
+      });
+      var activeCat = tabs.querySelector('.tab-btn.active').dataset.tab;
+      filterPodiums(activeCat, code);
+    }
+  });
+})();
+</script>
+{% endblock %}

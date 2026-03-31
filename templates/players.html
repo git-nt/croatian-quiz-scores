@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}All players{% endblock %}
+{% block body %}
+<h2>All players</h2>
+<p class="muted small">Click any column header to sort. Medal counts are from podium finishes (1st / 2nd / 3rd) across events.</p>
+{% if player_options is defined %}
+<div class="player-toolbar">
+  <label class="player-picker-label" for="player-jump">Jump to player</label>
+  <select id="player-jump" class="player-select">
+    <option value="">— select —</option>
+    {% for opt in player_options %}
+    <option value="{{ opt.slug }}">{{ opt.name }}</option>
+    {% endfor %}
+  </select>
+</div>
+{% endif %}
+<div class="scroll-x players-list-wrap">
+<table class="data players-list">
+  <thead>
+    <tr>
+      <th class="sortable sort-active" data-col="0" data-type="str">Player <span class="sort-arrow"> ▲</span></th>
+      <th class="sortable num" data-col="1" data-type="num">Events Played <span class="sort-arrow"></span></th>
+      <th class="sortable num rank-1" data-col="2" data-type="num">G <span class="sort-arrow"></span></th>
+      <th class="sortable num rank-2" data-col="3" data-type="num">S <span class="sort-arrow"></span></th>
+      <th class="sortable num rank-3" data-col="4" data-type="num">B <span class="sort-arrow"></span></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in players %}
+    {% set g, s, b = p.medal_counts() %}
+    <tr>
+      <td><a href="{{ base_url }}/players/{{ player_slug(p.name) }}/">{{ p.name }}</a></td>
+      <td class="num">{{ p.ranks | length }}</td>
+      <td class="num">{{ g }}</td>
+      <td class="num">{{ s }}</td>
+      <td class="num">{{ b }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+(function () {
+  var sel = document.getElementById('player-jump');
+  if (sel) {
+    sel.addEventListener('change', function () {
+      if (this.value) window.location.href = '{{ base_url }}/players/' + encodeURIComponent(this.value) + '/';
+    });
+  }
+
+  // ── Table sort ──
+  var table = document.querySelector('table.data');
+  if (!table) return;
+  var tbody = table.querySelector('tbody');
+  var state = { col: 0, asc: true };
+
+  table.querySelector('thead').addEventListener('click', function (e) {
+    var th = e.target.closest('th.sortable');
+    if (!th) return;
+    var col = +th.dataset.col;
+    var type = th.dataset.type;
+    if (state.col === col) { state.asc = !state.asc; }
+    else { state.col = col; state.asc = type === 'str'; } // str: A-Z first; num: low first
+
+    // Update arrows
+    table.querySelectorAll('th.sortable').forEach(function (h) {
+      var arrow = h.querySelector('.sort-arrow');
+      if (+h.dataset.col === col) {
+        arrow.textContent = state.asc ? ' ▲' : ' ▼';
+        h.classList.add('sort-active');
+      } else {
+        arrow.textContent = '';
+        h.classList.remove('sort-active');
+      }
+    });
+
+    var rows = Array.from(tbody.querySelectorAll('tr'));
+    rows.sort(function (a, b) {
+      var av = a.cells[col].textContent.trim();
+      var bv = b.cells[col].textContent.trim();
+      if (type === 'num') {
+        var an = av === '—' ? Infinity : parseFloat(av);
+        var bn = bv === '—' ? Infinity : parseFloat(bv);
+        return state.asc ? an - bn : bn - an;
+      } else {
+        av = av.toLowerCase(); bv = bv.toLowerCase();
+        return state.asc ? av.localeCompare(bv) : bv.localeCompare(av);
+      }
+    });
+    rows.forEach(function (r) { tbody.appendChild(r); });
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+{% block title %}{{ player.name }}{% endblock %}
+{% block body %}
+<p class="muted small"><a href="{{ base_url }}/">← Players</a></p>
+
+<div class="player-toolbar">
+  <label class="player-picker-label" for="player-select">Player</label>
+  <select id="player-select" class="player-select" aria-label="Select player">
+    {% for opt in player_options %}
+    <option value="{{ opt.slug }}" {% if opt.slug == current_slug %}selected{% endif %}>{{ opt.name }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<h1 class="player-name">{{ player.name }}</h1>
+{% if podium %}
+<div class="medal-box">
+  <div class="medal-box-header">Podium finishes</div>
+  {% if podium_live %}
+  {% if podium_hks %}<div class="medal-section-label">Live Events</div>{% endif %}
+  <table class="medal-table">
+    <tbody>
+      {% for m in podium_live %}
+      <tr>
+        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}G{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
+        <td class="medal-event"><a href="{{ base_url }}/events/{{ m.t.key }}/">{{ event_label(m.t.key, m.t.label) }}</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% if podium_hks %}
+  {% if podium_live %}<div class="medal-section-label">HKS Events</div>{% endif %}
+  <table class="medal-table">
+    <tbody>
+      {% for m in podium_hks %}
+      <tr>
+        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}G{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
+        <td class="medal-event"><a href="{{ base_url }}/events/{{ m.t.key }}/">{{ event_label(m.t.key, m.t.label) }}</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+{% endif %}
+
+<h2>Performance timeline</h2>
+<div class="legend">
+  <span class="legend-item"><span class="legend-swatch tl-gold"></span> 1st</span>
+  <span class="legend-item"><span class="legend-swatch tl-silver"></span> 2nd</span>
+  <span class="legend-item"><span class="legend-swatch tl-bronze"></span> 3rd</span>
+  <span class="legend-item"><span class="legend-swatch tl-final"></span> finalist</span>
+  <span class="legend-item"><span class="legend-swatch tl-no-event"></span> not held</span>
+  <span class="legend-item"><span class="legend-dash">—</span> absent</span>
+</div>
+<div class="scroll-x">
+<table class="data tl-grid">
+  <thead>
+    <tr>
+      <th></th>
+      {% for yr in tl_years %}<th class="tl-year">{{ yr }}</th>{% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="tl-divider">
+      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Live Events</th>
+    </tr>
+    {% for row in tl_live %}
+    <tr>
+      <th class="tl-series">{{ row.label }}</th>
+      {% for c in row.cells %}
+      {% if c.state == "no_event" %}
+      <td class="tl-cell tl-no-event"></td>
+      {% elif c.state == "absent" %}
+      <td class="tl-cell tl-absent"><a href="{{ base_url }}/events/{{ c.key }}/">—</a></td>
+      {% else %}
+      <td class="tl-cell {{ c.css }}"><a href="{{ base_url }}/events/{{ c.key }}/">{{ c.rank }}</a></td>
+      {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    <tr class="tl-spacer"><td colspan="{{ tl_years | length + 1 }}"></td></tr>
+    <tr class="tl-divider">
+      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">HKS Events</th>
+    </tr>
+    {% for row in tl_hks %}
+    <tr>
+      <th class="tl-series">{{ row.label }}</th>
+      {% for c in row.cells %}
+      {% if c.state == "no_event" %}
+      <td class="tl-cell tl-no-event"></td>
+      {% elif c.state == "absent" %}
+      <td class="tl-cell tl-absent"><a href="{{ base_url }}/events/{{ c.key }}/">—</a></td>
+      {% else %}
+      <td class="tl-cell {{ c.css }}"><a href="{{ base_url }}/events/{{ c.key }}/">{{ c.rank }}</a></td>
+      {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    <tr class="tl-spacer"><td colspan="{{ tl_years | length + 1 }}"></td></tr>
+    <tr class="tl-divider">
+      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Defunct Live Events</th>
+    </tr>
+    {% for row in tl_defunct %}
+    <tr>
+      <th class="tl-series tl-series-defunct">{{ row.label }}</th>
+      {% for c in row.cells %}
+      {% if c.state == "no_event" %}
+      <td class="tl-cell tl-no-event"></td>
+      {% elif c.state == "absent" %}
+      <td class="tl-cell tl-absent"><a href="{{ base_url }}/events/{{ c.key }}/">—</a></td>
+      {% else %}
+      <td class="tl-cell {{ c.css }}"><a href="{{ base_url }}/events/{{ c.key }}/">{{ c.rank }}</a></td>
+      {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+{% if history %}
+<h2>Results</h2>
+<p class="muted small">Only events where this player appeared, oldest first.</p>
+
+<div class="tabs" id="results-tabs">
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="all">All</button>
+    <button class="tab-btn" data-tab="live">Live Events</button>
+    <button class="tab-btn" data-tab="hks">HKS</button>
+  </div>
+  <div class="pill-bar" id="series-pills" hidden></div>
+  <div class="history-block">
+  <div class="legend" id="finalist-legend">
+    <span class="legend-item"><span class="legend-swatch rank-final"></span> finalist in a live event</span>
+  </div>
+  <div class="scroll-x">
+  <table class="data player-history">
+    <thead>
+      <tr>
+        <th rowspan="2">Event</th>
+        <th class="num" rowspan="2">Place</th>
+        <th class="num th-group" colspan="2">Points</th>
+      </tr>
+      <tr>
+        <th class="num th-sub">regular</th>
+        <th class="num th-sub col-final">regular + final</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in history %}
+      {% set t = row.t %}
+      {% set ed = row.ed %}
+      <tr data-cat="{{ 'hks' if is_hks_event(t.key) else 'live' }}" data-series="{{ series_code_from_key(t.key) }}">
+        <td><a href="{{ base_url }}/events/{{ t.key }}/">{{ event_label(t.key, t.label) }}</a></td>
+        <td class="num {% if ed.rank == 1 %}rank-1{% elif ed.rank == 2 %}rank-2{% elif ed.rank == 3 %}rank-3{% elif ed.is_finalist %}rank-final{% endif %}">
+          {{ ed.rank }}
+        </td>
+        <td class="num">{% if ed.is_finalist %}{{ ed.regular }}{% elif ed.total is not none %}{{ ed.total }}{% endif %}</td>
+        {% if is_hks_event(t.key) %}
+        <td class="num col-final cell-blank"></td>
+        {% else %}
+        <td class="num col-final">{% if ed.is_finalist %}{{ ed.total }}{% else %}—{% endif %}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <ul class="muted small series-key">
+  {%- for s in series if s.code == "wqc" and s.name != s.blurb %}
+    <li>{{ s.name }} — {{ s.blurb }}</li>
+  {%- endfor %}
+  {%- for s in series if s.code != "wqc" and s.name != s.blurb %}
+    <li>{{ s.name }} — {{ s.blurb }}</li>
+  {%- endfor %}
+  </ul>
+  </div>
+</div>
+{% endif %}
+
+{% if has_chart %}
+<h2>Placement over time</h2>
+<p class="muted small">Higher line = better placement. Chronological order.</p>
+<div class="chart-wrap">
+  <canvas id="rank-chart"></canvas>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+{% if has_chart %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  const labels = {{ chart_labels_js }};
+  const ranks = {{ chart_ranks_js }};
+  const maxRank = {{ chart_max }};
+  const ctx = document.getElementById('rank-chart');
+  if (!ctx || typeof Chart === 'undefined') return;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Placement',
+        data: ranks,
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37, 99, 235, 0.12)',
+        tension: 0.25,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          reverse: true,
+          min: 1,
+          max: Math.max(maxRank + 1, 3),
+          ticks: { maxTicksLimit: 14, precision: 0, color: '#5c6570' },
+          title: { display: true, text: 'Placement (lower is better)', color: '#5c6570', font: { size: 11 } }
+        },
+        x: {
+          ticks: { display: false },
+          grid: { display: false }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: function (items) { return labels[items[0].dataIndex]; },
+            label: function (ctx) { return 'Place #' + ctx.parsed.y; }
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
+{% endif %}
+<script>
+(function () {
+  const sel = document.getElementById('player-select');
+  if (sel) {
+    sel.addEventListener('change', function () {
+      if (this.value) window.location.href = '{{ base_url }}/players/' + encodeURIComponent(this.value) + '/';
+    });
+  }
+
+  const tabs     = document.getElementById('results-tabs');
+  const pills    = document.getElementById('series-pills');
+  const finLegend = document.getElementById('finalist-legend');
+
+  function updateFinalistLegend(cat) {
+    if (finLegend) finLegend.style.display = (cat === 'hks') ? 'none' : '';
+  }
+
+  // Pretty labels for series codes
+  const seriesLabel = { sova:'SOVA', mmm:'MMM', oo:'Osijek Open', wqc:'WQC', cro:'Croatian Open', zimko:'ZIMKO', ovako:'OVaKO' };
+
+  function applyFilter(cat, series) {
+    tabs.querySelectorAll('tbody tr').forEach(function (row) {
+      const catMatch    = cat === 'all' || row.dataset.cat === cat;
+      const seriesMatch = !series || row.dataset.series === series;
+      row.hidden = !(catMatch && seriesMatch);
+    });
+    const hideFinal = cat === 'hks' || (series && tabs.querySelector('tr[data-series="' + series + '"]') && tabs.querySelector('tr[data-series="' + series + '"]').dataset.cat === 'hks');
+    tabs.querySelectorAll('.col-final').forEach(function (cell) {
+      cell.hidden = hideFinal;
+    });
+  }
+
+  function buildPills(cat) {
+    pills.innerHTML = '';
+    // Collect distinct series codes present for this cat
+    const seen = [];
+    tabs.querySelectorAll('tbody tr').forEach(function (row) {
+      if (row.dataset.cat === cat && !seen.includes(row.dataset.series)) {
+        seen.push(row.dataset.series);
+      }
+    });
+    if (seen.length <= 1) { pills.hidden = true; return; }
+    // "All" pill first
+    const allBtn = document.createElement('button');
+    allBtn.className = 'pill-btn active';
+    allBtn.textContent = 'All';
+    allBtn.dataset.series = '';
+    pills.appendChild(allBtn);
+    seen.forEach(function (code) {
+      const btn = document.createElement('button');
+      btn.className = 'pill-btn';
+      btn.textContent = seriesLabel[code] || code.toUpperCase();
+      btn.dataset.series = code;
+      pills.appendChild(btn);
+    });
+    pills.hidden = false;
+  }
+
+  if (tabs) {
+    tabs.addEventListener('click', function (e) {
+      const btn = e.target.closest('.tab-btn');
+      if (btn) {
+        tabs.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        const cat = btn.dataset.tab;
+        if (cat === 'all') { pills.hidden = true; pills.innerHTML = ''; }
+        else buildPills(cat);
+        applyFilter(cat, '');
+        updateFinalistLegend(cat);
+      }
+    });
+
+    pills.addEventListener('click', function (e) {
+      const btn = e.target.closest('.pill-btn');
+      if (!btn) return;
+      pills.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      const activeCat = tabs.querySelector('.tab-btn.active').dataset.tab;
+      const series = btn.dataset.series;
+      // If filtering to a single HKS series, hide final col; if single live series, show it
+      const isHksSeries = series && tabs.querySelector('tr[data-series="' + series + '"]') && tabs.querySelector('tr[data-series="' + series + '"]').dataset.cat === 'hks';
+      const hideFinal = activeCat === 'hks' || isHksSeries;
+      updateFinalistLegend(isHksSeries ? 'hks' : activeCat);
+      tabs.querySelectorAll('tbody tr').forEach(function (row) {
+        row.hidden = (row.dataset.cat !== activeCat) || (series !== '' && row.dataset.series !== series);
+      });
+      tabs.querySelectorAll('.col-final').forEach(function (cell) {
+        cell.hidden = hideFinal;
+      });
+    });
+  }
+})();
+</script>
+{% endblock %}

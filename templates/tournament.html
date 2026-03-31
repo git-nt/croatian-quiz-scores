@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}{{ t.label }}{% endblock %}
+{% block body %}
+<p class="muted small"><a href="{{ base_url }}/events/">← Events</a></p>
+<div class="tournament-hero">
+  <h2>{{ t.label }}</h2>
+  {% set bl = blurb_for_key(t.key) %}
+  {% if bl %}<p class="muted">{{ bl }}</p>{% endif %}
+  <h3>Podium</h3>
+  {% if podium %}
+  <ul class="podium-list">
+    {% for pname, r in podium %}
+    <li>
+      {% if r == 1 %}🥇{% elif r == 2 %}🥈{% else %}🥉{% endif %}
+      <a href="{{ base_url }}/players/{{ player_slug(pname) }}/">{{ pname }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">No top-3 placements for this event.</p>
+  {% endif %}
+</div>
+
+<h3 class="text-center">Full ranking</h3>
+{% if has_sheet and rows %}
+{% if placement_only %}
+<p class="muted small text-center">Placements only ({{ rows|length }} listed) — no scores in the source yet.</p>
+{% elif is_score_only %}
+<p class="muted small text-center">{{ rows|length }} ranked</p>
+{% else %}
+<p class="muted small text-center">Final: top {{ finalist_count }} · {{ rows|length }} ranked overall</p>
+{% endif %}
+<div class="scroll-x">
+<table class="data standings-detail">
+  <thead>
+    <tr>
+      <th class="num">#</th>
+      <th>Player</th>
+      {% if is_score_only %}
+      <th class="num">Score</th>
+      {% else %}
+      <th class="num">Points <span class="th-hint">regular</span></th>
+      <th class="num">Points <span class="th-hint">regular + final</span></th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      <td class="num {% if row.rank == 1 %}rank-1{% elif row.rank == 2 %}rank-2{% elif row.rank == 3 %}rank-3{% endif %}">{{ row.rank if row.rank is not none else '—' }}</td>
+      <td><a href="{{ base_url }}/players/{{ player_slug(row.name) }}/">{{ row.name }}</a></td>
+      {% if is_score_only %}
+      <td class="num">{{ row.total if row.total is not none else '—' }}</td>
+      {% else %}
+      <td class="num">{% if row.is_finalist %}<i>{{ row.regular }}</i>{% elif row.total is not none %}{{ row.total }}{% endif %}</td>
+      <td class="num {% if not row.is_finalist %}cell-blank{% endif %}">{% if row.is_finalist %}{{ row.total }}{% endif %}</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% if not is_score_only %}
+<p class="note"><strong>regular + final</strong> is only filled for players who reached the final (combined). <strong>Regular</strong> is the qualifying-phase score for everyone; for finalists it is their score before the final. Highlighted rows played the final.</p>
+{% endif %}
+{% elif not has_sheet %}
+<p class="muted">No results loaded for this event.</p>
+{% else %}
+<p class="muted">No rows to show.</p>
+{% endif %}
+{% endblock %}

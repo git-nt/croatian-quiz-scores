@@ -1,0 +1,59 @@
+[
+  {
+    "code": "sova",
+    "name": "SOVA",
+    "blurb": "Spring Open Vallis Aurea, Požega",
+    "month": 4,
+    "defunct": false,
+    "category": "live"
+  },
+  {
+    "code": "mmm",
+    "name": "MMM",
+    "blurb": "Memorijal Mirka Miočića, Zadar",
+    "month": 10,
+    "defunct": false,
+    "category": "live"
+  },
+  {
+    "code": "oo",
+    "name": "Osijek Open",
+    "blurb": "Osijek Open",
+    "month": 12,
+    "defunct": false,
+    "category": "live"
+  },
+  {
+    "code": "wqc",
+    "name": "WQC",
+    "blurb": "World Quizzing Championships",
+    "month": 6,
+    "defunct": false,
+    "category": "hks"
+  },
+  {
+    "code": "cro",
+    "name": "Croatian Open",
+    "blurb": "Croatian Open",
+    "month": 11,
+    "defunct": false,
+    "category": "hks"
+  },
+  {
+    "code": "zimko",
+    "name": "ZIMKO",
+    "blurb": "Zimski karlovački Open, Karlovac",
+    "month": 1,
+    "month_overrides": { "2022": 5 },
+    "defunct": true,
+    "category": "live"
+  },
+  {
+    "code": "ovako",
+    "name": "OVaKO",
+    "blurb": "Varaždin Open",
+    "month": 6,
+    "defunct": true,
+    "category": "live"
+  }
+]

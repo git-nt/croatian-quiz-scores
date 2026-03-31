@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+{% block body %}
+<h2>Events</h2>
+<p class="muted small">Click a series to expand and browse its editions.</p>
+
+<div class="series-accordion">
+{% for cat in category_groups %}
+<div class="acc-category-label">{{ cat.label }}</div>
+{% for group in cat.groups %}
+<div class="acc-item">
+  <button class="acc-head" aria-expanded="false">
+    <span class="acc-label">{{ group.series.name }}</span>
+    {% if group.series.name != group.series.blurb %}
+    <span class="acc-sub muted small">{{ group.series.blurb }}</span>
+    {% endif %}
+    <span class="acc-arrow">▶</span>
+  </button>
+  <ul class="acc-body" hidden>
+    {% for t in group.tournaments %}
+    <li><a href="{{ base_url }}/events/{{ t.key }}/">{{ t.label }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endfor %}
+{% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+(function () {
+  document.querySelectorAll('.acc-head').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.closest('.acc-item');
+      var body = item.querySelector('.acc-body');
+      var open = !body.hidden;
+      body.hidden = open;
+      btn.setAttribute('aria-expanded', !open);
+      btn.querySelector('.acc-arrow').textContent = open ? '▶' : '▼';
+    });
+  });
+})();
+</script>
+{% endblock %}
