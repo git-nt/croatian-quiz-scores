@@ -216,10 +216,13 @@
   </table>
   </div>
   <ul class="muted small series-key">
-  {%- for s in series if s.code == "wqc" and s.name != s.blurb %}
+  {%- for s in series if (s.code == "wqc" or s.code == "cro" or s.code == "ovako") and s.code != "ovako" and s.code != "oo" and s.name != s.blurb %}
     <li>{{ s.name }} — {{ s.blurb }}</li>
   {%- endfor %}
-  {%- for s in series if s.code != "wqc" and s.name != s.blurb %}
+  {%- for s in series if s.code != "wqc" and s.code != "cro" and s.code != "ovako" and s.code != "oo" and s.name != s.blurb %}
+    <li>{{ s.name }} — {{ s.blurb }}, {{s.location}}</li>
+  {%- endfor %}
+  {%- for s in series if s.code == "ovako" %}
     <li>{{ s.name }} — {{ s.blurb }}</li>
   {%- endfor %}
   </ul>
