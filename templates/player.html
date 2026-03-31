@@ -13,11 +13,12 @@
 </div>
 
 <h1 class="player-name">{{ player.name }}</h1>
-{% if podium %}
+{% if podium or edp_medals or pair_medals %}
+<div class="medal-box-wrap">
 <div class="medal-box">
   <div class="medal-box-header">Podium finishes</div>
   {% if podium_live %}
-  {% if podium_hks %}<div class="medal-section-label">Live Events</div>{% endif %}
+  <div class="medal-section-label">Individual Live Events</div>
   <table class="medal-table">
     <tbody>
       {% for m in podium_live %}
@@ -30,7 +31,7 @@
   </table>
   {% endif %}
   {% if podium_hks %}
-  {% if podium_live %}<div class="medal-section-label">HKS Events</div>{% endif %}
+  <div class="medal-section-label">Individual HKS Events</div>
   <table class="medal-table">
     <tbody>
       {% for m in podium_hks %}
@@ -42,10 +43,52 @@
     </tbody>
   </table>
   {% endif %}
+  {% if pair_medals %}
+  <div class="medal-section-label">Pair Championships</div>
+  <table class="medal-table">
+    <tbody>
+      {% for m in pair_medals %}
+      <tr>
+        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}G{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
+        <td class="medal-event">
+          {% if m.series == 'php' %}
+          <a href="{{ base_url }}/events/php{{ m.year }}/">PHP {{ m.year }}</a>
+          {% else %}
+          <a href="{{ base_url }}/events/{{ m.series }}{{ m.year }}/">{{ m.label if m.label else pair_event_label(m.series, m.year) }}</a>
+          {% endif %}
+          — {% for p in m.players %}{% if p != player.name %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% else %}{{ p }}{% endif %}{% if not loop.last %} / {% endif %}{% endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% if edp_medals %}
+  <div class="medal-section-label">Team Championships</div>
+  <table class="medal-table">
+    <tbody>
+      {% for m in edp_medals %}
+      <tr>
+        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}G{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
+        <td class="medal-event">
+          {% if m.series == 'edp' %}
+          <a href="{{ base_url }}/events/edp{{ m.year }}/">EDP {{ m.year }}</a>
+          {% else %}
+          <a href="{{ base_url }}/events/{{ m.series }}{{ m.year }}/">{{ m.label if m.label else team_event_label(m.series, m.year) }}</a>
+          {% endif %}
+          — {{ m.team }}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
 </div>
 {% endif %}
 
-<h2>Performance timeline</h2>
+{% if tl_years %}
+<h2>Individual performance timeline</h2>
 <div class="legend">
   <span class="legend-item"><span class="legend-swatch tl-gold"></span> 1st</span>
   <span class="legend-item"><span class="legend-swatch tl-silver"></span> 2nd</span>
@@ -120,8 +163,12 @@
 </table>
 </div>
 
+{% else %}
+<p class="muted">No individual events played.</p>
+{% endif %}
+
 {% if history %}
-<h2>Results</h2>
+<h2>Individual results</h2>
 <p class="muted small">Only events where this player appeared, oldest first.</p>
 
 <div class="tabs" id="results-tabs">

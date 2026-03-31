@@ -1,0 +1,42 @@
+[
+  {
+    "year": 2017,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Marko Laginja", "Neven Milijić"]},
+      {"rank": 3, "players": ["Ena Šarić", "Ivan Vlahek"]}
+    ]
+  },
+  {
+    "year": 2018,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Ivan Jurić", "Neven Milijić"]},
+      {"rank": 3, "players": ["Karlo Plazina", "Neven Trgovec"]}
+    ]
+  },
+  {
+    "year": 2019,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Perica Živanović"]},
+      {"rank": 2, "players": ["Neven Milijić", "Neven Trgovec"]},
+      {"rank": 3, "players": ["Šime Gverić", "Ivan Jurić"]}
+    ]
+  },
+  {
+    "year": 2024,
+    "podium": [
+      {"rank": 1, "players": ["Dean Kotiga", "Neven Trgovec"]},
+      {"rank": 2, "players": ["Domagoj Pozderac", "Šime Gverić"]},
+      {"rank": 3, "players": ["Ivan Jurić", "Lovro Jurišić"]}
+    ]
+  },
+  {
+    "year": 2025,
+    "podium": [
+      {"rank": 1, "players": ["Domagoj Pozderac", "Mladen Vukorepa"]},
+      {"rank": 2, "players": ["Šime Gverić", "Neven Trgovec"]},
+      {"rank": 3, "players": ["Lovro Marinović", "Stipe Vukšić"]}
+    ]
+  }
+]

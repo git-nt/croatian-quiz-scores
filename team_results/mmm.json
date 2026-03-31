@@ -1,0 +1,74 @@
+[
+  {
+    "year": 2017,
+    "podium": [
+      {"rank": 1, "team": "Prstići", "members": ["Dean Kotiga", "Mladen Vukorepa", "Neven Milijić", "Perica Živanović"]},
+      {"rank": 2, "team": "K.u.K. Improvisatoren", "members": ["Krešimir Štimac", "Krešimir Sučević Međeral", "Maja Rogulj", "Rudi Mrazović"]},
+      {"rank": 3, "team": "Tena, Ena i 2 kretena", "members": ["Ena Šarić", "Tena Jurišić", "Filip Karačić", "Ivan Vlahek"]}
+    ]
+  },
+  {
+    "year": 2018,
+    "podium": [
+      {"rank": 1, "team": "Prstići", "members": ["Tomislav Bleiziffer", "Dean Kotiga", "Mladen Vukorepa", "Perica Živanović"]},
+      {"rank": 2, "team": "Njemački landrasi", "members": ["Ruben Finderle", "Alen Franjić", "Marko Laginja", "Neven Milijić"]},
+      {"rank": 3, "team": "B tim", "members": ["Rudi Mrazović", "Marko Ožegović", "Maja Rogulj", "Krešimir Sučević Međeral"]}
+    ]
+  },
+  {
+    "year": 2019,
+    "podium": [
+      {"rank": 1, "team": "Prstići", "members": ["Dean Kotiga", "Perica Živanović", "Mladen Vukorepa", "Lukša Benić"]},
+      {"rank": 2, "team": "D tim", "members": ["Krešimir Sučević Međeral", "Maja Rogulj", "Rudi Mrazović", "Tomislav Berić"]},
+      {"rank": 3, "team": "Vidim ose", "members": ["Marijana Jakovašić", "Borko Barić", "Dražen Nemet", "Dražen Polić"]}
+    ]
+  },
+  {
+    "year": 2020,
+    "podium": [
+      {"rank": 1, "team": "E tim", "members": ["Krešimir Sučević Međeral", "Maja Rogulj", "Karlo Lugomer", "Rudi Mrazović"]},
+      {"rank": 2, "team": "Prstići", "members": ["Dean Kotiga", "Mladen Vukorepa", "Perica Živanović", "Toni Velić"]},
+      {"rank": 3, "team": "Zapravo svejedno", "members": ["Tena Jurišić", "Lovro Ljubičić", "Tomislav Berić", "Filip Karačić"]}
+    ]
+  },
+  {
+    "year": 2021,
+    "podium": [
+      {"rank": 1, "team": "Prstići", "members": ["Dean Kotiga", "Perica Živanović", "Toni Velić", "Lukša Benić"]},
+      {"rank": 2, "team": "F tim", "members": ["Karlo Lugomer", "Rudi Mrazović", "Nina Križan", "Krešimir Sučević Međeral"]},
+      {"rank": 3, "team": "Jaka rekcija", "members": ["Fabijan Čorak", "Petar Ćosović", "Lovro Marinović", "Stipe Vukšić"]}
+    ]
+  },
+  {
+    "year": 2022,
+    "podium": [
+      {"rank": 1, "team": "Johnny, Kare, Kina iiii mali Zeus", "members": ["Šime Gverić", "Karlo Plazina", "Neven Trgovec", "Ivan Žderić"]},
+      {"rank": 2, "team": "Mali umiljati medvjedići", "members": ["Dean Kotiga", "Lukša Benić", "Perica Živanović", "Mladen Vukorepa"]},
+      {"rank": 3, "team": "E tim", "members": ["Karlo Lugomer", "Rudi Mrazović", "Maja Rogulj", "Krešimir Sučević Međeral"]}
+    ]
+  },
+  {
+    "year": 2023,
+    "podium": [
+      {"rank": 1, "team": "Tanganjiška srdela", "members": ["Petra Lypolt", "Kristo Kristić", "Martin Brkić", "Prakhar Gupta"]},
+      {"rank": 2, "team": "Johnny, Kare, Kina iiii mali Zeus", "members": ["Lovro Jurišić", "Neven Trgovec", "Šime Gverić", "Karlo Plazina"]},
+      {"rank": 3, "team": "36. smotra glazbenih kretena", "members": ["Dean Kotiga", "Mladen Vukorepa", "Perica Živanović", "Toni Velić"]}
+    ]
+  },
+  {
+    "year": 2024,
+    "podium": [
+      {"rank": 1, "team": "Johnny, Kare, Kina iiii mali Zeus", "members": ["Šime Gverić", "Karlo Plazina", "Neven Trgovec", "Ivan Jurić"]},
+      {"rank": 2, "team": "Kiwizaši", "members": ["Lidija Benković", "Domagoj Pozderac", "Dražen Cukina", "Dalibor Benković"]},
+      {"rank": 3, "team": "Prevare", "members": ["Krešimir Melnik", "Šimo Širanović", "Filip Znaor", "Goran Vesić"]}
+    ]
+  },
+  {
+    "year": 2025,
+    "podium": [
+      {"rank": 1, "team": "Jaka Rekcija", "members": ["Fabijan Čorak", "Petar Ćosović", "Lovro Marinović", "Stipe Vukšić"]},
+      {"rank": 2, "team": "Johnny, Kare, Kina iiii mali Zeus", "members": ["Lovro Jurišić", "Karlo Plazina", "Domagoj Pozderac", "Neven Trgovec"]},
+      {"rank": 3, "team": "Specijalna operacija", "members": ["Mario Ferenčak", "Vanja Galović", "Željko Pavić", "Ante Uzelac"]}
+    ]
+  }
+]

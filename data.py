@@ -30,6 +30,7 @@ class SeriesInfo:
     month_overrides: dict[int, int] = field(default_factory=dict)
     defunct: bool = False
     category: str = "live"  # "live" | "hks"
+    location: str = ""
 
     def month_for_year(self, year: int) -> int:
         return self.month_overrides.get(year, self.month)
@@ -49,6 +50,7 @@ def _load_series() -> list[SeriesInfo]:
             month_overrides=overrides,
             defunct=entry.get("defunct", False),
             category=entry.get("category", "live"),
+            location=entry.get("location", ""),
         ))
     return out
 

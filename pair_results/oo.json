@@ -1,0 +1,18 @@
+[
+  {
+    "year": 2024,
+    "podium": [
+      {"rank": 1, "players": ["Domagoj Pozderac", "Šime Gverić"]},
+      {"rank": 2, "players": ["Lovro Marinović", "Stipe Vukšić"]},
+      {"rank": 3, "players": ["Ivan Andonov", "Ivan Jurić"]}
+    ]
+  },
+  {
+    "year": 2025,
+    "podium": [
+      {"rank": 1, "players": ["Ivan Jurić", "Lovro Jurišić"]},
+      {"rank": 2, "players": ["Šime Gverić", "Domagoj Pozderac"]},
+      {"rank": 3, "players": ["Lovro Marinović", "Stipe Vukšić"]}
+    ]
+  }
+]

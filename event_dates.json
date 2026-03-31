@@ -1,0 +1,40 @@
+{
+  "wqc2014":   {"date": "June 7, 2014"},
+  "wqc2015":   {"date": "June 6, 2015"},
+  "wqc2016":   {"date": "June 4, 2016"},
+  "wqc2017":   {"date": "June 3, 2017"},
+  "wqc2018":   {"date": "June 2, 2018"},
+  "wqc2019":   {"date": "June 1, 2019"},
+  "wqc2020":   {"date": "June 6, 2020"},
+  "wqc2021":   {"date": "June 5, 2021"},
+  "wqc2022":   {"date": "June 4, 2022"},
+  "wqc2023":   {"date": "June 3, 2023"},
+  "wqc2024":   {"date": "June 1, 2024"},
+  "wqc2025":   {"date": "June 7, 2025"},
+
+  "mmm2017":   {"date": "September 30 – October 1, 2017", "location": "Zadar"},
+  "mmm2018":   {"date": "October 6–8, 2018",              "location": "Zadar"},
+  "mmm2019":   {"date": "October 5–6, 2019",              "location": "Zadar"},
+  "mmm2020":   {"date": "September 5–6, 2020",            "location": "Zadar"},
+  "mmm2021":   {"date": "September 18–19, 2021",          "location": "Zadar"},
+  "mmm2022":   {"date": "October 1–2, 2022",              "location": "Zadar"},
+  "mmm2023":   {"date": "September 16–17, 2023",          "location": "Zadar"},
+  "mmm2024":   {"date": "September 28–29, 2024",          "location": "Zadar"},
+  "mmm2025":   {"date": "October 4–5, 2025",              "location": "Zadar"},
+
+  "sova2017":  {"date": "April 1–2, 2017",                "location": "Požega"},
+  "sova2018":  {"date": "April 13–15, 2018",              "location": "Požega"},
+  "sova2019":  {"date": "May 17–19, 2019",                "location": "Požega"},
+  "sova2021":  {"date": "June 5–6, 2021",                 "location": "Požega"},
+  "sova2024":  {"date": "April 19–21, 2024",              "location": "Požega"},
+  "sova2025":  {"date": "April 25–27, 2025",              "location": "Požega"},
+
+  "ovako2019": {"date": "June 7–9, 2019",                 "location": "Varaždin"},
+
+  "oo2024":    {"date": "December 13–15, 2024",           "location": "Osijek"},
+  "oo2025":    {"date": "December 5–7, 2025",             "location": "Osijek"},
+
+  "zimko2019": {"date": "January 11–13, 2019",            "location": "Karlovac"},
+  "zimko2020": {"date": "January 24–26, 2020",            "location": "Karlovac"},
+  "zimko2022": {"date": "May 27–29, 2022",                "location": "Karlovac"}
+}

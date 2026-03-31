@@ -1,0 +1,51 @@
+[
+  {
+    "year": 2017,
+    "podium": [
+      {"rank": 1, "team": "Prstići", "members": ["Dean Kotiga", "Neven Milijić", "Mladen Vukorepa", "Perica Živanović"]},
+      {"rank": 2, "team": "K.u.K. Improvisatoren", "members": ["Rudi Mrazović", "Maja Rogulj", "Krešimir Sučević Međeral", "Krešimir Štimac"]},
+      {"rank": 3, "team": "Tena, Ena i dva kretena", "members": ["Tena Jurišić", "Filip Karačić", "Ena Šarić", "Ivan Vlahek"]}
+    ]
+  },
+  {
+    "year": 2018,
+    "podium": [
+      {"rank": 1, "team": "B tim", "members": ["Rudi Mrazović", "Marko Ožegović", "Maja Rogulj", "Krešimir Sučević Međeral"]},
+      {"rank": 2, "team": "Prstići", "members": ["Lukša Benić", "Dean Kotiga", "Mladen Vukorepa", "Perica Živanović"]},
+      {"rank": 3, "team": "Tena, Ena i dva kretena", "members": ["Tena Jurišić", "Filip Karačić", "Ena Šarić", "Ivan Vlahek"]}
+    ]
+  },
+  {
+    "year": 2019,
+    "podium": [
+      {"rank": 1, "team": "C tim", "members": ["Tomislav Berić", "Lovro Ljubičić", "Rudi Mrazović", "Krešimir Sučević Međeral"]},
+      {"rank": 2, "team": "Prstići", "members": ["Dean Kotiga", "Toni Velić", "Mladen Vukorepa", "Perica Živanović"]},
+      {"rank": 3, "team": "Johnny, Kare, Kina iii mali Zeus", "members": ["Šime Gverić", "Ivan Jurić", "Neven Trgovec", "Ivan Vulić"]}
+    ]
+  },
+  {
+    "year": 2021,
+    "label": "SOVA 2021 (24h Marathon)",
+    "podium": [
+      {"rank": 1, "team": "Jaka rekcija", "members": ["Fabijan Čorak", "Petar Ćosović", "Lovro Marinović", "Marijan Razum"]},
+      {"rank": 2, "team": "Snorlaxi", "members": ["Šime Gverić", "Karlo Plazina", "Dominik Varga", "Ivan Vulić"]},
+      {"rank": 3, "team": "Znalac, Bauštelac, Diplomac i Metalac", "members": ["Ivan Jurić", "Dragan Gulam", "Duško Lakić", "Lovro Jurišić"]}
+    ]
+  },
+  {
+    "year": 2024,
+    "podium": [
+      {"rank": 1, "team": "Zombi ujak", "members": ["Šime Gverić", "Dean Kotiga", "Domagoj Pozderac", "Neven Trgovec"]},
+      {"rank": 2, "team": "KviZDe", "members": ["Ivan Jurić", "Lovro Jurišić", "Duško Lakić", "Roko Sven Surać"]},
+      {"rank": 3, "team": "Braća i hlača", "members": ["Marin Blažetić", "Lovro Marinović", "Stipe Vukšić", "Bojan Hlača"]}
+    ]
+  },
+  {
+    "year": 2025,
+    "podium": [
+      {"rank": 1, "team": "Zombi stric", "members": ["Šime Gverić", "Domagoj Pozderac", "Neven Trgovec", "Mladen Vukorepa"]},
+      {"rank": 2, "team": "Jaka rekcija", "members": ["Fabijan Čorak", "Petar Ćosović", "Lovro Marinović", "Stipe Vukšić"]},
+      {"rank": 3, "team": "J tim", "members": ["Tomislav Berić", "Rudi Mrazović", "Krešimir Sučević Međeral", "Josip Zaninović"]}
+    ]
+  }
+]

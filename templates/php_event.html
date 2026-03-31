@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}PHP {{ year }}{% endblock %}
+{% block body %}
+<p class="muted small"><a href="{{ base_url }}/events/">← Events</a></p>
+<div class="tournament-hero">
+  <h2>PHP {{ year }}</h2>
+  <p class="muted">Prvenstvo Hrvatske u mješovitim parovima — mixed pairs championship organised by HKS.</p>
+  {% set di = event_date_for('php' ~ year) %}
+  {% if di %}<p class="event-date-line">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</p>{% endif %}
+  <h3 class="event-section-heading">Pairs Quiz</h3>
+  <ul class="event-podium-list">
+    {% for slot in podium %}
+    <li>{% if slot.rank == 1 %}🥇{% elif slot.rank == 2 %}🥈{% else %}🥉{% endif %} {% for p in slot.players %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% if not loop.last %} / {% endif %}{% endfor %}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
