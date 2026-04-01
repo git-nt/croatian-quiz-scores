@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}EDP {{ year }}{% endblock %}
+{% block title %}EDP {{ year }}.{% endblock %}
 {% block body %}
 <div class="tournament-hero">
-  <h2>EDP {{ year }}</h2>
+  <h2>EDP {{ year }}.</h2>
   <p class="muted">Ekipno državno prvenstvo u kvizu.</p>
   {% set di = event_date_for('edp' ~ year) %}
   {% if di %}<p class="event-date-line">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</p>{% endif %}

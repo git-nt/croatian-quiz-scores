@@ -88,9 +88,7 @@
   <h2>Medalje</h2>
   {% for t, podium in events_medals %}
   <div class="event-block" data-cat="{{ 'hks' if is_hks_event(t.key) else 'live' }}" data-series="{{ series_code_from_key(t.key) }}">
-    <h3><a href="{{ base_url }}/events/{{ t.key }}/">{{ t.label }}</a></h3>
-    {% set bl = blurb_for_key(t.key) %}
-    {% if bl %}<p class="sub">{{ bl }}</p>{% endif %}
+    <h3><a href="{{ base_url }}/events/{{ t.key }}/">{{ event_label(t.key, t.label) }}</a></h3>
     {% if podium %}
     <ul class="small">
       {% for pname, r in podium %}
@@ -108,7 +106,7 @@
   <h2>Medalje</h2>
   {% for entry in edp_by_year %}
   <div class="event-block edp-block" data-tcat="edp">
-    <h3><a href="{{ base_url }}/events/edp{{ entry.year }}/">EDP {{ entry.year }}</a></h3>
+    <h3><a href="{{ base_url }}/events/edp{{ entry.year }}/">EDP {{ entry.year }}.</a></h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
@@ -123,7 +121,7 @@
   {% for code in live_team_codes %}
   {% for entry in all_team_raw[code] | sort(attribute='year', reverse=True) %}
   <div class="event-block edp-block" data-tcat="live" data-tseries="{{ code }}">
-    <h3>{{ entry.label if entry.label is defined else team_event_label(code, entry.year) }}</h3>
+    <h3>{% set _h = entry.label if entry.label is defined else team_event_label(code, entry.year) %}{{ _h }}{% if _h and not _h.endswith('.') %}.{% endif %}</h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
@@ -142,7 +140,7 @@
   <h2>Medalje</h2>
   {% for entry in php_by_year %}
   <div class="event-block edp-block" data-pcat="php">
-    <h3><a href="{{ base_url }}/events/php{{ entry.year }}/">PHP {{ entry.year }}</a></h3>
+    <h3><a href="{{ base_url }}/events/php{{ entry.year }}/">PHP {{ entry.year }}.</a></h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
@@ -156,7 +154,7 @@
   {% for code in live_pair_codes %}
   {% for entry in all_pair_raw[code] | sort(attribute='year', reverse=True) %}
   <div class="event-block edp-block" data-pcat="live" data-pseries="{{ code }}">
-    <h3>{{ entry.label if entry.label is defined else pair_event_label(code, entry.year) }}</h3>
+    <h3>{% set _h = entry.label if entry.label is defined else pair_event_label(code, entry.year) %}{{ _h }}{% if _h and not _h.endswith('.') %}.{% endif %}</h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">

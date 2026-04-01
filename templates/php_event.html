@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}PHP {{ year }}{% endblock %}
+{% block title %}PHP {{ year }}.{% endblock %}
 {% block body %}
 <div class="tournament-hero">
-  <h2>PHP {{ year }}</h2>
+  <h2>PHP {{ year }}.</h2>
   <p class="muted">Prvenstvo Hrvatske u mješovitim parovima.</p>
   {% set di = event_date_for('php' ~ year) %}
   {% if di %}<p class="event-date-line">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</p>{% endif %}

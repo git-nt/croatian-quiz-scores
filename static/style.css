@@ -65,6 +65,64 @@ select.player-select {
   cursor: pointer;
 }
 
+/* Typeable player picker (home + player pages) */
+.player-combobox-field {
+  position: relative;
+  min-width: min(100%, 22rem);
+  max-width: 100%;
+}
+
+.player-combobox-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.7rem;
+  font-size: 1rem;
+  line-height: 1.35;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.player-combobox-input:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 1px;
+}
+
+.player-combobox-input::placeholder {
+  color: var(--muted);
+}
+
+.player-combobox-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 2px);
+  z-index: 300;
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  max-height: min(65vh, 22rem);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.12);
+}
+
+.player-combobox-option {
+  padding: 0.45rem 0.75rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.player-combobox-option:hover,
+.player-combobox-option.active {
+  background: #eff6ff;
+  color: var(--link);
+}
+
 .chart-wrap {
   position: relative;
   width: 100%;

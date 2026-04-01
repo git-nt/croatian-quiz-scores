@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}{{ t.label }}{% endblock %}
+{% block title %}{{ event_label(t.key, t.label) }}{% endblock %}
 {% block body %}
 <div class="tournament-hero">
-  <h2>{{ t.label }}</h2>
+  <h2>{{ event_label(t.key, t.label) }}</h2>
   {% set bl = blurb_for_key(t.key) %}
   {% if bl %}<p class="muted">{{ bl }}</p>{% endif %}
   {% set di = event_date_for(t.key) %}
@@ -50,7 +50,6 @@
 {% if placement_only %}
 <p class="muted small text-center">Samo plasmani ({{ rows|length }}) — rezultati još nisu uneseni.</p>
 {% elif is_score_only %}
-<p class="muted small text-center">{{ rows|length }} rangiranih</p>
 {% else %}
 {% endif %}
 <div class="scroll-x">

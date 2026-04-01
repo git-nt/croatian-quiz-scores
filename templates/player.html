@@ -2,12 +2,29 @@
 {% block title %}{{ player.name }}{% endblock %}
 {% block body %}
 <div class="player-toolbar">
-  <label class="player-picker-label" for="player-select">Igrač</label>
-  <select id="player-select" class="player-select" aria-label="Odaberite igrača">
-    {% for opt in player_options %}
-    <option value="{{ opt.slug }}" {% if opt.slug == current_slug %}selected{% endif %}>{{ opt.name }}</option>
-    {% endfor %}
-  </select>
+  <label class="player-picker-label" for="player-select-input">Igrač</label>
+  <div class="player-combobox" data-player-combobox data-base-url="{{ base_url }}" data-current-slug="{{ current_slug }}">
+    <script type="application/json" class="player-combobox-data">{{ player_options | tojson }}</script>
+    <div class="player-combobox-field">
+      <input
+        type="text"
+        id="player-select-input"
+        class="player-combobox-input"
+        value="{{ player.name }}"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="Upišite dio imena…"
+        aria-label="Odaberite igrača"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls="player-select-list"
+        role="combobox"
+      />
+      <ul id="player-select-list" class="player-combobox-list" role="listbox" hidden></ul>
+    </div>
+  </div>
 </div>
 
 <h1 class="player-name">{{ player.name }}</h1>
@@ -50,9 +67,9 @@
         <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}G{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
         <td class="medal-event">
           {% if m.series == 'php' %}
-          <a href="{{ base_url }}/events/php{{ m.year }}/">PHP {{ m.year }}</a>
+          <a href="{{ base_url }}/events/php{{ m.year }}/">PHP {{ m.year }}.</a>
           {% else %}
-          <a href="{{ base_url }}/events/{{ m.series }}{{ m.year }}/">{{ m.label if m.label else pair_event_label(m.series, m.year) }}</a>
+          <a href="{{ base_url }}/events/{{ m.series }}{{ m.year }}/">{% if m.label %}{{ event_label(m.series ~ (m.year | string), m.label) }}{% else %}{{ pair_event_label(m.series, m.year) }}{% endif %}</a>
           {% endif %}
           — {% for p in m.players %}{% if p != player.name %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% else %}{{ p }}{% endif %}{% if not loop.last %} / {% endif %}{% endfor %}
         </td>
@@ -70,9 +87,9 @@
         <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}G{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
         <td class="medal-event">
           {% if m.series == 'edp' %}
-          <a href="{{ base_url }}/events/edp{{ m.year }}/">EDP {{ m.year }}</a>
+          <a href="{{ base_url }}/events/edp{{ m.year }}/">EDP {{ m.year }}.</a>
           {% else %}
-          <a href="{{ base_url }}/events/{{ m.series }}{{ m.year }}/">{{ m.label if m.label else team_event_label(m.series, m.year) }}</a>
+          <a href="{{ base_url }}/events/{{ m.series }}{{ m.year }}/">{% if m.label %}{{ event_label(m.series ~ (m.year | string), m.label) }}{% else %}{{ team_event_label(m.series, m.year) }}{% endif %}</a>
           {% endif %}
           — {{ m.team }}
         </td>
@@ -218,7 +235,7 @@
   </table>
   </div>
   <ul class="muted small series-key">
-  {%- for s in series if (s.code == "wqc" or s.code == "ovako") and s.code != "ovako" and s.code != "oo" and s.name != s.blurb %}
+  {%- for s in series if (s.code == "wqc" or s.code == "cro" or s.code == "ovako") and s.code != "ovako" and s.code != "oo" and s.name != s.blurb %}
     <li>{{ s.name }} — {{ s.blurb }}</li>
   {%- endfor %}
   {%- for s in series if s.code != "wqc" and s.code != "cro" and s.code != "ovako" and s.code != "oo" and s.name != s.blurb %}
@@ -297,13 +314,6 @@
 {% endif %}
 <script>
 (function () {
-  const sel = document.getElementById('player-select');
-  if (sel) {
-    sel.addEventListener('change', function () {
-      if (this.value) window.location.href = '{{ base_url }}/players/' + encodeURIComponent(this.value) + '/';
-    });
-  }
-
   const tabs     = document.getElementById('results-tabs');
   const pills    = document.getElementById('series-pills');
   const finLegend = document.getElementById('finalist-legend');
@@ -388,4 +398,5 @@
   }
 })();
 </script>
+<script src="{{ base_url }}/static/player-combobox.js" defer></script>
 {% endblock %}
