@@ -29,7 +29,7 @@
   {
     "code": "wqc",
     "name": "WQC",
-    "blurb": "World Quizzing Championships",
+    "blurb": "Svjetsko kvizno prvenstvo",
     "month": 6,
     "defunct": false,
     "category": "hks"
@@ -37,7 +37,7 @@
   {
     "code": "cro",
     "name": "Croatian Open",
-    "blurb": "Individual Croatian Championship",
+    "blurb": "",
     "month": 11,
     "defunct": false,
     "category": "hks"

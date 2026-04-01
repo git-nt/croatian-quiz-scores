@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Events{% endblock %}
+{% block title %}Događaji{% endblock %}
 {% block body %}
-<h2>Events</h2>
-<p class="muted small">Click a section to expand and browse events.</p>
+<h2>Događaji</h2>
+<p class="muted small">Kliknite na kategoriju za prikaz događaja.</p>
 
 <div class="series-accordion">
 
   {# ── Category groups (HKS, Live Events, Defunct Live Events) ── #}
   {% for cat in category_groups %}
-  <div class="acc-category-label{% if 'Defunct' in cat.label %} acc-category-defunct{% endif %}">{{ cat.label }}</div>
+  <div class="acc-category-label{% if 'Neaktivni' in cat.label %} acc-category-defunct{% endif %}">{{ cat.label }}</div>
 
   {% for group in cat.groups %}
   <div class="acc-item">
@@ -45,7 +45,7 @@
   <div class="acc-item">
     <button class="acc-head" aria-expanded="false">
       <span class="acc-label">PHP</span>
-      <span class="acc-sub muted small">Prvenstvo Hrvatske u mješovitim parovima (Mixed Pairs Championship)</span>
+      <span class="acc-sub muted small">Prvenstvo Hrvatske u mješovitim parovima</span>
       <span class="acc-arrow">▶</span>
     </button>
     <ul class="acc-body" hidden>
@@ -58,7 +58,7 @@
   <div class="acc-item">
     <button class="acc-head" aria-expanded="false">
       <span class="acc-label">EDP</span>
-      <span class="acc-sub muted small">Ekipno državno prvenstvo (National Team Championship)</span>
+      <span class="acc-sub muted small">Ekipno državno prvenstvo</span>
       <span class="acc-arrow">▶</span>
     </button>
     <ul class="acc-body" hidden>

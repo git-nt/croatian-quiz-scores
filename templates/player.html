@@ -2,8 +2,8 @@
 {% block title %}{{ player.name }}{% endblock %}
 {% block body %}
 <div class="player-toolbar">
-  <label class="player-picker-label" for="player-select">Player</label>
-  <select id="player-select" class="player-select" aria-label="Select player">
+  <label class="player-picker-label" for="player-select">Igrač</label>
+  <select id="player-select" class="player-select" aria-label="Odaberite igrača">
     {% for opt in player_options %}
     <option value="{{ opt.slug }}" {% if opt.slug == current_slug %}selected{% endif %}>{{ opt.name }}</option>
     {% endfor %}
@@ -14,9 +14,9 @@
 {% if podium or edp_medals or pair_medals %}
 <div class="medal-box-wrap">
 <div class="medal-box">
-  <div class="medal-box-header">Podium finishes</div>
+  <div class="medal-box-header">Medalje</div>
   {% if podium_live %}
-  <div class="medal-section-label">Individual Live Events</div>
+  <div class="medal-section-label">Individualni open kvizovi</div>
   <table class="medal-table">
     <tbody>
       {% for m in podium_live %}
@@ -29,7 +29,7 @@
   </table>
   {% endif %}
   {% if podium_hks %}
-  <div class="medal-section-label">Individual HKS Events</div>
+  <div class="medal-section-label">Individualni HKS kvizovi</div>
   <table class="medal-table">
     <tbody>
       {% for m in podium_hks %}
@@ -42,7 +42,7 @@
   </table>
   {% endif %}
   {% if pair_medals %}
-  <div class="medal-section-label">Pairs Events</div>
+  <div class="medal-section-label">Kvizovi parova</div>
   <table class="medal-table">
     <tbody>
       {% for m in pair_medals %}
@@ -62,7 +62,7 @@
   </table>
   {% endif %}
   {% if edp_medals %}
-  <div class="medal-section-label">Team Events</div>
+  <div class="medal-section-label">Ekipni kvizovi</div>
   <table class="medal-table">
     <tbody>
       {% for m in edp_medals %}
@@ -86,14 +86,14 @@
 {% endif %}
 
 {% if tl_years %}
-<h2>Individual performance timeline</h2>
+<h2>Individualni nastupi</h2>
 <div class="legend">
-  <span class="legend-item"><span class="legend-swatch tl-gold"></span> 1st</span>
-  <span class="legend-item"><span class="legend-swatch tl-silver"></span> 2nd</span>
-  <span class="legend-item"><span class="legend-swatch tl-bronze"></span> 3rd</span>
+  <span class="legend-item"><span class="legend-swatch tl-gold"></span> 1.</span>
+  <span class="legend-item"><span class="legend-swatch tl-silver"></span> 2.</span>
+  <span class="legend-item"><span class="legend-swatch tl-bronze"></span> 3.</span>
   <span class="legend-item"><span class="legend-swatch tl-final"></span> finalist</span>
-  <span class="legend-item"><span class="legend-swatch tl-no-event"></span> not held</span>
-  <span class="legend-item"><span class="legend-dash">—</span> absent</span>
+  <span class="legend-item"><span class="legend-swatch tl-no-event"></span> nije održano</span>
+  <span class="legend-item"><span class="legend-dash">—</span> odsutan</span>
 </div>
 <div class="scroll-x">
 <table class="data tl-grid">
@@ -105,7 +105,7 @@
   </thead>
   <tbody>
     <tr class="tl-divider tl-divider-live">
-      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Live Events</th>
+      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Open kvizovi</th>
     </tr>
     {% for row in tl_live %}
     <tr>
@@ -123,7 +123,7 @@
     {% endfor %}
     <tr class="tl-spacer"><td colspan="{{ tl_years | length + 1 }}"></td></tr>
     <tr class="tl-divider tl-divider-hks">
-      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">HKS Events</th>
+      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">HKS kvizovi</th>
     </tr>
     {% for row in tl_hks %}
     <tr>
@@ -141,7 +141,7 @@
     {% endfor %}
     <tr class="tl-spacer"><td colspan="{{ tl_years | length + 1 }}"></td></tr>
     <tr class="tl-divider tl-divider-defunct">
-      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Defunct Live Events</th>
+      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Neaktivni openi</th>
     </tr>
     {% for row in tl_defunct %}
     <tr>
@@ -162,39 +162,39 @@
 </div>
 
 {% else %}
-<p class="muted">No individual events played.</p>
+<p class="muted">Nema individualnih nastupa.</p>
 {% endif %}
 
 {% if history %}
-<h2>Individual results</h2>
-<p class="muted small">Only events where this player appeared, oldest first.</p>
+<h2>Individualni rezultati</h2>
+<p class="muted small">Samo kvizovi na kojima je igrač nastupio, poredani kronološki.</p>
 
 <div class="tabs" id="results-tabs">
   <div class="results-filter-wrap">
     <div class="results-tier-all">
-      <button class="results-btn results-btn-all active" data-tab="all">All</button>
+      <button class="results-btn results-btn-all active" data-tab="all">Sve</button>
     </div>
     <div class="results-tier-cats" id="results-tier-cats">
-      <button class="results-btn results-btn-cat" data-tab="live">Live Events</button>
+      <button class="results-btn results-btn-cat" data-tab="live">Open kvizovi</button>
       <button class="results-btn results-btn-cat" data-tab="hks">HKS</button>
     </div>
   </div>
   <div class="pill-bar results-pill-bar" id="series-pills" hidden></div>
   <div class="history-block">
   <div class="legend" id="finalist-legend">
-    <span class="legend-item"><span class="legend-swatch rank-final"></span> finalist in a live event</span>
+    <span class="legend-item"><span class="legend-swatch rank-final"></span> finalist na open kvizu</span>
   </div>
   <div class="scroll-x">
   <table class="data player-history">
     <thead>
       <tr>
-        <th rowspan="2">Event</th>
-        <th class="num" rowspan="2">Place</th>
-        <th class="num th-group" colspan="2">Points</th>
+        <th rowspan="2">Kviz</th>
+        <th class="num" rowspan="2">Mjesto</th>
+        <th class="num th-group" colspan="2">Bodovi</th>
       </tr>
       <tr>
-        <th class="num th-sub">regular</th>
-        <th class="num th-sub col-final">regular + final</th>
+        <th class="num th-sub">prvi dio</th>
+        <th class="num th-sub col-final">prvi dio + finale</th>
       </tr>
     </thead>
     <tbody>
@@ -218,7 +218,7 @@
   </table>
   </div>
   <ul class="muted small series-key">
-  {%- for s in series if (s.code == "wqc" or s.code == "cro" or s.code == "ovako") and s.code != "ovako" and s.code != "oo" and s.name != s.blurb %}
+  {%- for s in series if (s.code == "wqc" or s.code == "ovako") and s.code != "ovako" and s.code != "oo" and s.name != s.blurb %}
     <li>{{ s.name }} — {{ s.blurb }}</li>
   {%- endfor %}
   {%- for s in series if s.code != "wqc" and s.code != "cro" and s.code != "ovako" and s.code != "oo" and s.name != s.blurb %}
@@ -233,8 +233,7 @@
 {% endif %}
 
 {% if has_chart %}
-<h2>Placement over time</h2>
-<p class="muted small">Higher line = better placement. Chronological order.</p>
+<h2>Individualni plasmani kroz vrijeme</h2>
 <div class="chart-wrap">
   <canvas id="rank-chart"></canvas>
 </div>
@@ -256,7 +255,7 @@
     data: {
       labels: labels,
       datasets: [{
-        label: 'Placement',
+        label: 'Plasman',
         data: ranks,
         borderColor: '#2563eb',
         backgroundColor: 'rgba(37, 99, 235, 0.12)',
@@ -275,7 +274,7 @@
           min: 1,
           max: Math.max(maxRank + 1, 3),
           ticks: { maxTicksLimit: 14, precision: 0, color: '#5c6570' },
-          title: { display: true, text: 'Placement (lower is better)', color: '#5c6570', font: { size: 11 } }
+          title: { display: true, text: 'Plasman (niže je bolje)', color: '#5c6570', font: { size: 11 } }
         },
         x: {
           ticks: { display: false },
@@ -287,7 +286,7 @@
         tooltip: {
           callbacks: {
             title: function (items) { return labels[items[0].dataIndex]; },
-            label: function (ctx) { return 'Place #' + ctx.parsed.y; }
+            label: function (ctx) { return 'Mjesto #' + ctx.parsed.y; }
           }
         }
       }
@@ -341,7 +340,7 @@
     // "All" pill first
     const allBtn = document.createElement('button');
     allBtn.className = 'pill-btn active';
-    allBtn.textContent = 'All';
+    allBtn.textContent = 'Sve';
     allBtn.dataset.series = '';
     pills.appendChild(allBtn);
     seen.forEach(function (code) {

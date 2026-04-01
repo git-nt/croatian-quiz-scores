@@ -7,9 +7,9 @@
   {% if bl %}<p class="muted">{{ bl }}</p>{% endif %}
   {% set di = event_date_for(t.key) %}
   {% if di %}<p class="event-date-line">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</p>{% endif %}
-  {% if external_link %}<p class="event-report-line"><a class="event-report-link" href="{{ external_link }}" target="_blank" rel="noopener">Report ↗</a></p>{% endif %}
+  {% if external_link %}<p class="event-report-line"><a class="event-report-link" href="{{ external_link }}" target="_blank" rel="noopener">Izvještaj ↗</a></p>{% endif %}
   {% if not team_only %}
-  <h3 class="event-section-heading">Individual Quiz</h3>
+  <h3 class="event-section-heading">Individualni kviz</h3>
   {% if podium %}
   <ul class="event-podium-list">
     {% for pname, r in podium %}
@@ -17,14 +17,14 @@
     {% endfor %}
   </ul>
   {% else %}
-  <p class="muted">No top-3 placements for this event.</p>
+  <p class="muted">Nema plasmana u top 3 na ovom kvizu.</p>
   {% endif %}
   {% endif %}
 </div>
 
 {% if pair_entry %}
 <div class="tournament-hero" style="margin-top:0.5rem;">
-  <h3 class="event-section-heading">Pairs Quiz</h3>
+  <h3 class="event-section-heading">Kviz parova</h3>
   <ul class="event-podium-list">
     {% for slot in pair_entry.podium %}
     <li>{% if slot.rank == 1 %}🥇{% elif slot.rank == 2 %}🥈{% else %}🥉{% endif %} {% for p in slot.players %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% if not loop.last %} / {% endif %}{% endfor %}</li>
@@ -35,7 +35,7 @@
 
 {% if team_entry %}
 <div class="tournament-hero" style="margin-top:0.5rem;">
-  <h3 class="event-section-heading">Team Quiz</h3>
+  <h3 class="event-section-heading">Ekipni kviz</h3>
   <ul class="event-podium-list">
     {% for slot in team_entry.podium %}
     <li>{% if slot.rank == 1 %}🥇{% elif slot.rank == 2 %}🥈{% else %}🥉{% endif %} <strong>{{ slot.team }}</strong><span class="muted small"> ({% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %})</span></li>
@@ -45,26 +45,25 @@
 {% endif %}
 
 {% if not team_only %}
-<h3 class="event-section-heading">{% if is_live_event %}Individual Quiz — {% endif %}Full ranking</h3>
+<h3 class="event-section-heading">{% if is_live_event %}Individualni kviz — {% endif %}Poredak</h3>
 {% if has_sheet and rows %}
 {% if placement_only %}
-<p class="muted small text-center">Placements only ({{ rows|length }} listed) — no scores in the source yet.</p>
+<p class="muted small text-center">Samo plasmani ({{ rows|length }}) — rezultati još nisu uneseni.</p>
 {% elif is_score_only %}
-<p class="muted small text-center">{{ rows|length }} ranked</p>
+<p class="muted small text-center">{{ rows|length }} rangiranih</p>
 {% else %}
-<p class="muted small text-center">Final: top {{ finalist_count }} · {{ rows|length }} ranked overall</p>
 {% endif %}
 <div class="scroll-x">
 <table class="data standings-detail">
   <thead>
     <tr>
       <th class="num">#</th>
-      <th>Player</th>
+      <th>Igrač</th>
       {% if is_score_only %}
-      <th class="num">Score</th>
+      <th class="num">Bodovi</th>
       {% else %}
-      <th class="num">Points <span class="th-hint">regular</span></th>
-      <th class="num">Points <span class="th-hint">regular + final</span></th>
+      <th class="num">Bodovi <span class="th-hint">prvi dio</span></th>
+      <th class="num">Bodovi <span class="th-hint">prvi dio + finale</span></th>
       {% endif %}
     </tr>
   </thead>
@@ -85,9 +84,9 @@
 </table>
 </div>
 {% elif not has_sheet %}
-<p class="muted">No results loaded for this event.</p>
+<p class="muted">Rezultati za ovaj događaj nisu učitani.</p>
 {% else %}
-<p class="muted">No rows to show.</p>
+<p class="muted">Nema podataka za prikaz.</p>
 {% endif %}
 {% endif %}
 {% endblock %}

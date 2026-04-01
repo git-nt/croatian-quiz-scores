@@ -28,10 +28,10 @@ OUT = BASE / "_site"
 
 
 def event_label(key: str, label: str) -> str:
-    """Return display label for a tournament; WQC gets '(Croatia)' qualifier."""
+    """Return display label for a tournament; WQC gets '(Hrvatska)' qualifier."""
     if series_code_from_key(key) == "wqc":
         m = re.search(r"(\d{4})", label)
-        return f"WQC {m.group(1)} (Croatia)" if m else label
+        return f"WQC {m.group(1)} (Hrvatska)" if m else label
     return label
 
 
@@ -377,14 +377,14 @@ def build(base_url: str = ""):
     ]
     player_options.sort(key=lambda o: o["name"].lower())
     write_page("", "players.html", {
-        "title": "All players",
+        "title": "Svi igrači",
         "players": players_sorted,
         "player_options": player_options,
     })
 
     # ── Medals ──
     write_page("medals", "medals.html", {
-        "title": "Medalists",
+        "title": "Medalje",
         "medals_all": medals_all,
         "medals_live": medals_live,
         "medals_hks": medals_hks,
@@ -553,8 +553,8 @@ def build(base_url: str = ""):
 
     category_groups = [
         {"label": "HKS", "groups": _series_group("hks")},
-        {"label": "Live Events", "groups": _series_group_filtered("live", False)},
-        {"label": "Defunct Live Events", "groups": _series_group_filtered("live", True)},
+        {"label": "Open kvizovi", "groups": _series_group_filtered("live", False)},
+        {"label": "Neaktivni openi", "groups": _series_group_filtered("live", True)},
     ]
     # Team-only event years per series (not in individual data), for events page links
     _team_only_by_series: dict[str, list[dict]] = {}
@@ -567,7 +567,7 @@ def build(base_url: str = ""):
             _team_only_by_series[_sc] = sorted(_extra, key=lambda e: e["year"], reverse=True)
 
     write_page("events", "tournaments.html", {
-        "title": "Events",
+        "title": "Događaji",
         "category_groups": category_groups,
         "edp_by_year": edp_by_year,
         "php_by_year": php_by_year,

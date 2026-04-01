@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}All players{% endblock %}
+{% block title %}Svi igrači{% endblock %}
 {% block body %}
-<h2>All players</h2>
+<h2>Svi igrači</h2>
 {% if player_options is defined %}
 <div class="player-toolbar">
-  <label class="player-picker-label" for="player-jump">Jump to player</label>
+  <label class="player-picker-label" for="player-jump">Skoči na igrača</label>
   <select id="player-jump" class="player-select">
-    <option value="">— select —</option>
+    <option value="">— odaberite —</option>
     {% for opt in player_options %}
     <option value="{{ opt.slug }}">{{ opt.name }}</option>
     {% endfor %}
