@@ -3,17 +3,17 @@
 {% block body %}
 <h2>Medalists</h2>
 
-{% macro medal_table(medal_rows) %}
+{% macro medal_table(medal_rows, key) %}
 {% if medal_rows %}
-<div class="scroll-x players-list-wrap">
-<table class="data players-list">
+<div class="scroll-x players-list-wrap medal-panel" data-key="{{ key }}" hidden>
+<table class="data players-list sortable">
   <thead>
     <tr>
-      <th>Player</th>
-      <th class="num rank-1">G</th>
-      <th class="num rank-2">S</th>
-      <th class="num rank-3">B</th>
-      <th class="num">Σ</th>
+      <th data-col="0" data-type="str">Player</th>
+      <th class="num rank-1" data-col="1" data-type="num">G</th>
+      <th class="num rank-2" data-col="2" data-type="num">S</th>
+      <th class="num rank-3" data-col="3" data-type="num">B</th>
+      <th class="num" data-col="4" data-type="num">Σ</th>
     </tr>
   </thead>
   <tbody>
@@ -30,80 +30,62 @@
 </table>
 </div>
 {% else %}
+<div class="medal-panel" data-key="{{ key }}" hidden>
 <p class="muted">No podium finishes recorded.</p>
+</div>
 {% endif %}
 {% endmacro %}
 
-{# ── Outer tabs: Individual | Teams | Pairs ── #}
-<div class="tab-bar" id="outer-tab-bar">
-  <button class="tab-btn active" data-outer="individual">Individual</button>
-  <button class="tab-btn" data-outer="pairs">Pairs</button>
-  <button class="tab-btn" data-outer="teams">Teams</button>
-  <button class="tab-btn" data-outer="all">All</button>
+{# ── Tier 1: root “All” (own row) ── #}
+<div class="tab-bar medals-filter-tier-all" id="T1">
+  <button type="button" class="tab-btn medals-btn-all active" data-t1="all">All</button>
 </div>
 
-{# ══════════ ALL PANEL ══════════ #}
-<div id="panel-all" hidden>
-  <p class="muted small">All medals combined — individual, pair and team championships.</p>
-  {{ medal_table(medals_combined) }}
+{# ── Tier 2: Individual | Pairs | Teams ── #}
+<div class="tab-bar medals-filter-root" id="T2">
+  <button type="button" class="tab-btn medals-btn-mode" data-t2="individual">Individual</button>
+  <button type="button" class="tab-btn medals-btn-mode" data-t2="pairs">Pairs</button>
+  <button type="button" class="tab-btn medals-btn-mode" data-t2="teams">Teams</button>
 </div>
 
-{# ══════════ INDIVIDUAL PANEL ══════════ #}
-<div id="panel-individual">
-  <p class="muted small">Only players with at least one podium finish. Counts come from official placements (1st = gold, 2nd = silver, 3rd = bronze).</p>
+{# ── Tier 3: sub-category (slate, “All” outline vs solid cats) ── #}
+<div class="tab-bar medals-filter-sub" id="T3" hidden></div>
 
-  <div class="tabs" id="medal-tabs">
-    <div class="tab-bar">
-      <button class="tab-btn active" data-tab="all">All</button>
-      <button class="tab-btn" data-tab="live">Live Events</button>
-      <button class="tab-btn" data-tab="hks">HKS</button>
-    </div>
+{# ── Tier 4: series pills ── #}
+<div class="pill-bar medals-filter-pills" id="T4" hidden></div>
 
-    <div class="tab-panel" data-panel="all">
-      <p class="muted small">All events combined (Live Events + HKS).</p>
-      {{ medal_table(medals_all) }}
-    </div>
+{# ══════════ ALL MEDAL TABLES ══════════ #}
 
-    <div class="tab-panel" data-panel="live" hidden>
-      <div class="pill-bar">
-        <button class="pill-btn active" data-series="">All</button>
-        {% for s in series if s.category == "live" %}
-        <button class="pill-btn" data-series="{{ s.code }}">{{ s.name }}</button>
-        {% endfor %}
-      </div>
-      <div data-series-panel="">
-        <p class="muted small">Live open events only: SOVA, MMM, Osijek Open, ZIMKO, OVaKO.</p>
-        {{ medal_table(medals_live) }}
-      </div>
-      {% for s in series if s.category == "live" %}
-      <div data-series-panel="{{ s.code }}" hidden>
-        <p class="muted small">{{ s.name }} — {{ s.blurb }}.</p>
-        {{ medal_table(medals_by_series[s.code]) }}
-      </div>
-      {% endfor %}
-    </div>
+{{ medal_table(medals_combined, "all") }}
 
-    <div class="tab-panel" data-panel="hks" hidden>
-      <div class="pill-bar">
-        <button class="pill-btn active" data-series="">All</button>
-        {% for s in series if s.category == "hks" %}
-        <button class="pill-btn" data-series="{{ s.code }}">{{ s.name }}</button>
-        {% endfor %}
-      </div>
-      <div data-series-panel="">
-        <p class="muted small">HKS events only: Croatian Open, WQC.</p>
-        {{ medal_table(medals_hks) }}
-      </div>
-      {% for s in series if s.category == "hks" %}
-      <div data-series-panel="{{ s.code }}" hidden>
-        <p class="muted small">{{ s.name }}{% if s.name != s.blurb %} — {{ s.blurb }}{% endif %}.</p>
-        {{ medal_table(medals_by_series[s.code]) }}
-      </div>
-      {% endfor %}
-    </div>
-  </div>
+{{ medal_table(medals_all, "individual-all") }}
+{{ medal_table(medals_live, "individual-live-all") }}
+{% for s in series if s.category == "live" %}
+{{ medal_table(medals_by_series[s.code], "individual-live-" ~ s.code) }}
+{% endfor %}
+{{ medal_table(medals_hks, "individual-hks-all") }}
+{% for s in series if s.category == "hks" %}
+{{ medal_table(medals_by_series[s.code], "individual-hks-" ~ s.code) }}
+{% endfor %}
 
-  <h2 id="podium-heading">Podium by event</h2>
+{{ medal_table(team_medals_all, "teams-all") }}
+{{ medal_table(team_medals_live, "teams-live-all") }}
+{% for s in live_team_series %}
+{{ medal_table(team_medals_by_series[s.code], "teams-live-" ~ s.code) }}
+{% endfor %}
+{{ medal_table(team_medals_edp, "teams-edp") }}
+
+{{ medal_table(pair_medals_all, "pairs-all") }}
+{{ medal_table(pair_medals_live, "pairs-live-all") }}
+{% for s in live_pair_series %}
+{{ medal_table(pair_medals_by_series[s.code], "pairs-live-" ~ s.code) }}
+{% endfor %}
+{{ medal_table(pair_medals_php, "pairs-php") }}
+
+{# ══════════ PODIUM SECTIONS ══════════ #}
+
+<div class="podium-section" data-for="individual" hidden>
+  <h2>Podium by event</h2>
   {% for t, podium in events_medals %}
   <div class="event-block" data-cat="{{ 'hks' if is_hks_event(t.key) else 'live' }}" data-series="{{ series_code_from_key(t.key) }}">
     <h3><a href="{{ base_url }}/events/{{ t.key }}/">{{ t.label }}</a></h3>
@@ -122,56 +104,8 @@
   {% endfor %}
 </div>
 
-{# ══════════ TEAMS PANEL ══════════ #}
-<div id="panel-teams" hidden>
-  <div class="tabs" id="team-tabs">
-    <div class="tab-bar">
-      <button class="tab-btn active" data-ttab="all">All</button>
-      {% if live_team_series %}
-      <button class="tab-btn" data-ttab="live">Live Events</button>
-      {% endif %}
-      <button class="tab-btn" data-ttab="edp">EDP</button>
-    </div>
-
-    {# All #}
-    <div class="team-panel" data-tpanel="all">
-      <p class="muted small">All team championships combined.</p>
-      {{ medal_table(team_medals_all) }}
-    </div>
-
-    {# EDP #}
-    <div class="team-panel" data-tpanel="edp" hidden>
-      <p class="muted small">EDP — Ekipno državno prvenstvo, team championship organised by HKS.</p>
-      {{ medal_table(team_medals_edp) }}
-    </div>
-
-    {# Live Events #}
-    {% if live_team_series %}
-    <div class="team-panel" data-tpanel="live" hidden>
-      <div class="pill-bar">
-        <button class="pill-btn active" data-tseries="">All</button>
-        {% for s in live_team_series %}
-        <button class="pill-btn" data-tseries="{{ s.code }}">{{ s.name }}</button>
-        {% endfor %}
-      </div>
-      <div data-tseries-panel="">
-        <p class="muted small">All live event team championships.</p>
-        {{ medal_table(team_medals_live) }}
-      </div>
-      {% for s in live_team_series %}
-      <div data-tseries-panel="{{ s.code }}" hidden>
-        <p class="muted small">{{ s.name }} — {{ s.blurb }} team championship.</p>
-        {{ medal_table(team_medals_by_series[s.code]) }}
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
-  </div>
-
-  {# Podium by year — all team events #}
+<div class="podium-section" data-for="teams" hidden>
   <h2>Podium by year</h2>
-
-  {# EDP years #}
   {% for entry in edp_by_year %}
   <div class="event-block edp-block" data-tcat="edp">
     <h3><a href="{{ base_url }}/events/edp{{ entry.year }}/">EDP {{ entry.year }}</a></h3>
@@ -186,11 +120,8 @@
     </ul>
   </div>
   {% endfor %}
-
-  {# Live team years #}
   {% for code in live_team_codes %}
   {% for entry in all_team_raw[code] | sort(attribute='year', reverse=True) %}
-  {% set s = series_info(code) %}
   <div class="event-block edp-block" data-tcat="live" data-tseries="{{ code }}">
     <h3>{{ entry.label if entry.label is defined else team_event_label(code, entry.year) }}</h3>
     <ul class="small edp-podium">
@@ -207,38 +138,7 @@
   {% endfor %}
 </div>
 
-{# ══════════ PAIRS PANEL ══════════ #}
-<div id="panel-pairs" hidden>
-  <div class="tabs" id="pair-tabs">
-    <div class="tab-bar">
-      <button class="tab-btn active" data-ptab="all">All</button>
-      {% if live_pair_series %}
-      <button class="tab-btn" data-ptab="live">Live Events</button>
-      {% endif %}
-      <button class="tab-btn" data-ptab="php">PHP</button>
-    </div>
-    <div class="pair-panel" data-ppanel="all">
-      <p class="muted small">All pair championships combined.</p>
-      {{ medal_table(pair_medals_all) }}
-    </div>
-    <div class="pair-panel" data-ppanel="php" hidden>
-      <p class="muted small">PHP — Prvenstvo Hrvatske u mješovitim parovima, mixed pairs championship organised by HKS.</p>
-      {{ medal_table(pair_medals_php) }}
-    </div>
-    {% if live_pair_series %}
-    <div class="pair-panel" data-ppanel="live" hidden>
-      <div class="pill-bar">
-        <button class="pill-btn active" data-pseries="">All</button>
-        {% for s in live_pair_series %}<button class="pill-btn" data-pseries="{{ s.code }}">{{ s.name }}</button>{% endfor %}
-      </div>
-      <div data-pseries-panel="">{{ medal_table(pair_medals_live) }}</div>
-      {% for s in live_pair_series %}
-      <div data-pseries-panel="{{ s.code }}" hidden>{{ medal_table(pair_medals_by_series[s.code]) }}</div>
-      {% endfor %}
-    </div>
-    {% endif %}
-  </div>
-
+<div class="podium-section" data-for="pairs" hidden>
   <h2>Podium by year</h2>
   {% for entry in php_by_year %}
   <div class="event-block edp-block" data-pcat="php">
@@ -275,141 +175,187 @@
 {% block extra_scripts %}
 <script>
 (function () {
-  // ── Outer tabs: All | Individual | Pairs | Teams ──
-  var outerBar = document.getElementById('outer-tab-bar');
-  var outerPanels = {
-    all:        document.getElementById('panel-all'),
-    individual: document.getElementById('panel-individual'),
-    pairs:      document.getElementById('panel-pairs'),
-    teams:      document.getElementById('panel-teams'),
+  var T1  = document.getElementById('T1');
+  var T2  = document.getElementById('T2');
+  var T3  = document.getElementById('T3');
+  var T4  = document.getElementById('T4');
+  var panels  = document.querySelectorAll('.medal-panel');
+  var podiums = document.querySelectorAll('.podium-section');
+
+  var t3Opts = {
+    individual: [{k:'all',l:'All'},{k:'live',l:'Live Events'},{k:'hks',l:'HKS'}],
+    pairs:      [{k:'all',l:'All'},{k:'live',l:'Live Events'},{k:'php',l:'PHP'}],
+    teams:      [{k:'all',l:'All'},{k:'live',l:'Live Events'},{k:'edp',l:'EDP'}]
   };
 
-  outerBar.addEventListener('click', function (e) {
+  var t4Pills = {
+    'individual-live': [
+      {c:'',l:'All'},
+      {% for s in series if s.category == "live" %}{c:'{{ s.code }}',l:'{{ s.name }}'},{% endfor %}
+    ],
+    'individual-hks': [
+      {c:'',l:'All'},
+      {% for s in series if s.category == "hks" %}{c:'{{ s.code }}',l:'{{ s.name }}'},{% endfor %}
+    ],
+    'teams-live': [
+      {c:'',l:'All'},
+      {% for s in live_team_series %}{c:'{{ s.code }}',l:'{{ s.name }}'},{% endfor %}
+    ],
+    'pairs-live': [
+      {c:'',l:'All'},
+      {% for s in live_pair_series %}{c:'{{ s.code }}',l:'{{ s.name }}'},{% endfor %}
+    ]
+  };
+
+  var cur2 = '', cur3 = '', cur4 = '';
+
+  function panelKey() {
+    if (!cur2) return 'all';
+    if (!cur3 || cur3 === 'all') return cur2 + '-all';
+    if (cur3 === 'edp' || cur3 === 'php') return cur2 + '-' + cur3;
+    if (!cur4) return cur2 + '-' + cur3 + '-all';
+    return cur2 + '-' + cur3 + '-' + cur4;
+  }
+
+  function showPanel() {
+    var key = panelKey();
+    panels.forEach(function (p) { p.hidden = (p.dataset.key !== key); });
+  }
+
+  function buildT3() {
+    T3.innerHTML = '';
+    var opts = t3Opts[cur2];
+    if (!opts) { T3.hidden = true; return; }
+    T3.hidden = false;
+    opts.forEach(function (o) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      var isAll = o.k === 'all';
+      b.className = 'tab-btn' + (isAll ? ' medals-sub-all' : ' medals-sub-cat') +
+        (o.k === (cur3 || 'all') ? ' active' : '');
+      b.dataset.t3 = o.k;
+      b.textContent = o.l;
+      T3.appendChild(b);
+    });
+  }
+
+  function buildT4() {
+    T4.innerHTML = '';
+    var pills = t4Pills[cur2 + '-' + cur3];
+    if (!pills || pills.length <= 1) { T4.hidden = true; return; }
+    T4.hidden = false;
+    pills.forEach(function (p) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      var isAll = p.c === '';
+      b.className = 'pill-btn' + (isAll ? ' medals-pill-all' : ' medals-pill-series') +
+        (p.c === cur4 ? ' active' : '');
+      b.dataset.t4 = p.c;
+      b.textContent = p.l;
+      T4.appendChild(b);
+    });
+  }
+
+  function updatePodiums() {
+    podiums.forEach(function (s) { s.hidden = !cur2 || s.dataset.for !== cur2; });
+    if (cur2 === 'individual') {
+      var sec = document.querySelector('.podium-section[data-for="individual"]');
+      if (sec) sec.querySelectorAll('.event-block').forEach(function (b) {
+        var c3 = cur3 || 'all';
+        var catOk = c3 === 'all' || b.dataset.cat === c3;
+        var serOk = !cur4 || b.dataset.series === cur4;
+        b.hidden = !(catOk && serOk);
+      });
+    } else if (cur2 === 'teams') {
+      var sec = document.querySelector('.podium-section[data-for="teams"]');
+      if (sec) sec.querySelectorAll('.edp-block').forEach(function (b) {
+        var c3 = cur3 || 'all';
+        var catOk = c3 === 'all' || b.dataset.tcat === c3;
+        var serOk = !cur4 || b.dataset.tseries === cur4;
+        b.hidden = !(catOk && serOk);
+      });
+    } else if (cur2 === 'pairs') {
+      var sec = document.querySelector('.podium-section[data-for="pairs"]');
+      if (sec) sec.querySelectorAll('.edp-block').forEach(function (b) {
+        var c3 = cur3 || 'all';
+        var catOk = c3 === 'all' || b.dataset.pcat === c3;
+        var serOk = !cur4 || b.dataset.pseries === cur4;
+        b.hidden = !(catOk && serOk);
+      });
+    }
+  }
+
+  function refresh() { buildT3(); buildT4(); showPanel(); updatePodiums(); }
+
+  /* ── T1: root All ── */
+  T1.addEventListener('click', function (e) {
     var btn = e.target.closest('.tab-btn');
-    if (!btn || !btn.dataset.outer) return;
-    outerBar.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+    if (!btn || !btn.dataset.t1) return;
+    T1.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
     btn.classList.add('active');
-    var tab = btn.dataset.outer;
-    Object.keys(outerPanels).forEach(function (k) { outerPanels[k].hidden = k !== tab; });
+    T2.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+    cur2 = ''; cur3 = ''; cur4 = '';
+    refresh();
   });
 
-  // ── Team tabs (inside Teams panel) ──
-  var teamTabs = document.getElementById('team-tabs');
-  if (teamTabs) {
-    function filterTeamPodiums(tcat, tseries) {
-      teamTabs.parentElement.querySelectorAll('.edp-block').forEach(function (b) {
-        var catOk = tcat === 'all' || b.dataset.tcat === tcat;
-        var seriesOk = !tseries || b.dataset.tseries === tseries;
-        b.hidden = !(catOk && seriesOk);
-      });
-    }
-    teamTabs.addEventListener('click', function (e) {
-      var tabBtn = e.target.closest('.tab-btn');
-      if (tabBtn && tabBtn.dataset.ttab) {
-        teamTabs.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-        teamTabs.querySelectorAll('.team-panel').forEach(function (p) { p.hidden = true; });
-        tabBtn.classList.add('active');
-        var panel = teamTabs.querySelector('[data-tpanel="' + tabBtn.dataset.ttab + '"]');
-        if (panel) {
-          panel.hidden = false;
-          panel.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.tseries === ''); });
-          panel.querySelectorAll('[data-tseries-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-tseries-panel') !== ''; });
-        }
-        filterTeamPodiums(tabBtn.dataset.ttab, '');
-        return;
-      }
-      var pillBtn = e.target.closest('.pill-btn');
-      if (pillBtn && pillBtn.dataset.tseries !== undefined) {
-        pillBtn.closest('.pill-bar').querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
-        pillBtn.classList.add('active');
-        var panel = pillBtn.closest('.team-panel');
-        var code = pillBtn.dataset.tseries;
-        panel.querySelectorAll('[data-tseries-panel]').forEach(function (p) {
-          p.hidden = p.getAttribute('data-tseries-panel') !== code;
+  /* ── T2: Individual / Pairs / Teams ── */
+  T2.addEventListener('click', function (e) {
+    var btn = e.target.closest('.tab-btn');
+    if (!btn || !btn.dataset.t2) return;
+    T1.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+    T2.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    cur2 = btn.dataset.t2; cur3 = 'all'; cur4 = '';
+    refresh();
+  });
+
+  /* ── T3: All / Live Events / HKS|PHP|EDP ── */
+  T3.addEventListener('click', function (e) {
+    var btn = e.target.closest('.tab-btn');
+    if (!btn || !btn.dataset.t3) return;
+    T3.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    cur3 = btn.dataset.t3; cur4 = '';
+    buildT4(); showPanel(); updatePodiums();
+  });
+
+  /* ── T4: series pills ── */
+  T4.addEventListener('click', function (e) {
+    var btn = e.target.closest('.pill-btn');
+    if (!btn || btn.dataset.t4 === undefined) return;
+    T4.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    cur4 = btn.dataset.t4;
+    showPanel(); updatePodiums();
+  });
+
+  /* initial state */
+  refresh();
+
+  /* ── Sortable tables ── */
+  document.querySelectorAll('table.sortable').forEach(function (table) {
+    var headers = table.querySelectorAll('thead th[data-col]');
+    var tbody = table.querySelector('tbody');
+    var sortCol = -1, sortAsc = false;
+    headers.forEach(function (th) {
+      th.addEventListener('click', function () {
+        var col = parseInt(th.dataset.col);
+        var isNum = th.dataset.type === 'num';
+        if (sortCol === col) { sortAsc = !sortAsc; }
+        else { sortCol = col; sortAsc = isNum ? false : true; }
+        headers.forEach(function (h) { h.classList.remove('sort-asc', 'sort-desc'); });
+        th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+        var rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort(function (a, b) {
+          var av, bv;
+          if (isNum) { av = parseInt(a.children[col].textContent) || 0; bv = parseInt(b.children[col].textContent) || 0; }
+          else { av = a.children[col].textContent.trim().toLowerCase(); bv = b.children[col].textContent.trim().toLowerCase(); }
+          var c = av < bv ? -1 : av > bv ? 1 : 0;
+          return sortAsc ? c : -c;
         });
-        filterTeamPodiums('live', code);
-      }
-    });
-  }
-
-  // ── Pair tabs ──
-  var pairTabs = document.getElementById('pair-tabs');
-  if (pairTabs) {
-    function filterPairPodiums(pcat, pseries) {
-      pairTabs.parentElement.querySelectorAll('.edp-block[data-pcat]').forEach(function (b) {
-        var catOk    = pcat === 'all' || b.dataset.pcat === pcat;
-        var seriesOk = !pseries || b.dataset.pseries === pseries;
-        b.hidden = !(catOk && seriesOk);
+        rows.forEach(function (r) { tbody.appendChild(r); });
       });
-    }
-    pairTabs.addEventListener('click', function (e) {
-      var tabBtn = e.target.closest('.tab-btn');
-      if (tabBtn && tabBtn.dataset.ptab) {
-        pairTabs.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-        pairTabs.querySelectorAll('.pair-panel').forEach(function (p) { p.hidden = true; });
-        tabBtn.classList.add('active');
-        var panel = pairTabs.querySelector('[data-ppanel="' + tabBtn.dataset.ptab + '"]');
-        if (panel) {
-          panel.hidden = false;
-          panel.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.pseries === ''); });
-          panel.querySelectorAll('[data-pseries-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-pseries-panel') !== ''; });
-        }
-        filterPairPodiums(tabBtn.dataset.ptab, '');
-        return;
-      }
-      var pillBtn = e.target.closest('.pill-btn');
-      if (pillBtn && pillBtn.dataset.pseries !== undefined) {
-        pillBtn.closest('.pill-bar').querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
-        pillBtn.classList.add('active');
-        var panel = pillBtn.closest('.pair-panel');
-        var code = pillBtn.dataset.pseries;
-        panel.querySelectorAll('[data-pseries-panel]').forEach(function (p) {
-          p.hidden = p.getAttribute('data-pseries-panel') !== code;
-        });
-        filterPairPodiums('live', code);
-      }
     });
-  }
-
-  // ── Inner tabs (Individual panel): All | Live Events | HKS ──
-  var tabs = document.getElementById('medal-tabs');
-  if (!tabs) return;
-
-  function filterPodiums(cat, series) {
-    document.querySelectorAll('.event-block').forEach(function (block) {
-      var catMatch = cat === 'all' || block.dataset.cat === cat;
-      var seriesMatch = !series || block.dataset.series === series;
-      block.hidden = !(catMatch && seriesMatch);
-    });
-  }
-
-  tabs.addEventListener('click', function (e) {
-    var tabBtn = e.target.closest('.tab-btn');
-    if (tabBtn && tabBtn.dataset.tab) {
-      tabs.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-      tabs.querySelectorAll('.tab-panel').forEach(function (p) { p.hidden = true; });
-      tabBtn.classList.add('active');
-      var panel = tabs.querySelector('[data-panel="' + tabBtn.dataset.tab + '"]');
-      panel.hidden = false;
-      panel.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.series === ''); });
-      panel.querySelectorAll('[data-series-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-series-panel') !== ''; });
-      filterPodiums(tabBtn.dataset.tab, '');
-      return;
-    }
-
-    var pillBtn = e.target.closest('.pill-btn');
-    if (pillBtn) {
-      var pillBar = pillBtn.closest('.pill-bar');
-      pillBar.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
-      pillBtn.classList.add('active');
-      var panel = pillBtn.closest('.tab-panel');
-      var code = pillBtn.dataset.series;
-      panel.querySelectorAll('[data-series-panel]').forEach(function (p) {
-        p.hidden = p.getAttribute('data-series-panel') !== code;
-      });
-      var activeCat = tabs.querySelector('.tab-btn.active').dataset.tab;
-      filterPodiums(activeCat, code);
-    }
   });
 })();
 </script>

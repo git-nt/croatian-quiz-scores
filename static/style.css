@@ -9,6 +9,11 @@
   --bronze: #9a3412;
   --accent: #1d4ed8;
   --link: #1d4ed8;
+  /* Medalists page filters — distinct from header nav blue */
+  --medal-nav-accent: #0f766e;
+  --medal-nav-accent-soft: #ecfdf5;
+  --medal-sub-accent: #475569;
+  --medal-sub-accent-soft: #f1f5f9;
   --finalist-bg: rgba(37, 99, 235, 0.1);
   --finalist-bg-hover: rgba(37, 99, 235, 0.16);
 }
@@ -196,6 +201,10 @@ table.data {
   justify-content: center;
 }
 
+.medal-panel[hidden] {
+  display: none !important;
+}
+
 table.data.players-list {
   width: auto;
   min-width: 26rem;
@@ -205,9 +214,10 @@ table.data.players-list td:first-child,
 table.data.players-list th:first-child {
   width: 16rem;
   max-width: 16rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Never truncate names in the first column; allow wrapping. */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 table.data th,
@@ -490,19 +500,16 @@ ul.event-podium-list li {
 
 .medal-box-wrap {
   text-align: center;
-  max-width: 420px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .medal-box {
-  display: inline-block;
+  display: table;
   min-width: 15rem;
   max-width: 100%;
   border: 1px solid var(--border);
   border-radius: 6px;
   overflow: hidden;
-  margin: 1rem 0 1.5rem;
+  margin: 1rem auto 1.5rem;
   text-align: left;
 }
 
@@ -577,8 +584,10 @@ span.medal-chip.medal-3 {
 }
 
 td.medal-event {
-  white-space: nowrap;
-  text-align: center;
+  /* Never truncate: allow long event/team strings to wrap. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: left;
   width: 100%;
 }
 
@@ -830,6 +839,175 @@ th.tl-series-defunct {
   border-color: var(--accent);
   color: #fff;
   font-weight: 600;
+}
+
+/* ── Medalists filters: nav-like pills, teal root / slate sub-tiers ── */
+
+.medals-filter-tier-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: none;
+  margin-bottom: 0.45rem;
+}
+
+.medals-filter-root {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: none;
+  margin-bottom: 0.85rem;
+}
+
+.medals-filter-root .tab-btn,
+.medals-filter-tier-all .tab-btn {
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.88rem;
+  margin-bottom: 0;
+  transition: background 0.12s, color 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+.medals-filter-root .tab-btn:hover,
+.medals-filter-tier-all .tab-btn:hover {
+  border-color: var(--medal-nav-accent);
+  color: var(--text);
+}
+
+/* Top row “All” only — soft fill + ring when active */
+.medals-filter-tier-all .medals-btn-all.active {
+  background: var(--medal-nav-accent-soft);
+  border-color: var(--medal-nav-accent);
+  color: var(--medal-nav-accent);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--medal-nav-accent);
+}
+
+.medals-filter-root .medals-btn-mode.active {
+  background: var(--medal-nav-accent);
+  border-color: var(--medal-nav-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Equal width for Individual / Pairs / Teams (width fits longest label) */
+.medals-filter-root .medals-btn-mode {
+  flex: 0 0 auto;
+  width: 10.75rem;
+  max-width: 100%;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.medals-filter-sub {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem;
+  border-bottom: none;
+  margin-bottom: 0.55rem;
+}
+
+.medals-filter-sub .tab-btn {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 0;
+  transition: background 0.12s, color 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+.medals-filter-sub .tab-btn:hover {
+  border-color: var(--medal-sub-accent);
+  color: var(--text);
+}
+
+.medals-filter-sub .medals-sub-all.active {
+  background: var(--medal-sub-accent-soft);
+  border-color: var(--medal-sub-accent);
+  color: var(--medal-sub-accent);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--medal-sub-accent);
+}
+
+.medals-filter-sub .medals-sub-cat.active {
+  background: var(--medal-sub-accent);
+  border-color: var(--medal-sub-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.medals-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+}
+
+.medals-filter-pills .pill-btn {
+  padding: 0.22rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  transition: background 0.12s, color 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+.medals-filter-pills .pill-btn:hover {
+  border-color: var(--medal-sub-accent);
+  color: var(--text);
+}
+
+.medals-filter-pills .medals-pill-all.active {
+  background: var(--medal-sub-accent-soft);
+  border-color: var(--medal-sub-accent);
+  color: var(--medal-sub-accent);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--medal-sub-accent);
+}
+
+.medals-filter-pills .medals-pill-series.active {
+  background: var(--medal-sub-accent);
+  border-color: var(--medal-sub-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Sortable table headers ── */
+table.sortable th[data-col] {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-right: 1.1rem;
+}
+table.sortable th[data-col]::after {
+  content: '⇅';
+  position: absolute;
+  right: 0.15rem;
+  font-size: 0.7rem;
+  opacity: 0.3;
+}
+table.sortable th.sort-asc::after {
+  content: '▲';
+  opacity: 0.7;
+}
+table.sortable th.sort-desc::after {
+  content: '▼';
+  opacity: 0.7;
 }
 
 /* ── Series accordion (Events page) ── */
