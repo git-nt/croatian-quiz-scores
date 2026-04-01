@@ -24,6 +24,9 @@
 
 body {
   margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: "Segoe UI", system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
@@ -165,10 +168,15 @@ table.player-history th.num {
 
 
 .wrap {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   max-width: 64rem;
   margin: 0 auto;
   padding: 1.5rem clamp(1.5rem, 5vw, 5rem) 3rem;
   text-align: center;
+  min-height: 0;
 }
 
 /* Only table cells and accordion items need left-alignment */
@@ -182,6 +190,7 @@ table.player-history th.num {
 /* ── Top bar header ── */
 
 .site-bar {
+  flex-shrink: 0;
   background: #0f172a;
   color: #f8fafc;
   position: sticky;
@@ -440,6 +449,31 @@ table.standings-detail tbody tr.row-finalist:nth-child(even) td {
 
 .muted {
   color: var(--muted);
+}
+
+.site-footer {
+  margin-top: auto;
+  padding-top: 2.75rem;
+  border-top: 1px solid rgba(209, 213, 219, 0.85);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: #9ca3af;
+}
+
+.site-footer a {
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--muted);
+  text-decoration: underline;
 }
 
 .small {
