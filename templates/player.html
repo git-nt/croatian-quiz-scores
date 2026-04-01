@@ -38,7 +38,7 @@
     <tbody>
       {% for m in podium_live %}
       <tr>
-        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}G{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
+        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}Z{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
         <td class="medal-event"><a href="{{ base_url }}/events/{{ m.t.key }}/">{{ event_label(m.t.key, m.t.label) }}</a></td>
       </tr>
       {% endfor %}
@@ -51,7 +51,7 @@
     <tbody>
       {% for m in podium_hks %}
       <tr>
-        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}G{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
+        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}Z{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
         <td class="medal-event"><a href="{{ base_url }}/events/{{ m.t.key }}/">{{ event_label(m.t.key, m.t.label) }}</a></td>
       </tr>
       {% endfor %}
@@ -64,7 +64,7 @@
     <tbody>
       {% for m in pair_medals %}
       <tr>
-        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}G{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
+        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}Z{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
         <td class="medal-event">
           {% if m.series == 'php' %}
           <a href="{{ base_url }}/events/php{{ m.year }}/">PHP {{ m.year }}.</a>
@@ -84,7 +84,7 @@
     <tbody>
       {% for m in edp_medals %}
       <tr>
-        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}G{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
+        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{% if m.rank == 1 %}Z{% elif m.rank == 2 %}S{% else %}B{% endif %}</span></td>
         <td class="medal-event">
           {% if m.series == 'edp' %}
           <a href="{{ base_url }}/events/edp{{ m.year }}/">EDP {{ m.year }}.</a>
@@ -303,7 +303,7 @@
         tooltip: {
           callbacks: {
             title: function (items) { return labels[items[0].dataIndex]; },
-            label: function (ctx) { return 'Mjesto #' + ctx.parsed.y; }
+            label: function (ctx) { return '#' + ctx.parsed.y; }
           }
         }
       }

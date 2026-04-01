@@ -10,7 +10,7 @@
   <thead>
     <tr>
       <th data-col="0" data-type="str">Igrač</th>
-      <th class="num rank-1" data-col="1" data-type="num">G</th>
+      <th class="num rank-1" data-col="1" data-type="num">Z</th>
       <th class="num rank-2" data-col="2" data-type="num">S</th>
       <th class="num rank-3" data-col="3" data-type="num">B</th>
       <th class="num" data-col="4" data-type="num">Σ</th>
@@ -110,7 +110,7 @@
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
-        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}G{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
+        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}Z{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
         <strong>{{ slot.team }}</strong>
         <span class="edp-members">({% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %})</span>
       </li>
@@ -125,7 +125,7 @@
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
-        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}G{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
+        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}Z{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
         <strong>{{ slot.team }}</strong>
         <span class="edp-members">({% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %})</span>
       </li>
@@ -144,7 +144,7 @@
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
-        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}G{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
+        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}Z{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
         {% for p in slot.players %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% if not loop.last %} / {% endif %}{% endfor %}
       </li>
       {% endfor %}
@@ -158,7 +158,7 @@
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
-        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}G{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
+        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}Z{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
         {% for p in slot.players %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% if not loop.last %} / {% endif %}{% endfor %}
       </li>
       {% endfor %}
