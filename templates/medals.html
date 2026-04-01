@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Medalists{% endblock %}
+{% block title %}Medalje{% endblock %}
 {% block body %}
-<h2>Medalists</h2>
+<h2>Medalje</h2>
 
 {% macro medal_table(medal_rows, key) %}
 {% if medal_rows %}
@@ -9,8 +9,8 @@
 <table class="data players-list sortable">
   <thead>
     <tr>
-      <th data-col="0" data-type="str">Player</th>
-      <th class="num rank-1" data-col="1" data-type="num">G</th>
+      <th data-col="0" data-type="str">Igrač</th>
+      <th class="num rank-1" data-col="1" data-type="num">Z</th>
       <th class="num rank-2" data-col="2" data-type="num">S</th>
       <th class="num rank-3" data-col="3" data-type="num">B</th>
       <th class="num" data-col="4" data-type="num">Σ</th>
@@ -31,21 +31,21 @@
 </div>
 {% else %}
 <div class="medal-panel" data-key="{{ key }}" hidden>
-<p class="muted">No podium finishes recorded.</p>
+<p class="muted">Nema zabilježenih plasmana na postolje.</p>
 </div>
 {% endif %}
 {% endmacro %}
 
 {# ── Tier 1: root “All” (own row) ── #}
 <div class="tab-bar medals-filter-tier-all" id="T1">
-  <button type="button" class="tab-btn medals-btn-all active" data-t1="all">All</button>
+  <button type="button" class="tab-btn medals-btn-all active" data-t1="all">Sve</button>
 </div>
 
 {# ── Tier 2: Individual | Pairs | Teams ── #}
 <div class="tab-bar medals-filter-root" id="T2">
-  <button type="button" class="tab-btn medals-btn-mode" data-t2="individual">Individual</button>
-  <button type="button" class="tab-btn medals-btn-mode" data-t2="pairs">Pairs</button>
-  <button type="button" class="tab-btn medals-btn-mode" data-t2="teams">Teams</button>
+  <button type="button" class="tab-btn medals-btn-mode" data-t2="individual">Pojedinačno</button>
+  <button type="button" class="tab-btn medals-btn-mode" data-t2="pairs">Parovi</button>
+  <button type="button" class="tab-btn medals-btn-mode" data-t2="teams">Ekipno</button>
 </div>
 
 {# ── Tier 3: sub-category (slate, “All” outline vs solid cats) ── #}
@@ -85,12 +85,10 @@
 {# ══════════ PODIUM SECTIONS ══════════ #}
 
 <div class="podium-section" data-for="individual" hidden>
-  <h2>Podium by event</h2>
+  <h2>Medalje</h2>
   {% for t, podium in events_medals %}
   <div class="event-block" data-cat="{{ 'hks' if is_hks_event(t.key) else 'live' }}" data-series="{{ series_code_from_key(t.key) }}">
-    <h3><a href="{{ base_url }}/events/{{ t.key }}/">{{ t.label }}</a></h3>
-    {% set bl = blurb_for_key(t.key) %}
-    {% if bl %}<p class="sub">{{ bl }}</p>{% endif %}
+    <h3><a href="{{ base_url }}/events/{{ t.key }}/">{{ event_label(t.key, t.label) }}</a></h3>
     {% if podium %}
     <ul class="small">
       {% for pname, r in podium %}
@@ -98,21 +96,21 @@
       {% endfor %}
     </ul>
     {% else %}
-    <p class="muted small">No top-3 placements for this event.</p>
+    <p class="muted small">Nema plasmana u top 3 na ovom kvizu.</p>
     {% endif %}
   </div>
   {% endfor %}
 </div>
 
 <div class="podium-section" data-for="teams" hidden>
-  <h2>Podium by year</h2>
+  <h2>Medalje</h2>
   {% for entry in edp_by_year %}
   <div class="event-block edp-block" data-tcat="edp">
-    <h3><a href="{{ base_url }}/events/edp{{ entry.year }}/">EDP {{ entry.year }}</a></h3>
+    <h3><a href="{{ base_url }}/events/edp{{ entry.year }}/">EDP {{ entry.year }}.</a></h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
-        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}G{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
+        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}Z{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
         <strong>{{ slot.team }}</strong>
         <span class="edp-members">({% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %})</span>
       </li>
@@ -123,11 +121,11 @@
   {% for code in live_team_codes %}
   {% for entry in all_team_raw[code] | sort(attribute='year', reverse=True) %}
   <div class="event-block edp-block" data-tcat="live" data-tseries="{{ code }}">
-    <h3>{{ entry.label if entry.label is defined else team_event_label(code, entry.year) }}</h3>
+    <h3>{% set _h = entry.label if entry.label is defined else team_event_label(code, entry.year) %}{{ _h }}{% if _h and not _h.endswith('.') %}.{% endif %}</h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
-        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}G{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
+        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}Z{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
         <strong>{{ slot.team }}</strong>
         <span class="edp-members">({% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %})</span>
       </li>
@@ -139,14 +137,14 @@
 </div>
 
 <div class="podium-section" data-for="pairs" hidden>
-  <h2>Podium by year</h2>
+  <h2>Medalje</h2>
   {% for entry in php_by_year %}
   <div class="event-block edp-block" data-pcat="php">
-    <h3><a href="{{ base_url }}/events/php{{ entry.year }}/">PHP {{ entry.year }}</a></h3>
+    <h3><a href="{{ base_url }}/events/php{{ entry.year }}/">PHP {{ entry.year }}.</a></h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
-        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}G{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
+        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}Z{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
         {% for p in slot.players %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% if not loop.last %} / {% endif %}{% endfor %}
       </li>
       {% endfor %}
@@ -156,11 +154,11 @@
   {% for code in live_pair_codes %}
   {% for entry in all_pair_raw[code] | sort(attribute='year', reverse=True) %}
   <div class="event-block edp-block" data-pcat="live" data-pseries="{{ code }}">
-    <h3>{{ entry.label if entry.label is defined else pair_event_label(code, entry.year) }}</h3>
+    <h3>{% set _h = entry.label if entry.label is defined else pair_event_label(code, entry.year) %}{{ _h }}{% if _h and not _h.endswith('.') %}.{% endif %}</h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
-        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}G{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
+        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}Z{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
         {% for p in slot.players %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% if not loop.last %} / {% endif %}{% endfor %}
       </li>
       {% endfor %}
@@ -183,26 +181,26 @@
   var podiums = document.querySelectorAll('.podium-section');
 
   var t3Opts = {
-    individual: [{k:'all',l:'All'},{k:'live',l:'Live Events'},{k:'hks',l:'HKS'}],
-    pairs:      [{k:'all',l:'All'},{k:'live',l:'Live Events'},{k:'php',l:'PHP'}],
-    teams:      [{k:'all',l:'All'},{k:'live',l:'Live Events'},{k:'edp',l:'EDP'}]
+    individual: [{k:'all',l:'Sve'},{k:'live',l:'Open kvizovi'},{k:'hks',l:'HKS'}],
+    pairs:      [{k:'all',l:'Sve'},{k:'live',l:'Open kvizovi'},{k:'php',l:'PHP'}],
+    teams:      [{k:'all',l:'Sve'},{k:'live',l:'Open kvizovi'},{k:'edp',l:'EDP'}]
   };
 
   var t4Pills = {
     'individual-live': [
-      {c:'',l:'All'},
+      {c:'',l:'Sve'},
       {% for s in series if s.category == "live" %}{c:'{{ s.code }}',l:'{{ s.name }}'},{% endfor %}
     ],
     'individual-hks': [
-      {c:'',l:'All'},
+      {c:'',l:'Sve'},
       {% for s in series if s.category == "hks" %}{c:'{{ s.code }}',l:'{{ s.name }}'},{% endfor %}
     ],
     'teams-live': [
-      {c:'',l:'All'},
+      {c:'',l:'Sve'},
       {% for s in live_team_series %}{c:'{{ s.code }}',l:'{{ s.name }}'},{% endfor %}
     ],
     'pairs-live': [
-      {c:'',l:'All'},
+      {c:'',l:'Sve'},
       {% for s in live_pair_series %}{c:'{{ s.code }}',l:'{{ s.name }}'},{% endfor %}
     ]
   };

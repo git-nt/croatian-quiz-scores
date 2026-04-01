@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block title %}EDP {{ year }}{% endblock %}
+{% block title %}EDP {{ year }}.{% endblock %}
 {% block body %}
 <div class="tournament-hero">
-  <h2>EDP {{ year }}</h2>
-  <p class="muted">Ekipno državno prvenstvo — team championship organised by HKS.</p>
+  <h2>EDP {{ year }}.</h2>
+  <p class="muted">Ekipno državno prvenstvo u kvizu.</p>
   {% set di = event_date_for('edp' ~ year) %}
   {% if di %}<p class="event-date-line">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</p>{% endif %}
-  {% if external_link %}<p class="event-report-line"><a class="event-report-link" href="{{ external_link }}" target="_blank" rel="noopener">Report ↗</a></p>{% endif %}
-  <h3 class="event-section-heading">Team Quiz</h3>
+  {% if external_link %}<p class="event-report-line"><a class="event-report-link" href="{{ external_link }}" target="_blank" rel="noopener">Izvještaj ↗</a></p>{% endif %}
+  <h3 class="event-section-heading">Ekipni kviz</h3>
   <ul class="event-podium-list">
     {% for slot in podium %}
     <li>{% if slot.rank == 1 %}🥇{% elif slot.rank == 2 %}🥈{% else %}🥉{% endif %} <strong>{{ slot.team }}</strong><span class="muted small"> ({% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %})</span></li>

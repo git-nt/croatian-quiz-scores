@@ -1,28 +1,33 @@
 {% extends "base.html" %}
-{% block title %}All players{% endblock %}
+{% block title %}Svi igrači{% endblock %}
 {% block body %}
-<h2>All players</h2>
+<h2>Svi igrači</h2>
 {% if player_options is defined %}
 <div class="player-toolbar">
-  <label class="player-picker-label" for="player-jump">Jump to player</label>
-  <select id="player-jump" class="player-select">
-    <option value="">— select —</option>
-    {% for opt in player_options %}
-    <option value="{{ opt.slug }}">{{ opt.name }}</option>
-    {% endfor %}
-  </select>
+  <label class="player-picker-label" for="player-jump-input">Odabir igrača</label>
+  <div class="player-combobox" data-player-combobox data-base-url="{{ base_url }}" data-current-slug="">
+    <script type="application/json" class="player-combobox-data">{{ player_options | tojson }}</script>
+    <div class="player-combobox-field">
+      <input
+        type="text"
+        id="player-jump-input"
+        class="player-combobox-input"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="Upišite dio imena…"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls="player-jump-list"
+        role="combobox"
+      />
+      <ul id="player-jump-list" class="player-combobox-list" role="listbox" hidden></ul>
+    </div>
+  </div>
 </div>
 {% endif %}
 {% endblock %}
 {% block extra_scripts %}
-<script>
-(function () {
-  var sel = document.getElementById('player-jump');
-  if (sel) {
-    sel.addEventListener('change', function () {
-      if (this.value) window.location.href = '{{ base_url }}/players/' + encodeURIComponent(this.value) + '/';
-    });
-  }
-})();
-</script>
+<script src="{{ base_url }}/static/player-combobox.js" defer></script>
 {% endblock %}

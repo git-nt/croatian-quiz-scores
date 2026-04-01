@@ -28,11 +28,14 @@ OUT = BASE / "_site"
 
 
 def event_label(key: str, label: str) -> str:
-    """Return display label for a tournament; WQC gets '(Croatia)' qualifier."""
+    """Display title: Croatian style '.' after year; WQC adds '(Hrvatska)'."""
+    raw = (label or "").strip()
     if series_code_from_key(key) == "wqc":
-        m = re.search(r"(\d{4})", label)
-        return f"WQC {m.group(1)} (Croatia)" if m else label
-    return label
+        m = re.search(r"(\d{4})", raw) or re.search(r"(\d{4})", key)
+        return f"WQC {m.group(1)}. (Hrvatska)" if m else raw
+    if not raw:
+        return raw
+    return raw if raw.endswith(".") else f"{raw}."
 
 
 def player_slug(name: str) -> str:
@@ -123,9 +126,9 @@ def build(base_url: str = ""):
 
     def team_event_label(series_code: str, year: int) -> str:
         if series_code == "edp":
-            return f"EDP {year}"
+            return f"EDP {year}."
         s = SERIES_BY_CODE.get(series_code)
-        return f"{s.name} {year}" if s else f"{series_code.upper()} {year}"
+        return f"{s.name} {year}." if s else f"{series_code.upper()} {year}."
     env.globals["team_event_label"] = team_event_label
     env.globals["series_info"] = lambda code: SERIES_BY_CODE.get(code)
 
@@ -330,9 +333,9 @@ def build(base_url: str = ""):
 
     def pair_event_label(series_code: str, year: int) -> str:
         if series_code == "php":
-            return f"PHP {year}"
+            return f"PHP {year}."
         s = SERIES_BY_CODE.get(series_code)
-        return f"{s.name} {year}" if s else f"{series_code.upper()} {year}"
+        return f"{s.name} {year}." if s else f"{series_code.upper()} {year}."
     env.globals["pair_event_label"] = pair_event_label
 
     # Set of known player slugs for linking
@@ -377,14 +380,14 @@ def build(base_url: str = ""):
     ]
     player_options.sort(key=lambda o: o["name"].lower())
     write_page("", "players.html", {
-        "title": "All players",
+        "title": "Svi igrači",
         "players": players_sorted,
         "player_options": player_options,
     })
 
     # ── Medals ──
     write_page("medals", "medals.html", {
-        "title": "Medalists",
+        "title": "Medalje",
         "medals_all": medals_all,
         "medals_live": medals_live,
         "medals_hks": medals_hks,
@@ -409,7 +412,6 @@ def build(base_url: str = ""):
         "all_pair_raw": _all_pair_raw,
         "live_pair_codes": _live_pair_codes,
         "data": data,
-        "blurb_for_key": blurb_for_key,
     })
 
     # ── Player detail pages ──
@@ -430,7 +432,7 @@ def build(base_url: str = ""):
             ed = p.event_details.get(t.key)
             if ed is not None:
                 history.append({"t": t, "ed": ed})
-                chart_labels.append(t.label)
+                chart_labels.append(event_label(t.key, t.label))
                 chart_ranks.append(ed.rank)
                 if ed.rank <= 3:
                     code = series_code_from_key(t.key)
@@ -553,8 +555,8 @@ def build(base_url: str = ""):
 
     category_groups = [
         {"label": "HKS", "groups": _series_group("hks")},
-        {"label": "Live Events", "groups": _series_group_filtered("live", False)},
-        {"label": "Defunct Live Events", "groups": _series_group_filtered("live", True)},
+        {"label": "Open kvizovi", "groups": _series_group_filtered("live", False)},
+        {"label": "Neaktivni openi", "groups": _series_group_filtered("live", True)},
     ]
     # Team-only event years per series (not in individual data), for events page links
     _team_only_by_series: dict[str, list[dict]] = {}
@@ -567,7 +569,7 @@ def build(base_url: str = ""):
             _team_only_by_series[_sc] = sorted(_extra, key=lambda e: e["year"], reverse=True)
 
     write_page("events", "tournaments.html", {
-        "title": "Events",
+        "title": "Događaji",
         "category_groups": category_groups,
         "edp_by_year": edp_by_year,
         "php_by_year": php_by_year,
@@ -578,7 +580,7 @@ def build(base_url: str = ""):
     # ── EDP year detail pages ──
     for entry in edp_raw:
         write_page(f"events/edp{entry['year']}", "edp_event.html", {
-            "title": f"EDP {entry['year']}",
+            "title": f"EDP {entry['year']}.",
             "year": entry["year"],
             "podium": entry["podium"],
             "external_link": entry.get("external_link"),
@@ -587,7 +589,7 @@ def build(base_url: str = ""):
     # ── PHP year detail pages ──
     for entry in php_raw:
         write_page(f"events/php{entry['year']}", "php_event.html", {
-            "title": f"PHP {entry['year']}",
+            "title": f"PHP {entry['year']}.",
             "year": entry["year"],
             "podium": entry["podium"],
             "external_link": entry.get("external_link"),
@@ -632,7 +634,7 @@ def build(base_url: str = ""):
         team_entry = _team_by_event.get((sc, _event_year)) if _event_year else None
         pair_entry = _pair_by_event.get((sc, _event_year)) if _event_year else None
         write_page(f"events/{t.key}", "tournament.html", {
-            "title": t.label,
+            "title": event_label(t.key, t.label),
             "t": t,
             "rows": rows,
             "has_sheet": has_sheet,
@@ -661,6 +663,9 @@ def build(base_url: str = ""):
             if _ekey in _tournament_keys:
                 continue
             _label = _entry.get("label") or f"{_series_obj.name} {_entry['year']}"
+            _label = _label.rstrip()
+            if not _label.endswith("."):
+                _label = f"{_label}."
             _t = SimpleNamespace(label=_label, key=_ekey)
             write_page(f"events/{_ekey}", "tournament.html", {
                 "title": _label,

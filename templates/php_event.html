@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block title %}PHP {{ year }}{% endblock %}
+{% block title %}PHP {{ year }}.{% endblock %}
 {% block body %}
 <div class="tournament-hero">
-  <h2>PHP {{ year }}</h2>
-  <p class="muted">Prvenstvo Hrvatske u mješovitim parovima — mixed pairs championship organised by HKS.</p>
+  <h2>PHP {{ year }}.</h2>
+  <p class="muted">Prvenstvo Hrvatske u mješovitim parovima.</p>
   {% set di = event_date_for('php' ~ year) %}
   {% if di %}<p class="event-date-line">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</p>{% endif %}
-  {% if external_link %}<p class="event-report-line"><a class="event-report-link" href="{{ external_link }}" target="_blank" rel="noopener">Report ↗</a></p>{% endif %}
-  <h3 class="event-section-heading">Pairs Quiz</h3>
+  {% if external_link %}<p class="event-report-line"><a class="event-report-link" href="{{ external_link }}" target="_blank" rel="noopener">Izvještaj ↗</a></p>{% endif %}
+  <h3 class="event-section-heading">Kviz parova</h3>
   <ul class="event-podium-list">
     {% for slot in podium %}
     <li>{% if slot.rank == 1 %}🥇{% elif slot.rank == 2 %}🥈{% else %}🥉{% endif %} {% for p in slot.players %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% if not loop.last %} / {% endif %}{% endfor %}</li>

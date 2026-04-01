@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Events{% endblock %}
+{% block title %}Događaji{% endblock %}
 {% block body %}
-<h2>Events</h2>
-<p class="muted small">Click a section to expand and browse events.</p>
+<h2>Događaji</h2>
+<p class="muted small">Kliknite na kategoriju za prikaz događaja.</p>
 
 <div class="series-accordion">
 
   {# ── Category groups (HKS, Live Events, Defunct Live Events) ── #}
   {% for cat in category_groups %}
-  <div class="acc-category-label{% if 'Defunct' in cat.label %} acc-category-defunct{% endif %}">{{ cat.label }}</div>
+  <div class="acc-category-label{% if 'Neaktivni' in cat.label %} acc-category-defunct{% endif %}">{{ cat.label }}</div>
 
   {% for group in cat.groups %}
   <div class="acc-item">
@@ -31,8 +31,8 @@
       {% set extras = team_only_by_series.get(group.series.code, []) %}
       {% set extra_years = extras | map(attribute='year') | list %}
       {% set all_links = [] %}
-      {% for t in group.tournaments %}{% set _ = all_links.append({'year': t.key[-4:]|int, 'key': t.key, 'href': base_url + '/events/' + t.key + '/', 'label': t.label}) %}{% endfor %}
-      {% for extra in extras %}{% set _k = group.series.code + extra.year|string %}{% set _ = all_links.append({'year': extra.year, 'key': _k, 'href': base_url + '/events/' + _k + '/', 'label': extra.label if extra.label is defined else group.series.name + ' ' + extra.year|string}) %}{% endfor %}
+      {% for t in group.tournaments %}{% set _ = all_links.append({'year': t.key[-4:]|int, 'key': t.key, 'href': base_url + '/events/' + t.key + '/', 'label': event_label(t.key, t.label)}) %}{% endfor %}
+      {% for extra in extras %}{% set _k = group.series.code + extra.year|string %}{% set _lbl = extra.label if extra.label is defined else group.series.name + ' ' + extra.year|string %}{% set _ = all_links.append({'year': extra.year, 'key': _k, 'href': base_url + '/events/' + _k + '/', 'label': event_label(_k, _lbl)}) %}{% endfor %}
       {% for link in all_links | sort(attribute='year') %}
       {% set di = event_date_for(link.key) %}
       <li><a href="{{ link.href }}">{{ link.label }}{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</a></li>
@@ -45,26 +45,26 @@
   <div class="acc-item">
     <button class="acc-head" aria-expanded="false">
       <span class="acc-label">PHP</span>
-      <span class="acc-sub muted small">Prvenstvo Hrvatske u mješovitim parovima (Mixed Pairs Championship)</span>
+      <span class="acc-sub muted small">Prvenstvo Hrvatske u mješovitim parovima</span>
       <span class="acc-arrow">▶</span>
     </button>
     <ul class="acc-body" hidden>
       {% for entry in php_by_year | sort(attribute='year') %}
       {% set di = event_date_for('php' ~ entry.year) %}
-      <li><a href="{{ base_url }}/events/php{{ entry.year }}/">PHP {{ entry.year }}{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</a></li>
+      <li><a href="{{ base_url }}/events/php{{ entry.year }}/">PHP {{ entry.year }}.{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</a></li>
       {% endfor %}
     </ul>
   </div>
   <div class="acc-item">
     <button class="acc-head" aria-expanded="false">
       <span class="acc-label">EDP</span>
-      <span class="acc-sub muted small">Ekipno državno prvenstvo (National Team Championship)</span>
+      <span class="acc-sub muted small">Ekipno državno prvenstvo</span>
       <span class="acc-arrow">▶</span>
     </button>
     <ul class="acc-body" hidden>
       {% for entry in edp_by_year | sort(attribute='year') %}
       {% set di = event_date_for('edp' ~ entry.year) %}
-      <li><a href="{{ base_url }}/events/edp{{ entry.year }}/">EDP {{ entry.year }}{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</a></li>
+      <li><a href="{{ base_url }}/events/edp{{ entry.year }}/">EDP {{ entry.year }}.{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</a></li>
       {% endfor %}
     </ul>
   </div>
