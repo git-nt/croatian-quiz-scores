@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ player.name }}{% endblock %}
 {% block body %}
-<p class="muted small"><a href="{{ base_url }}/">← Players</a></p>
-
 <div class="player-toolbar">
   <label class="player-picker-label" for="player-select">Player</label>
   <select id="player-select" class="player-select" aria-label="Select player">
@@ -106,7 +104,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr class="tl-divider">
+    <tr class="tl-divider tl-divider-live">
       <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Live Events</th>
     </tr>
     {% for row in tl_live %}
@@ -124,7 +122,7 @@
     </tr>
     {% endfor %}
     <tr class="tl-spacer"><td colspan="{{ tl_years | length + 1 }}"></td></tr>
-    <tr class="tl-divider">
+    <tr class="tl-divider tl-divider-hks">
       <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">HKS Events</th>
     </tr>
     {% for row in tl_hks %}
@@ -142,7 +140,7 @@
     </tr>
     {% endfor %}
     <tr class="tl-spacer"><td colspan="{{ tl_years | length + 1 }}"></td></tr>
-    <tr class="tl-divider">
+    <tr class="tl-divider tl-divider-defunct">
       <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Defunct Live Events</th>
     </tr>
     {% for row in tl_defunct %}
@@ -172,12 +170,16 @@
 <p class="muted small">Only events where this player appeared, oldest first.</p>
 
 <div class="tabs" id="results-tabs">
-  <div class="tab-bar">
-    <button class="tab-btn active" data-tab="all">All</button>
-    <button class="tab-btn" data-tab="live">Live Events</button>
-    <button class="tab-btn" data-tab="hks">HKS</button>
+  <div class="results-filter-wrap">
+    <div class="results-tier-all">
+      <button class="results-btn results-btn-all active" data-tab="all">All</button>
+    </div>
+    <div class="results-tier-cats" id="results-tier-cats">
+      <button class="results-btn results-btn-cat" data-tab="live">Live Events</button>
+      <button class="results-btn results-btn-cat" data-tab="hks">HKS</button>
+    </div>
   </div>
-  <div class="pill-bar" id="series-pills" hidden></div>
+  <div class="pill-bar results-pill-bar" id="series-pills" hidden></div>
   <div class="history-block">
   <div class="legend" id="finalist-legend">
     <span class="legend-item"><span class="legend-swatch rank-final"></span> finalist in a live event</span>
@@ -354,9 +356,9 @@
 
   if (tabs) {
     tabs.addEventListener('click', function (e) {
-      const btn = e.target.closest('.tab-btn');
+      const btn = e.target.closest('.results-btn');
       if (btn) {
-        tabs.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+        tabs.querySelectorAll('.results-btn').forEach(function (b) { b.classList.remove('active'); });
         btn.classList.add('active');
         const cat = btn.dataset.tab;
         if (cat === 'all') { pills.hidden = true; pills.innerHTML = ''; }
@@ -371,7 +373,7 @@
       if (!btn) return;
       pills.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      const activeCat = tabs.querySelector('.tab-btn.active').dataset.tab;
+      const activeCat = tabs.querySelector('.results-btn.active').dataset.tab;
       const series = btn.dataset.series;
       // If filtering to a single HKS series, hide final col; if single live series, show it
       const isHksSeries = series && tabs.querySelector('tr[data-series="' + series + '"]') && tabs.querySelector('tr[data-series="' + series + '"]').dataset.cat === 'hks';

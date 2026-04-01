@@ -9,11 +9,11 @@
   --bronze: #9a3412;
   --accent: #1d4ed8;
   --link: #1d4ed8;
-  /* Medalists page filters — distinct from header nav blue */
-  --medal-nav-accent: #0f766e;
-  --medal-nav-accent-soft: #ecfdf5;
-  --medal-sub-accent: #475569;
-  --medal-sub-accent-soft: #f1f5f9;
+  /* Filter buttons — dark red primary, dark blue secondary */
+  --medal-nav-accent: #991b1b;
+  --medal-nav-accent-soft: #fef2f2;
+  --medal-sub-accent: #1e3a5f;
+  --medal-sub-accent-soft: #eff6ff;
   --finalist-bg: rgba(37, 99, 235, 0.1);
   --finalist-bg-hover: rgba(37, 99, 235, 0.16);
 }
@@ -107,8 +107,9 @@ table.player-history th.num {
 
 
 .wrap {
+  max-width: 64rem;
   margin: 0 auto;
-  padding: 1.25rem clamp(1.5rem, 5vw, 5rem) 3rem;
+  padding: 1.5rem clamp(1.5rem, 5vw, 5rem) 3rem;
   text-align: center;
 }
 
@@ -120,26 +121,33 @@ table.player-history th.num {
   text-align: left;
 }
 
-header.site {
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
+/* ── Top bar header ── */
+
+.site-bar {
+  background: #0f172a;
+  color: #f8fafc;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
 }
 
-header.site h1 {
-  margin: 0 0 0.35rem;
-  font-size: 1.45rem;
-  font-weight: 650;
+.site-bar-inner {
+  max-width: 64rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem clamp(1rem, 4vw, 3rem);
 }
 
-header.site h1 a {
-  color: var(--text);
-}
-
-header.site p.lead {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.95rem;
+.site-logo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f8fafc !important;
+  text-decoration: none !important;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 nav.top {
@@ -147,7 +155,7 @@ nav.top {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 0.9rem;
+  margin-bottom: 1.25rem;
   font-size: 0.88rem;
 }
 
@@ -166,6 +174,7 @@ nav.top a:hover {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
+  text-decoration: none;
 }
 
 nav.top a.active {
@@ -430,13 +439,41 @@ td.cell-blank {
   color: var(--muted);
   margin: 0 0 0.5rem;
 }
-.event-list-date {
-  display: flex;
+
+.event-report-line {
+  margin: 0.45rem 0 0.2rem;
+}
+
+.event-report-link {
+  display: inline-flex;
   align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1e40af;
+  background: #eff6ff;
+  border: 1px solid rgba(29,78,216,0.25);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.event-report-link:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #fff;
+  text-decoration: none;
+}
+
+.event-list-date {
   flex-shrink: 0;
+  margin-left: auto;
   font-size: 0.78rem;
   color: var(--muted);
-  padding-right: 1rem;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .event-section-heading {
@@ -506,7 +543,7 @@ ul.event-podium-list li {
   display: table;
   min-width: 15rem;
   max-width: 100%;
-  border: 1px solid var(--border);
+  border: 1px solid #9ca3af;
   border-radius: 6px;
   overflow: hidden;
   margin: 1rem auto 1.5rem;
@@ -514,12 +551,13 @@ ul.event-podium-list li {
 }
 
 .medal-box-header {
-  background: #e8eaee;
+  background: #1e3a5f;
+  color: #fff;
   font-weight: 600;
   font-size: 0.88rem;
   text-align: center;
-  padding: 0.4rem 0.75rem;
-  border-bottom: 1px solid var(--border);
+  padding: 0.45rem 0.75rem;
+  border-bottom: none;
 }
 
 .medal-section-label {
@@ -528,10 +566,11 @@ ul.event-podium-list li {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--muted);
+  color: #374151;
   text-align: center;
-  padding: 0.3rem 0.75rem;
-  border-bottom: 1px solid var(--border);
+  padding: 0.35rem 0.75rem;
+  border-top: 1px solid #9ca3af;
+  border-bottom: 1px solid #9ca3af;
 }
 
 table.medal-table {
@@ -762,12 +801,28 @@ tr.tl-divider th {
 th.tl-divider-label {
   text-align: left;
   font-size: 0.72rem;
-  font-weight: 500;
-  color: var(--muted);
-  padding: 0.65rem 0.55rem 0.25rem;
-  background: var(--bg);
-  letter-spacing: 0.03em;
+  font-weight: 700;
+  padding: 0.55rem 0.55rem 0.25rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+tr.tl-divider-live th.tl-divider-label {
+  background: #eff6ff;
+  color: #1e3a8a;
+  border-left: 3px solid #1d4ed8;
+}
+
+tr.tl-divider-hks th.tl-divider-label {
+  background: #eff6ff;
+  color: #1e3a8a;
+  border-left: 3px solid #1d4ed8;
+}
+
+tr.tl-divider-defunct th.tl-divider-label {
+  background: #f8fafc;
+  color: #475569;
+  border-left: 3px solid #94a3b8;
 }
 
 th.tl-series-defunct {
@@ -806,6 +861,66 @@ th.tl-series-defunct {
   color: var(--accent);
   border-bottom-color: var(--accent);
   font-weight: 600;
+}
+
+/* ── Individual results tiered filter (player page) ── */
+
+.results-filter-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.results-tier-all,
+.results-tier-cats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.results-btn {
+  padding: 0.28rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+.results-btn:hover {
+  border-color: var(--medal-nav-accent);
+  color: var(--text);
+}
+
+.results-btn-all.active {
+  background: var(--medal-nav-accent-soft);
+  border-color: var(--medal-nav-accent);
+  color: var(--medal-nav-accent);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--medal-nav-accent);
+}
+
+.results-btn-cat {
+  min-width: 7rem;
+  text-align: center;
+}
+
+.results-btn-cat.active {
+  background: var(--medal-nav-accent);
+  border-color: var(--medal-nav-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.results-pill-bar {
+  margin: -0.25rem 0 1rem;
 }
 
 /* ── Series pill filter ── */
@@ -1040,11 +1155,16 @@ table.sortable th.sort-desc::after {
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--text);
-  background: var(--border);
-  padding: 0.45rem 0.9rem;
+  color: #fff;
+  background: #1e3a5f;
+  padding: 0.5rem 0.9rem;
   border-radius: 4px;
   margin-top: 0.8rem;
+}
+
+.acc-category-defunct {
+  background: #6b7280;
+  color: #fff;
 }
 
 .acc-item {
@@ -1093,12 +1213,7 @@ table.sortable th.sort-desc::after {
 }
 
 .acc-body li {
-  display: flex;
-  align-items: stretch;
   border-bottom: 1px solid var(--border);
-}
-.acc-body li a {
-  flex: 1;
 }
 
 .acc-body li:last-child {
@@ -1119,13 +1234,7 @@ table.sortable th.sort-desc::after {
 }
 
 .acc-body li a::after {
-  content: '↗';
-  font-size: 0.8rem;
-  color: var(--muted);
-  flex-shrink: 0;
-  margin-left: 0.5rem;
-  opacity: 0;
-  transition: opacity 0.12s;
+  display: none;
 }
 
 .acc-body li a:hover {
@@ -1134,7 +1243,4 @@ table.sortable th.sort-desc::after {
   color: var(--accent);
 }
 
-.acc-body li a:hover::after {
-  opacity: 1;
-}
 

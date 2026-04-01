@@ -1,6 +1,7 @@
 [
   {
     "year": 2025,
+    "external_link": "https://hrkviz.hr/izvjestaj/189__11_Prvenstvo_Hrvatske_za_mjesovite_parove__PHP_2025_",
     "podium": [
       {"rank": 1, "players": ["Mateja Iveta", "Neven Trgovec"]},
       {"rank": 2, "players": ["Sara Librenjak", "Krešimir Sučević Međeral"]},
@@ -9,6 +10,7 @@
   },
   {
     "year": 2024,
+    "external_link": "https://hrkviz.hr/izvjestaj/175_10__Prvenstvo_Hrvatske_za_mjesovite_parove__PHP_2024_",
     "podium": [
       {"rank": 1, "players": ["Mateja Iveta", "Neven Trgovec"]},
       {"rank": 2, "players": ["Helena Buranji", "Krešimir Sučević Međeral"]},
@@ -17,6 +19,7 @@
   },
   {
     "year": 2023,
+    "external_link": "https://hrkviz.hr/izvjestaj/159_9__Prvenstvo_Hrvatske_za_mjesovite_parove__PHP_2023_",
     "podium": [
       {"rank": 1, "players": ["Ana Pašalić", "Krešimir Sučević Međeral"]},
       {"rank": 2, "players": ["Marijana Jakovašić", "Dražen Nemet"]},
@@ -25,6 +28,7 @@
   },
   {
     "year": 2022,
+    "external_link": "https://hrkviz.hr/izvjestaj/143_8__PHP_2022_",
     "podium": [
       {"rank": 1, "players": ["Sara Librenjak", "Krešimir Sučević Međeral"]},
       {"rank": 2, "players": ["Maja Rogulj", "Krešimir Štimac"]},
@@ -33,6 +37,7 @@
   },
   {
     "year": 2021,
+    "external_link": "https://hrkviz.hr/izvjestaj/127_7__PHP_2021_",
     "podium": [
       {"rank": 1, "players": ["Sara Librenjak", "Krešimir Sučević Međeral"]},
       {"rank": 2, "players": ["Maja Rogulj", "Krešimir Štimac"]},
@@ -41,6 +46,7 @@
   },
   {
     "year": 2020,
+    "external_link": "https://hrkviz.hr/izvjestaj/112_6__PHP_2020_",
     "podium": [
       {"rank": 1, "players": ["Maja Rogulj", "Krešimir Štimac"]},
       {"rank": 2, "players": ["Marijana Jakovašić", "Dražen Nemet"]},
@@ -49,6 +55,7 @@
   },
   {
     "year": 2019,
+    "external_link": "https://hrkviz.hr/izvjestaj/80_5__PHP_2019_",
     "podium": [
       {"rank": 1, "players": ["Marijana Jakovašić", "Mladen Vukorepa"]},
       {"rank": 2, "players": ["Ena Šarić", "Perica Živanović"]},
@@ -57,6 +64,7 @@
   },
   {
     "year": 2018,
+    "external_link": "https://hrkviz.hr/izvjestaj/54_4__PHP_2018_",
     "podium": [
       {"rank": 1, "players": ["Ena Šarić", "Perica Živanović"]},
       {"rank": 2, "players": ["Marijana Jakovašić", "Dean Kotiga"]},
@@ -65,6 +73,7 @@
   },
   {
     "year": 2017,
+    "external_link": "https://hrkviz.hr/izvjestaj/152_3__PHP_2017_",
     "podium": [
       {"rank": 1, "players": ["Marijana Jakovašić", "Dean Kotiga"]},
       {"rank": 2, "players": ["Petra Lypolt", "Krešimir Sučević Međeral"]},
@@ -73,6 +82,7 @@
   },
   {
     "year": 2016,
+    "external_link": "https://hrkviz.hr/izvjestaj/37_2__PHP_2016_",
     "podium": [
       {"rank": 1, "players": ["Maja Rogulj", "Krešimir Štimac"]},
       {"rank": 2, "players": ["Ena Šarić", "Ivan Vlahek"]},
@@ -81,6 +91,7 @@
   },
   {
     "year": 2015,
+    "external_link": "https://hrkviz.hr/izvjestaj/35_1__PHP_2015__%E2%80%93_poredak",
     "podium": [
       {"rank": 1, "players": ["Dorjana Širola", "Dean Kotiga"]},
       {"rank": 2, "players": ["Lana Molvarec", "Mladen Vukorepa"]},

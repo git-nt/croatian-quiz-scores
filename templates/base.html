@@ -7,15 +7,17 @@
   <link rel="stylesheet" href="{{ base_url }}/static/style.css" />
 </head>
 <body>
+  <header class="site-bar">
+    <div class="site-bar-inner">
+      <a class="site-logo" href="{{ base_url }}/">Croatian Quiz Stats</a>
+    </div>
+  </header>
   <div class="wrap">
-    <header class="site">
-      <h1><a href="{{ base_url }}/">Croatian Quiz Stats</a></h1>
-      <nav class="top">
-        <a href="{{ base_url }}/" data-exact="1">Players</a>
-        <a href="{{ base_url }}/medals/">Medalists</a>
-        <a href="{{ base_url }}/events/">Events</a>
-      </nav>
-    </header>
+    <nav class="top">
+      <a href="{{ base_url }}/" data-exact="1">Players</a>
+      <a href="{{ base_url }}/medals/">Medalists</a>
+      <a href="{{ base_url }}/events/">Events</a>
+    </nav>
     <main>
       {% block body %}{% endblock %}
     </main>

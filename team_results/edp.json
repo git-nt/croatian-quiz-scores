@@ -1,6 +1,7 @@
 [
   {
     "year": 2025,
+    "external_link": "https://hrkviz.hr/izvjestaj/197_11__Ekipno_Drzavno_Prvenstvo_2025_",
     "podium": [
       {"rank": 1, "team": "Crni sljezov kolačić", "members": ["Šime Gverić", "Mateja Iveta", "Karlo Plazina", "Krešimir Štimac", "Neven Trgovec"]},
       {"rank": 2, "team": "Perlice", "members": ["Lukša Benić", "Dean Kotiga", "Toni Velić", "Elio Verbanac", "Mladen Vukorepa"]},
@@ -9,6 +10,7 @@
   },
   {
     "year": 2024,
+    "external_link": "https://hrkviz.hr/izvjestaj/185_10__Ekipno_Drzavno_Prvenstvo_2024_",
     "podium": [
       {"rank": 1, "team": "Perlice", "members": ["Lukša Benić", "Dean Kotiga", "Neven Trgovec", "Toni Velić", "Mladen Vukorepa"]},
       {"rank": 2, "team": "I tim", "members": ["Tomislav Berić", "Krešimir Sučević Međeral", "Rudi Mrazović", "Ante Spahija", "Josip Zaninović"]},
@@ -17,6 +19,7 @@
   },
   {
     "year": 2023,
+    "external_link": "https://hrkviz.hr/izvjestaj/169_9__Ekipno_Drzavno_Prvenstvo_2023_",
     "podium": [
       {"rank": 1, "team": "Prvoplasirani", "members": ["Lukša Benić", "Dean Kotiga", "Nikola Pezić", "Neven Trgovec", "Mladen Vukorepa"]},
       {"rank": 2, "team": "Kraken Mare", "members": ["Borko Barić", "Šime Gverić", "Josip Kelava", "Dražen Nemet", "Ana Žele"]},
@@ -25,6 +28,7 @@
   },
   {
     "year": 2022,
+    "external_link": "https://hrkviz.hr/izvjestaj/151__8__Ekipno_Drzavno_Prvenstvo_2022_",
     "podium": [
       {"rank": 1, "team": "Perlice", "members": ["Lukša Benić", "Nikola Pezić", "Neven Trgovec", "Toni Velić", "Mladen Vukorepa"]},
       {"rank": 2, "team": "KviZDe", "members": ["Dragan Gulam", "Ivan Jurić", "Lovro Jurišić", "Duško Lakić", "Roko Sven Surać"]},
@@ -33,6 +37,7 @@
   },
   {
     "year": 2021,
+    "external_link": "https://hrkviz.hr/izvjestaj/130_7__Ekipno_Drzavno_Prvenstvo_2021_",
     "podium": [
       {"rank": 1, "team": "Perlice", "members": ["Dean Kotiga", "Nikola Pezić", "Neven Trgovec", "Toni Velić", "Mladen Vukorepa"]},
       {"rank": 2, "team": "A Tim", "members": ["Krešimir Sučević Međeral", "Rudi Mrazović", "Marko Ožegović", "Maja Rogulj", "Krešimir Štimac"]},
@@ -41,6 +46,7 @@
   },
   {
     "year": 2019,
+    "external_link": "https://hrkviz.hr/izvjestaj/96_6__Ekipno_Drzavno_Prvenstvo_2019_",
     "podium": [
       {"rank": 1, "team": "Perlice", "members": ["Lukša Benić", "Dean Kotiga", "Nikola Pezić", "Neven Trgovec", "Mladen Vukorepa"]},
       {"rank": 2, "team": "K.u.K. Improvisatoren", "members": ["Tomislav Berić", "Kristo Kristić", "Krešimir Sučević Međeral", "Maja Rogulj", "Krešimir Štimac"]},
@@ -49,6 +55,7 @@
   },
   {
     "year": 2018,
+    "external_link": "https://hrkviz.hr/galerija/6_5__Ekipno_drzavno_prvenstvo_2018_",
     "podium": [
       {"rank": 1, "team": "K.u.K. Improvisatoren", "members": ["Kristo Kristić", "Krešimir Sučević Međeral", "Marko Ožegović", "Maja Rogulj", "Krešimir Štimac"]},
       {"rank": 2, "team": "Perlice", "members": ["Tomislav Ćurin", "Dean Kotiga", "Nikola Pezić", "Neven Trgovec", "Mladen Vukorepa"]},
@@ -73,6 +80,7 @@
   },
   {
     "year": 2015,
+    "external_link": "https://hrkviz.hr/izvjestaj/38_2__EDP_2015_",
     "podium": [
       {"rank": 1, "team": "Perlice", "members": ["Tomislav Ćurin", "Dean Kotiga", "Nikola Pezić", "Toni Velić", "Mladen Vukorepa"]},
       {"rank": 2, "team": "Mlađi referenti", "members": ["Ernad Grubišić", "Vedran Kos", "Nikola Lazić", "Neven Milijić", "David Rajlić"]},
@@ -81,6 +89,7 @@
   },
   {
     "year": 2014,
+    "external_link": "https://hrkviz.hr/izvjestaj/39_1_EDP_2014_",
     "podium": [
       {"rank": 1, "team": "Belzebube", "members": ["Petra Lypolt", "Kristo Kristić", "Ena Šarić", "Ivan Vlahek"]},
       {"rank": 2, "team": "Perlice", "members": ["Lukša Benić", "Dean Kotiga", "Nikola Pezić", "Mladen Vukorepa"]},

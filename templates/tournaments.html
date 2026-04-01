@@ -8,9 +8,8 @@
 
   {# ── Category groups (HKS, Live Events, Defunct Live Events) ── #}
   {% for cat in category_groups %}
-  <div class="acc-category-label">{{ cat.label }}</div>
+  <div class="acc-category-label{% if 'Defunct' in cat.label %} acc-category-defunct{% endif %}">{{ cat.label }}</div>
 
-  {# EDP injected after WQC/Croatian Open inside HKS #}
   {% for group in cat.groups %}
   <div class="acc-item">
     <button class="acc-head" aria-expanded="false">
@@ -36,26 +35,13 @@
       {% for extra in extras %}{% set _k = group.series.code + extra.year|string %}{% set _ = all_links.append({'year': extra.year, 'key': _k, 'href': base_url + '/events/' + _k + '/', 'label': extra.label if extra.label is defined else group.series.name + ' ' + extra.year|string}) %}{% endfor %}
       {% for link in all_links | sort(attribute='year') %}
       {% set di = event_date_for(link.key) %}
-      <li><a href="{{ link.href }}">{{ link.label }}</a>{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</li>
+      <li><a href="{{ link.href }}">{{ link.label }}{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</a></li>
       {% endfor %}
     </ul>
   </div>
-  {% endfor %}
 
-  {% if cat.label == 'HKS' %}
-  <div class="acc-item">
-    <button class="acc-head" aria-expanded="false">
-      <span class="acc-label">EDP</span>
-      <span class="acc-sub muted small">Ekipno državno prvenstvo (National Team Championship)</span>
-      <span class="acc-arrow">▶</span>
-    </button>
-    <ul class="acc-body" hidden>
-      {% for entry in edp_by_year | sort(attribute='year') %}
-      {% set di = event_date_for('edp' ~ entry.year) %}
-      <li><a href="{{ base_url }}/events/edp{{ entry.year }}/">EDP {{ entry.year }}</a>{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</li>
-      {% endfor %}
-    </ul>
-  </div>
+  {# Insert PHP then EDP after Croatian Open (last HKS series) #}
+  {% if cat.label == 'HKS' and loop.last %}
   <div class="acc-item">
     <button class="acc-head" aria-expanded="false">
       <span class="acc-label">PHP</span>
@@ -65,11 +51,26 @@
     <ul class="acc-body" hidden>
       {% for entry in php_by_year | sort(attribute='year') %}
       {% set di = event_date_for('php' ~ entry.year) %}
-      <li><a href="{{ base_url }}/events/php{{ entry.year }}/">PHP {{ entry.year }}</a>{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</li>
+      <li><a href="{{ base_url }}/events/php{{ entry.year }}/">PHP {{ entry.year }}{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="acc-item">
+    <button class="acc-head" aria-expanded="false">
+      <span class="acc-label">EDP</span>
+      <span class="acc-sub muted small">Ekipno državno prvenstvo (National Team Championship)</span>
+      <span class="acc-arrow">▶</span>
+    </button>
+    <ul class="acc-body" hidden>
+      {% for entry in edp_by_year | sort(attribute='year') %}
+      {% set di = event_date_for('edp' ~ entry.year) %}
+      <li><a href="{{ base_url }}/events/edp{{ entry.year }}/">EDP {{ entry.year }}{% if di %}<span class="event-list-date">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</span>{% endif %}</a></li>
       {% endfor %}
     </ul>
   </div>
   {% endif %}
+
+  {% endfor %}
 
   {% endfor %}
 

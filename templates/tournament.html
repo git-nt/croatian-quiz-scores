@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block title %}{{ t.label }}{% endblock %}
 {% block body %}
-<p class="muted small"><a href="{{ base_url }}/events/">← Events</a></p>
 <div class="tournament-hero">
   <h2>{{ t.label }}</h2>
   {% set bl = blurb_for_key(t.key) %}
   {% if bl %}<p class="muted">{{ bl }}</p>{% endif %}
   {% set di = event_date_for(t.key) %}
   {% if di %}<p class="event-date-line">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</p>{% endif %}
+  {% if external_link %}<p class="event-report-line"><a class="event-report-link" href="{{ external_link }}" target="_blank" rel="noopener">Report ↗</a></p>{% endif %}
   {% if not team_only %}
   <h3 class="event-section-heading">Individual Quiz</h3>
   {% if podium %}

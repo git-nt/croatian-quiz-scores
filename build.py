@@ -181,8 +181,15 @@ def build(base_url: str = ""):
                         "team":   slot["team"],
                         "members": slot["members"],
                     })
+    _special_months = {"edp": 11, "php": 3}
+
+    def _medal_sort_key(m):
+        s = SERIES_BY_CODE.get(m["series"])
+        month = s.month_for_year(m["year"]) if s else _special_months.get(m["series"], 6)
+        return (m["rank"], m["year"], month)
+
     for _ml in _team_player_medals.values():
-        _ml.sort(key=lambda m: (m["rank"], m["year"]))
+        _ml.sort(key=_medal_sort_key)
 
     def _team_medal_table(entries_iter):
         """(name, g, s, b, total) sorted by G desc from an iterable of {year,rank,…} dicts."""
@@ -274,7 +281,7 @@ def build(base_url: str = ""):
                         "players": slot["players"],
                     })
     for _ml in _pair_player_medals.values():
-        _ml.sort(key=lambda m: (m["rank"], m["year"]))
+        _ml.sort(key=_medal_sort_key)
 
     def _pair_medal_table(entries_iter):
         """(name, g, s, b, total) sorted by G desc from pair entries."""
@@ -574,6 +581,7 @@ def build(base_url: str = ""):
             "title": f"EDP {entry['year']}",
             "year": entry["year"],
             "podium": entry["podium"],
+            "external_link": entry.get("external_link"),
         })
 
     # ── PHP year detail pages ──
@@ -582,6 +590,7 @@ def build(base_url: str = ""):
             "title": f"PHP {entry['year']}",
             "year": entry["year"],
             "podium": entry["podium"],
+            "external_link": entry.get("external_link"),
         })
 
     # Build lookup: (series_code, year) → team/pair podium entry
@@ -636,6 +645,7 @@ def build(base_url: str = ""):
             "team_entry": team_entry,
             "pair_entry": pair_entry,
             "team_only": False,
+            "external_link": None,
         })
 
     # ── Team-only event pages (no individual data) ──
@@ -666,6 +676,7 @@ def build(base_url: str = ""):
                 "team_entry": _entry,
                 "pair_entry": None,
                 "team_only": True,
+                "external_link": _entry.get("external_link"),
             })
 
     print(f"Built {pages} pages → {OUT.relative_to(BASE)}/")
