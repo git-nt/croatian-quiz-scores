@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Medalje{% endblock %}
 {% block body %}
-<h2>Medalje</h2>
-
 {% macro medal_table(medal_rows, key) %}
 {% if medal_rows %}
 <div class="scroll-x players-list-wrap medal-panel" data-key="{{ key }}" hidden>
@@ -85,7 +83,7 @@
 {# ══════════ PODIUM SECTIONS ══════════ #}
 
 <div class="podium-section" data-for="individual" hidden>
-  <h2>Medalje</h2>
+  <h2></h2>
   {% for t, podium in events_medals %}
   <div class="event-block" data-cat="{{ 'hks' if is_hks_event(t.key) else 'live' }}" data-series="{{ series_code_from_key(t.key) }}">
     <h3><a href="{{ base_url }}/events/{{ t.key }}/">{{ event_label(t.key, t.label) }}</a></h3>
