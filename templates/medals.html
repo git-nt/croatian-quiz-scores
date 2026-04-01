@@ -119,7 +119,7 @@
   {% for code in live_team_codes %}
   {% for entry in all_team_raw[code] | sort(attribute='year', reverse=True) %}
   <div class="event-block edp-block" data-tcat="live" data-tseries="{{ code }}">
-    <h3>{% set _h = entry.label if entry.label is defined else team_event_label(code, entry.year) %}{{ _h }}{% if _h and not _h.endswith('.') %}.{% endif %}</h3>
+    <h3>{{ event_label(code ~ (entry.year | string), entry.label if entry.label is defined else team_event_label(code, entry.year)) }}</h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
@@ -152,7 +152,7 @@
   {% for code in live_pair_codes %}
   {% for entry in all_pair_raw[code] | sort(attribute='year', reverse=True) %}
   <div class="event-block edp-block" data-pcat="live" data-pseries="{{ code }}">
-    <h3>{% set _h = entry.label if entry.label is defined else pair_event_label(code, entry.year) %}{{ _h }}{% if _h and not _h.endswith('.') %}.{% endif %}</h3>
+    <h3>{{ event_label(code ~ (entry.year | string), entry.label if entry.label is defined else pair_event_label(code, entry.year)) }}</h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">

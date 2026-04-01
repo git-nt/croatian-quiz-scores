@@ -28,13 +28,24 @@ OUT = BASE / "_site"
 
 
 def event_label(key: str, label: str) -> str:
-    """Display title: Croatian style '.' after year; WQC adds '(Hrvatska)'."""
+    """Display title: Croatian style '.' after year; WQC adds '(Hrvatska)'.
+
+    If the label ends with a parenthetical after the year (e.g. SOVA 2021 (24h maraton)),
+    the dot goes after the year: SOVA 2021. (24h maraton) — not after the closing paren.
+    """
     raw = (label or "").strip()
     if series_code_from_key(key) == "wqc":
         m = re.search(r"(\d{4})", raw) or re.search(r"(\d{4})", key)
         return f"WQC {m.group(1)}. (Hrvatska)" if m else raw
     if not raw:
         return raw
+    if re.search(r"\([^)]+\)\s*\.?\s*$", raw):
+        m_ok = re.match(r"^(.+?)\s+(\d{4})\.\s+(\([^)]+\))\s*$", raw)
+        if m_ok:
+            return raw
+        m_fix = re.match(r"^(.+?)\s+(\d{4})\s+(\([^)]+\))\s*\.?\s*$", raw)
+        if m_fix:
+            return f"{m_fix.group(1)} {m_fix.group(2)}. {m_fix.group(3)}"
     return raw if raw.endswith(".") else f"{raw}."
 
 
@@ -663,13 +674,11 @@ def build(base_url: str = ""):
             _ekey = f"{_sc}{_entry['year']}"
             if _ekey in _tournament_keys:
                 continue
-            _label = _entry.get("label") or f"{_series_obj.name} {_entry['year']}"
-            _label = _label.rstrip()
-            if not _label.endswith("."):
-                _label = f"{_label}."
-            _t = SimpleNamespace(label=_label, key=_ekey)
+            _raw = _entry.get("label") or f"{_series_obj.name} {_entry['year']}"
+            _disp = event_label(_ekey, _raw)
+            _t = SimpleNamespace(label=_disp, key=_ekey)
             write_page(f"events/{_ekey}", "tournament.html", {
-                "title": _label,
+                "title": _disp,
                 "t": _t,
                 "rows": [],
                 "has_sheet": False,
