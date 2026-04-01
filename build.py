@@ -633,6 +633,7 @@ def build(base_url: str = ""):
         _event_year = int(_year_match.group(1)) if _year_match else None
         team_entry = _team_by_event.get((sc, _event_year)) if _event_year else None
         pair_entry = _pair_by_event.get((sc, _event_year)) if _event_year else None
+        _meta = event_date_for(t.key) or {}
         write_page(f"events/{t.key}", "tournament.html", {
             "title": event_label(t.key, t.label),
             "t": t,
@@ -647,7 +648,7 @@ def build(base_url: str = ""):
             "team_entry": team_entry,
             "pair_entry": pair_entry,
             "team_only": False,
-            "external_link": None,
+            "external_link": _meta.get("external_link"),
         })
 
     # ── Team-only event pages (no individual data) ──
