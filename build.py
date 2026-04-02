@@ -677,6 +677,9 @@ def build(base_url: str = ""):
             _raw = _entry.get("label") or f"{_series_obj.name} {_entry['year']}"
             _disp = event_label(_ekey, _raw)
             _t = SimpleNamespace(label=_disp, key=_ekey)
+            _team_ext = _entry.get("external_link") or (event_date_for(_ekey) or {}).get(
+                "external_link"
+            )
             write_page(f"events/{_ekey}", "tournament.html", {
                 "title": _disp,
                 "t": _t,
@@ -691,7 +694,7 @@ def build(base_url: str = ""):
                 "team_entry": _entry,
                 "pair_entry": None,
                 "team_only": True,
-                "external_link": _entry.get("external_link"),
+                "external_link": _team_ext,
             })
 
     print(f"Built {pages} pages → {OUT.relative_to(BASE)}/")
