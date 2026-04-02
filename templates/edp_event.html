@@ -3,7 +3,7 @@
 {% block body %}
 <div class="tournament-hero">
   <h2>EDP {{ year }}.</h2>
-  <p class="muted">Ekipno državno prvenstvo u kvizu.</p>
+  <p class="muted">Ekipno državno prvenstvo u kvizu</p>
   {% set di = event_date_for('edp' ~ year) %}
   {% if di %}<p class="event-date-line">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</p>{% endif %}
   {% if external_link %}<p class="event-report-line"><a class="event-report-link" href="{{ external_link }}" target="_blank" rel="noopener">Izvještaj ↗</a></p>{% endif %}
