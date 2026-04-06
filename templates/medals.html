@@ -102,9 +102,9 @@
 
 <div class="podium-section" data-for="teams" hidden>
   <h2>Medalje</h2>
-  {% for entry in edp_by_year %}
-  <div class="event-block edp-block" data-tcat="edp">
-    <h3><a href="{{ base_url }}/events/edp{{ entry.year }}/">EDP {{ entry.year }}.</a></h3>
+  {% for entry in team_podiums_sorted %}
+  <div class="event-block edp-block" data-tcat="{{ entry.cat }}"{% if entry.cat == 'live' %} data-tseries="{{ entry.code }}"{% endif %}>
+    <h3><a href="{{ base_url }}/events/{{ entry.event_key }}/">{{ event_label(entry.event_key, entry.label) }}</a></h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
@@ -115,30 +115,14 @@
       {% endfor %}
     </ul>
   </div>
-  {% endfor %}
-  {% for code in live_team_codes %}
-  {% for entry in all_team_raw[code] | sort(attribute='year', reverse=True) %}
-  <div class="event-block edp-block" data-tcat="live" data-tseries="{{ code }}">
-    <h3>{{ event_label(code ~ (entry.year | string), entry.label if entry.label is defined else team_event_label(code, entry.year)) }}</h3>
-    <ul class="small edp-podium">
-      {% for slot in entry.podium %}
-      <li class="edp-team">
-        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}Z{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
-        <strong>{{ slot.team }}</strong>
-        <span class="edp-members">({% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %})</span>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endfor %}
   {% endfor %}
 </div>
 
 <div class="podium-section" data-for="pairs" hidden>
   <h2>Medalje</h2>
-  {% for entry in php_by_year %}
-  <div class="event-block edp-block" data-pcat="php">
-    <h3><a href="{{ base_url }}/events/php{{ entry.year }}/">PHP {{ entry.year }}.</a></h3>
+  {% for entry in pair_podiums_sorted %}
+  <div class="event-block edp-block" data-pcat="{{ entry.cat }}"{% if entry.cat == 'live' %} data-pseries="{{ entry.code }}"{% endif %}>
+    <h3><a href="{{ base_url }}/events/{{ entry.event_key }}/">{{ event_label(entry.event_key, entry.label) }}</a></h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
       <li class="edp-team">
@@ -148,21 +132,6 @@
       {% endfor %}
     </ul>
   </div>
-  {% endfor %}
-  {% for code in live_pair_codes %}
-  {% for entry in all_pair_raw[code] | sort(attribute='year', reverse=True) %}
-  <div class="event-block edp-block" data-pcat="live" data-pseries="{{ code }}">
-    <h3>{{ event_label(code ~ (entry.year | string), entry.label if entry.label is defined else pair_event_label(code, entry.year)) }}</h3>
-    <ul class="small edp-podium">
-      {% for slot in entry.podium %}
-      <li class="edp-team">
-        <span class="medal-chip medal-{{ slot.rank }}">{% if slot.rank == 1 %}Z{% elif slot.rank == 2 %}S{% else %}B{% endif %}</span>
-        {% for p in slot.players %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% if not loop.last %} / {% endif %}{% endfor %}
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endfor %}
   {% endfor %}
 </div>
 

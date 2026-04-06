@@ -342,6 +342,12 @@ def build(base_url: str = ""):
     }
     live_pair_series = [s for s in SERIES if s.code in _live_pair_codes]
 
+    # Combined chronological podium lists for medals page
+    def _podium_chrono_key(e):
+        s = SERIES_BY_CODE.get(e["code"])
+        month = s.month_for_year(e["year"]) if s else _special_months.get(e["code"], 6)
+        return (-e["year"], -month)
+
     def pair_event_label(series_code: str, year: int) -> str:
         if series_code == "php":
             return f"PHP {year}."
@@ -397,6 +403,30 @@ def build(base_url: str = ""):
     })
 
     # ── Medals ──
+    team_podiums_sorted = []
+    for _sc, _entries in _all_team_raw.items():
+        _cat = "edp" if _sc == "edp" else "live"
+        for _e in _entries:
+            team_podiums_sorted.append({
+                "code": _sc, "cat": _cat, "year": _e["year"],
+                "podium": _e["podium"],
+                "label": _e.get("label") or team_event_label(_sc, _e["year"]),
+                "event_key": f"{_sc}{_e['year']}",
+            })
+    team_podiums_sorted.sort(key=_podium_chrono_key)
+
+    pair_podiums_sorted = []
+    for _sc, _entries in _all_pair_raw.items():
+        _cat = "php" if _sc == "php" else "live"
+        for _e in _entries:
+            pair_podiums_sorted.append({
+                "code": _sc, "cat": _cat, "year": _e["year"],
+                "podium": _e["podium"],
+                "label": _e.get("label") or pair_event_label(_sc, _e["year"]),
+                "event_key": f"{_sc}{_e['year']}",
+            })
+    pair_podiums_sorted.sort(key=_podium_chrono_key)
+
     write_page("medals", "medals.html", {
         "title": "Medalje",
         "medals_all": medals_all,
@@ -405,23 +435,19 @@ def build(base_url: str = ""):
         "medals_by_series": medals_by_series,
         "series": SERIES,
         "events_medals": events_medals,
-        "edp_by_year": edp_by_year,
         "team_medals_all": team_medals_all,
         "team_medals_edp": team_medals_edp,
         "team_medals_live": team_medals_live,
         "team_medals_by_series": team_medals_by_series,
         "live_team_series": live_team_series,
-        "all_team_raw": _all_team_raw,
-        "live_team_codes": _live_team_codes,
         "medals_combined": medals_combined,
-        "php_by_year": php_by_year,
         "pair_medals_all": pair_medals_all,
         "pair_medals_php": pair_medals_php,
         "pair_medals_live": pair_medals_live,
         "pair_medals_by_series": pair_medals_by_series,
         "live_pair_series": live_pair_series,
-        "all_pair_raw": _all_pair_raw,
-        "live_pair_codes": _live_pair_codes,
+        "team_podiums_sorted": team_podiums_sorted,
+        "pair_podiums_sorted": pair_podiums_sorted,
         "data": data,
     })
 
