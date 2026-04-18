@@ -72,5 +72,6 @@
   "php2022":   {"date": "21.5.2022.",                   "location": "Zagreb"},
   "php2023":   {"date": "23.4.2023.",                 "location": "Zagreb"},
   "php2024":   {"date": "14.4.2024.",                 "location": "Zagreb"},
-  "php2025":   {"date": "5.4.2025.",                  "location": "Rijeka"}
+  "php2025":   {"date": "5.4.2025.",                  "location": "Rijeka"},
+  "php2026":   {"date": "11.4.2026.",                 "location": "Zagreb", "external_link": "https://hrkviz.hr/izvjestaj/202__12_Prvenstvo_Hrvatske_za_mjesovite_parove__PHP_2026_"}
 }

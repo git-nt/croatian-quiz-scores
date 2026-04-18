@@ -1,5 +1,14 @@
 [
   {
+    "year": 2026,
+    "external_link": "https://hrkviz.hr/izvjestaj/202__12_Prvenstvo_Hrvatske_za_mjesovite_parove__PHP_2026_",
+    "podium": [
+      {"rank": 1, "players": ["Sara Librenjak", "Krešimir Sučević Međeral"]},
+      {"rank": 2, "players": ["Marta Brkljačić", "Domagoj Pozderac"]},
+      {"rank": 3, "players": ["Mia Miošić", "Lucian Šošić"]}
+    ]
+  },
+  {
     "year": 2025,
     "external_link": "https://hrkviz.hr/izvjestaj/189__11_Prvenstvo_Hrvatske_za_mjesovite_parove__PHP_2025_",
     "podium": [
