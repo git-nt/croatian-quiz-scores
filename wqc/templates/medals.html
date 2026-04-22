@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Medals{% endblock %}
+{% block body %}
+<h1>Medals</h1>
+<p class="muted small">Podium finishes (1st–3rd) per year in the overall standings or within each genre column (ranked by genre score that year).</p>
+
+<div class="tab-bar medals-filter-root wqc-medals-tier2" id="wqc-T2" role="tablist" aria-label="Medals by category">
+  <button type="button" class="medals-btn-mode active" data-view="overall" role="tab" aria-selected="true" id="tab-overall" aria-controls="view-overall">Overall</button>
+  {% for gid in GENRE_IDS %}
+  <button type="button" class="medals-btn-mode" data-view="{{ gid }}" role="tab" aria-selected="false" id="tab-{{ gid }}" aria-controls="view-{{ gid }}">{{ GENRE_LABEL[gid] }}</button>
+  {% endfor %}
+</div>
+
+{# One block per tab: summary table + podiums stay in sync — no duplicate show/hide lists #}
+{% macro medal_view(medal_rows, podium_items, key) %}
+<div class="wqc-medal-view" id="view-{{ key }}" data-view="{{ key }}" role="tabpanel" aria-labelledby="tab-{{ key }}" hidden>
+  {% if medal_rows %}
+  <div class="scroll-x players-list-wrap">
+  <table class="data players-list sortable">
+    <thead>
+      <tr>
+        <th data-col="0" data-type="str">Player</th>
+        <th class="num rank-1" data-col="1" data-type="num"><span class="medal-col-icon medal-col-g" title="Gold">G</span></th>
+        <th class="num rank-2" data-col="2" data-type="num"><span class="medal-col-icon medal-col-s" title="Silver">S</span></th>
+        <th class="num rank-3" data-col="3" data-type="num"><span class="medal-col-icon medal-col-b" title="Bronze">B</span></th>
+        <th class="num" data-col="4" data-type="num">Σ</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for name, g, s, b, t in medal_rows %}
+      <tr>
+        <td><a href="{{ base_url }}/players/{{ player_slug(name) }}/">{{ name }}</a></td>
+        <td class="num">{{ g }}</td>
+        <td class="num">{{ s }}</td>
+        <td class="num">{{ b }}</td>
+        <td class="num"><strong>{{ t }}</strong></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <p class="muted">No podium rows for this view.</p>
+  {% endif %}
+
+  <div class="medal-podium-wrap wqc-podium-below-table">
+    <h2 class="medal-podium-heading">Podiums by year</h2>
+    {% for y, podium in podium_items %}
+    <div class="event-block">
+      <h3><a href="{{ base_url }}/years/{{ y }}/">WQC {{ y }}</a></h3>
+      {% if podium %}
+      <ul class="small left event-podium-list">
+        {% for pname, r in podium %}
+        <li>{% if r == 1 %}🥇{% elif r == 2 %}🥈{% else %}🥉{% endif %}
+          <a href="{{ base_url }}/players/{{ player_slug(pname) }}/">{{ pname }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="muted small">No top-3 data for this championship / category.</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{{ medal_view(medals_overall, podium_years_overall, "overall") }}
+{% for gid in GENRE_IDS %}
+{{ medal_view(medals_by_genre.get(gid, []), podium_years_by_genre[gid], gid) }}
+{% endfor %}
+
+{% endblock %}
+{% block extra_scripts %}
+<script>
+(function () {
+  var root = document.getElementById('wqc-T2');
+  if (!root) return;
+
+  var views = document.querySelectorAll('.wqc-medal-view');
+  var tabs = root.querySelectorAll('.medals-btn-mode[data-view]');
+
+  function setView(key) {
+    views.forEach(function (v) {
+      var isOn = v.dataset.view === key;
+      v.hidden = !isOn;
+      v.style.display = isOn ? '' : 'none';
+    });
+    tabs.forEach(function (btn) {
+      var on = btn.dataset.view === key;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    try {
+      history.replaceState(null, '', '#m-' + key);
+    } catch (e) {}
+  }
+
+  root.addEventListener('click', function (e) {
+    var btn = e.target.closest('.medals-btn-mode[data-view]');
+    if (!btn) return;
+    e.preventDefault();
+    setView(btn.dataset.view);
+  });
+
+  var hash = (location.hash || '').replace(/^#m-/, '');
+  var valid = false;
+  if (hash) {
+    views.forEach(function (v) { if (v.dataset.view === hash) valid = true; });
+  }
+  setView(valid ? hash : 'overall');
+
+  window.addEventListener('hashchange', function () {
+    var h = (location.hash || '').replace(/^#m-/, '');
+    views.forEach(function (v) {
+      if (v.dataset.view === h) setView(h);
+    });
+  });
+})();
+(function () {
+  document.querySelectorAll('table.sortable').forEach(function (table) {
+    var headers = table.querySelectorAll('thead th[data-col]');
+    var tbody = table.querySelector('tbody');
+    if (!tbody) return;
+    var sortCol = -1, sortAsc = false;
+    headers.forEach(function (th) {
+      th.addEventListener('click', function () {
+        if (table.offsetParent === null) return;
+        var col = parseInt(th.dataset.col, 10);
+        var isNum = th.dataset.type === 'num';
+        if (sortCol === col) sortAsc = !sortAsc;
+        else { sortCol = col; sortAsc = isNum ? false : true; }
+        headers.forEach(function (h) { h.classList.remove('sort-asc', 'sort-desc'); });
+        th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+        var rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort(function (a, b) {
+          var av = a.children[col].textContent.trim();
+          var bv = b.children[col].textContent.trim();
+          var cmp;
+          if (isNum) {
+            var an = parseInt(av, 10) || 0, bn = parseInt(bv, 10) || 0;
+            cmp = an < bn ? -1 : an > bn ? 1 : 0;
+          } else {
+            cmp = av.toLowerCase().localeCompare(bv.toLowerCase());
+          }
+          return sortAsc ? cmp : -cmp;
+        });
+        rows.forEach(function (r) { tbody.appendChild(r); });
+      });
+    });
+  });
+})();
+</script>
+{% endblock %}

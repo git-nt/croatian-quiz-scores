@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}{{ title }}{% endblock %} · WQC stats</title>
+  <link rel="icon" href="{{ asset_url(page_rel, 'favicon.ico') }}" sizes="any" />
+  <link rel="stylesheet" href="{{ asset_url(page_rel, 'wqc.css') }}" />
+</head>
+<body>
+  <header class="site-bar">
+    <div class="site-bar-inner">
+      <a class="site-logo" href="{{ base_url }}/">World Quiz Championship — stats</a>
+    </div>
+  </header>
+  <div class="wrap">
+    <nav class="top">
+      <a href="{{ base_url }}/" data-exact="1">Players</a>
+      <a href="{{ base_url }}/medals/">Medals</a>
+      <a href="{{ base_url }}/years/">Years</a>
+    </nav>
+    <main>
+      {% block body %}{% endblock %}
+    </main>
+    <footer class="site-footer">
+      <p class="muted small">Static demo generated from spreadsheet data. Not affiliated with the WQC organisers.</p>
+    </footer>
+  </div>
+  {% block extra_scripts %}{% endblock %}
+<script>
+(function () {
+  var path = window.location.pathname.replace(/\/$/, '');
+  var base = ({{ base_url | tojson }} || '').replace(/\/$/, '');
+  document.querySelectorAll('nav.top a').forEach(function (a) {
+    var href = a.getAttribute('href').replace(/\/$/, '');
+    var full = base + href;
+    if (path === full || (href === base && path === base)) a.classList.add('active');
+    else if (!a.dataset.exact && href && path.startsWith(href + '/')) a.classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>

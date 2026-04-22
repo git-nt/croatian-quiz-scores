@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% block title %}{{ player.name }}{% endblock %}
+{% block body %}
+<div class="player-toolbar">
+  <label class="player-picker-label" for="player-select-input">Player</label>
+  <div class="player-combobox" data-player-combobox data-base-url="{{ base_url }}" data-current-slug="{{ current_slug }}">
+    <script type="application/json" class="player-combobox-data">{{ player_options | tojson }}</script>
+    <div class="player-combobox-field">
+      <input
+        type="text"
+        id="player-select-input"
+        class="player-combobox-input"
+        value="{{ player.name }}"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="Type part of a name…"
+        aria-label="Search player"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls="player-select-list"
+        role="combobox"
+      />
+      <ul id="player-select-list" class="player-combobox-list" role="listbox" hidden></ul>
+    </div>
+  </div>
+</div>
+
+<h1 class="player-name">{{ player.name }}</h1>
+
+{% if has_medal_block %}
+<div class="medal-box-wrap">
+<div class="medal-box">
+  <div class="medal-box-header">Medals</div>
+  {% if podium_overall_rows %}
+  <div class="medal-section-label">Individual WQC (overall)</div>
+  <table class="medal-table">
+    <tbody>
+      {% for row in podium_overall_rows %}
+      <tr>
+        <td class="medal-icon"><span class="medal-chip medal-{{ row.rank }}">{% if row.rank == 1 %}G{% elif row.rank == 2 %}S{% else %}B{% endif %}</span></td>
+        <td class="medal-event"><a href="{{ base_url }}/years/{{ row.year }}/">WQC {{ row.year }}</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% for gid in GENRE_IDS %}
+  {% if podium_genre_rows[gid] %}
+  <div class="medal-section-label">{{ GENRE_LABEL[gid] }}</div>
+  <table class="medal-table">
+    <tbody>
+      {% for row in podium_genre_rows[gid] %}
+      <tr>
+        <td class="medal-icon"><span class="medal-chip medal-{{ row.rank }}">{% if row.rank == 1 %}G{% elif row.rank == 2 %}S{% else %}B{% endif %}</span></td>
+        <td class="medal-event"><a href="{{ base_url }}/years/{{ row.year }}/">WQC {{ row.year }}</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% endfor %}
+</div>
+</div>
+{% endif %}
+
+{% if tl_years %}
+<h2>WQC timeline</h2>
+<p class="muted small">Overall first, then each genre (ranks use scores in that column for that year). Grey cells: genre not on the sheet or missing score.</p>
+<div class="legend">
+  <span class="legend-item"><span class="legend-swatch tl-gold"></span> 1st</span>
+  <span class="legend-item"><span class="legend-swatch tl-silver"></span> 2nd</span>
+  <span class="legend-item"><span class="legend-swatch tl-bronze"></span> 3rd</span>
+  <span class="legend-item"><span class="legend-swatch tl-final"></span> 4th–10th</span>
+  <span class="legend-item"><span class="legend-swatch tl-no-event"></span> n/a</span>
+  <span class="legend-item"><span class="legend-dash">—</span> did not play</span>
+</div>
+<div class="scroll-x">
+<table class="data tl-grid">
+  <thead>
+    <tr>
+      <th></th>
+      {% for yr in tl_years %}<th class="tl-year">{{ yr }}</th>{% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="tl-divider">
+      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Overall</th>
+    </tr>
+    <tr>
+      <th class="tl-series">{{ overall_row.label }}</th>
+      {% for c in overall_row.cells %}
+      {% if c.state == 'no_sheet' %}
+      <td class="tl-cell tl-no-event"></td>
+      {% elif c.state == 'absent' %}
+      <td class="tl-cell tl-absent">—</td>
+      {% else %}
+      <td class="tl-cell {{ c.css }}"><a href="{{ base_url }}/years/{{ c.year }}/">{{ c.rank }}</a></td>
+      {% endif %}
+      {% endfor %}
+    </tr>
+    <tr class="tl-spacer"><td colspan="{{ tl_years | length + 1 }}"></td></tr>
+    <tr class="tl-divider">
+      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">By genre</th>
+    </tr>
+    {% for grow in genre_rows %}
+    <tr>
+      <th class="tl-series">{{ grow.label }}</th>
+      {% for c in grow.cells %}
+      {% if c.state == 'no_sheet' %}
+      <td class="tl-cell tl-no-event"></td>
+      {% elif c.state == 'absent' %}
+      <td class="tl-cell tl-absent">—</td>
+      {% elif c.state == 'na' %}
+      <td class="tl-cell {{ c.css }}"></td>
+      {% else %}
+      <td class="tl-cell {{ c.css }}"><a href="{{ base_url }}/years/{{ c.year }}/">{{ c.rank }}</a></td>
+      {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endif %}
+
+{% if history_rows %}
+<h2>Results by year</h2>
+<div class="scroll-x">
+<table class="data player-history-wide sortable">
+  <thead>
+    <tr>
+      <th data-col="0" data-type="num">Year</th>
+      <th class="num" data-col="1" data-type="num">Overall</th>
+      <th class="num" data-col="2" data-type="num">Score</th>
+      {% for gid in GENRE_IDS %}
+      <th class="num genre-sub" data-col="{{ 3 + loop.index0 }}" data-type="num">{{ GENRE_LABEL[gid] }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for h in history_rows %}
+    {% set r = h.row %}
+    <tr>
+      <td><a href="{{ base_url }}/years/{{ h.year }}/">{{ h.year }}</a></td>
+      <td class="num">{{ r.rank }}</td>
+      <td class="num">{% if r.score is not none %}{{ r.score | int }}{% else %}—{% endif %}</td>
+      {% for gid in GENRE_IDS %}
+      <td class="num">
+        {% set v = r.genres.get(gid) %}
+        {% set gr = r.genre_ranks.get(gid) %}
+        {% if v is not none and gr is not none %}
+          {{ v | int }} <span class="muted">(#{{ gr }})</span>
+        {% elif v is not none %}
+          {{ v | int }}
+        {% else %}
+          —
+        {% endif %}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endif %}
+
+{% if has_chart %}
+<h2>Overall rank over time</h2>
+<div class="chart-wrap">
+  <canvas id="rank-chart"></canvas>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+{% if has_chart %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  const labels = {{ chart_labels_js }};
+  const ranks = {{ chart_ranks_js }};
+  const maxRank = {{ chart_max }};
+  const ctx = document.getElementById('rank-chart');
+  if (!ctx || typeof Chart === 'undefined') return;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Rank',
+        data: ranks,
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37, 99, 235, 0.12)',
+        tension: 0.25,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          reverse: true,
+          min: 1,
+          max: Math.max(maxRank + 1, 3),
+          ticks: { maxTicksLimit: 14, precision: 0, color: '#5c6570' },
+          title: { display: true, text: 'Rank (lower is better)', color: '#5c6570', font: { size: 11 } }
+        },
+        x: {
+          ticks: { display: false },
+          grid: { display: false }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: function (items) { return labels[items[0].dataIndex]; },
+            label: function (ctx) { return '#' + ctx.parsed.y; }
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
+{% endif %}
+<script>
+(function () {
+  document.querySelectorAll('table.player-history-wide.sortable').forEach(function (table) {
+    var headers = table.querySelectorAll('thead th[data-col]');
+    var tbody = table.querySelector('tbody');
+    if (!tbody) return;
+    var sortCol = -1, sortAsc = false;
+    headers.forEach(function (th) {
+      th.addEventListener('click', function () {
+        var col = parseInt(th.dataset.col, 10);
+        var isNum = th.dataset.type === 'num';
+        if (sortCol === col) sortAsc = !sortAsc;
+        else { sortCol = col; sortAsc = isNum ? (col !== 0) : true; }
+        headers.forEach(function (h) { h.classList.remove('sort-asc', 'sort-desc'); });
+        th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+        var rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort(function (a, b) {
+          var av = a.children[col].textContent.trim().replace(/[^\d.\-]/g, '');
+          var bv = b.children[col].textContent.trim().replace(/[^\d.\-]/g, '');
+          var an = parseFloat(av) || 0, bn = parseFloat(bv) || 0;
+          var cmp = an < bn ? -1 : an > bn ? 1 : 0;
+          return sortAsc ? cmp : -cmp;
+        });
+        rows.forEach(function (r) { tbody.appendChild(r); });
+      });
+    });
+  });
+})();
+</script>
+<script src="{{ asset_url(page_rel, 'player-combobox.js') }}" defer></script>
+{% endblock %}

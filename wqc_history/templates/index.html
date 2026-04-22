@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player WQC Stats</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Page Styling */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f7fb;
+            padding: 20px;
+        }
+
+        /* Container */
+        .container {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            max-width: 1200px;
+            width: 90vw;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #555555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4a90e2;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        /* Results Table */
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4a90e2;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #f9f9f9;
+            color: #333333;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #e8f1fb;
+        }
+
+        /* No Results Message */
+        .no-results {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #888888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Get Player WQC Stats</h1>
+        
+        <!-- Form to Enter Player Name -->
+        <form action="/" method="POST">
+            <label for="player">Enter Player Name:</label>
+            <input list="player-names" id="player" name="player" placeholder="Player name" required>
+            <datalist id="player-names">
+                {% for player in players %}
+                <option value="{{ player }}">
+                {% endfor %}
+            </datalist>
+            <button type="submit">Submit</button>
+        </form>
+
+        <!-- Display Results -->
+        {% if results_html %}
+        <h2>Results for {{ player_name }}</h2>
+        <div style="overflow-x:auto;">
+            {{ results_html|safe }}
+        </div>
+        {% elif results_html is not none %}
+        <p class="no-results">No results found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

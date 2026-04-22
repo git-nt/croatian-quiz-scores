@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Players{% endblock %}
+{% block body %}
+<h1>Players</h1>
+<p class="muted">Search any competitor from recorded WQC sheets (name as published in the file).</p>
+
+<div class="player-toolbar">
+  <label class="player-picker-label" for="player-select-input">Player</label>
+  <div class="player-combobox" data-player-combobox data-base-url="{{ base_url }}" data-current-slug="">
+    <script type="application/json" class="player-combobox-data">{{ player_options | tojson }}</script>
+    <div class="player-combobox-field">
+      <input
+        type="text"
+        id="player-select-input"
+        class="player-combobox-input"
+        value=""
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="Type part of a name…"
+        aria-label="Search player"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls="player-select-list"
+        role="combobox"
+      />
+      <ul id="player-select-list" class="player-combobox-list" role="listbox" hidden></ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script src="{{ asset_url(page_rel, 'player-combobox.js') }}" defer></script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}WQC {{ year }}{% endblock %}
+{% block body %}
+<h1>WQC {{ year }}</h1>
+<p class="muted small"><a href="{{ base_url }}/years/">← All years</a></p>
+<div class="scroll-x">
+<table class="data standings sortable">
+  <thead>
+    <tr>
+      <th class="num" data-col="0" data-type="num">Rank</th>
+      <th data-col="1" data-type="str">Player</th>
+      <th class="num" data-col="2" data-type="num">Score</th>
+      {% for gid in genres_present %}
+      <th class="num" data-col="{{ 3 + loop.index0 }}" data-type="num">{{ GENRE_LABEL[gid] }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td class="num">{{ r.rank }}</td>
+      <td><a href="{{ base_url }}/players/{{ player_slug(r.name) }}/">{{ r.name }}</a></td>
+      <td class="num">{% if r.score is not none %}{{ r.score | int }}{% else %}—{% endif %}</td>
+      {% for gid in genres_present %}
+      <td class="num">
+        {% set v = r.genres.get(gid) %}
+        {% set gr = r.genre_ranks.get(gid) %}
+        {% if v is not none and gr is not none %}
+          {{ v | int }} <span class="muted">(#{{ gr }})</span>
+        {% elif v is not none %}
+          {{ v | int }}
+        {% else %}
+          —
+        {% endif %}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+(function () {
+  document.querySelectorAll('table.sortable').forEach(function (table) {
+    var headers = table.querySelectorAll('thead th[data-col]');
+    var tbody = table.querySelector('tbody');
+    if (!tbody) return;
+    var sortCol = -1, sortAsc = false;
+    headers.forEach(function (th) {
+      th.addEventListener('click', function () {
+        var col = parseInt(th.dataset.col, 10);
+        var isNum = th.dataset.type === 'num';
+        if (sortCol === col) sortAsc = !sortAsc;
+        else { sortCol = col; sortAsc = isNum ? false : true; }
+        headers.forEach(function (h) { h.classList.remove('sort-asc', 'sort-desc'); });
+        th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+        var rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort(function (a, b) {
+          var av = a.children[col].textContent.trim().replace(/[^\d.\-]/g, '');
+          var bv = b.children[col].textContent.trim().replace(/[^\d.\-]/g, '');
+          var cmp;
+          if (isNum) {
+            var an = parseFloat(av) || 0, bn = parseFloat(bv) || 0;
+            cmp = an < bn ? -1 : an > bn ? 1 : 0;
+          } else {
+            cmp = av.toLowerCase().localeCompare(bv.toLowerCase());
+          }
+          return sortAsc ? cmp : -cmp;
+        });
+        rows.forEach(function (r) { tbody.appendChild(r); });
+      });
+    });
+  });
+})();
+</script>
+{% endblock %}
