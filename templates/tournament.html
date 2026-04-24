@@ -8,6 +8,7 @@
   {% set di = event_date_for(t.key) %}
   {% if di %}<p class="event-date-line">{{ di.date }}{% if di.location %} · {{ di.location }}{% endif %}</p>{% endif %}
   {% if external_link %}<p class="event-report-line"><a class="event-report-link" href="{{ external_link }}" target="_blank" rel="noopener">Izvještaj ↗</a></p>{% endif %}
+  {% if t.key == 'sova2024' %}<p class="muted small"><strong>Napomena</strong>: rezultati individualnog kviza nisu potpuni.</p>{% endif %}
   {% if not team_only %}
   <h3 class="event-section-heading">Individualni kviz</h3>
   {% if podium %}
