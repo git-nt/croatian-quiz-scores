@@ -38,5 +38,13 @@
       {"rank": 2, "players": ["Šime Gverić", "Neven Trgovec"]},
       {"rank": 3, "players": ["Lovro Marinović", "Stipe Vukšić"]}
     ]
+  },
+  {
+    "year": 2026,
+    "podium": [
+      {"rank": 1, "players": ["Šime Gverić", "Neven Trgovec"]},
+      {"rank": 2, "players": ["Lovro Marinović", "Stipe Vukšić"]},
+      {"rank": 3, "players": ["Ivan Jurić", "Lovro Jurišić"]}
+    ]
   }
 ]
