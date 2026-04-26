@@ -47,5 +47,13 @@
       {"rank": 2, "team": "Jaka rekcija", "members": ["Fabijan Čorak", "Petar Ćosović", "Lovro Marinović", "Stipe Vukšić"]},
       {"rank": 3, "team": "J tim", "members": ["Tomislav Berić", "Rudi Mrazović", "Krešimir Sučević Međeral", "Josip Zaninović"]}
     ]
+  },
+  {
+    "year": 2026,
+    "podium": [
+      {"rank": 1, "team": "Zombi stric", "members": ["Šime Gverić", "Domagoj Pozderac", "Neven Trgovec", "Mladen Vukorepa"]},
+      {"rank": 2, "team": "Ajatolah Huawei", "members": ["Mia Miošić", "Saša Benzon", "Petar Kordić", "Lucian Šošić"]},
+      {"rank": 3, "team": "KviZDe", "members": ["Ivan Jurić", "Lovro Jurišić", "Duško Lakić", "Paško Sorić"]}
+    ]
   }
 ]
