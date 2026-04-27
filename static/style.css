@@ -134,6 +134,58 @@ select.player-select {
   margin: 0.5rem auto 1.5rem;
 }
 
+/* ── Chart mode toggle (Centil / Plasman) ── */
+.chart-toggle {
+  display: inline-flex;
+  margin: 0 auto 0.5rem;
+  padding: 2px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  gap: 2px;
+}
+
+.chart-toggle-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.chart-toggle-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.3rem 0.95rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.chart-toggle-btn:hover {
+  color: var(--text);
+}
+
+.chart-toggle-btn.active {
+  background: var(--surface);
+  color: var(--accent);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+/* "Ukupno igrača" (field size) column on player history */
+table.data.player-history th.field-size-th {
+  line-height: 1.15;
+  font-size: 0.82rem;
+}
+
+table.data.player-history td.field-size {
+  color: var(--muted);
+  font-weight: 400;
+}
+
 /* Centres the legend, table, and series key as one left-aligned block */
 .history-block {
   width: fit-content;

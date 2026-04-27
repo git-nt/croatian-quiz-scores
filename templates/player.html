@@ -206,7 +206,8 @@
     <thead>
       <tr>
         <th rowspan="2">Kviz</th>
-        <th class="num" rowspan="2">Mjesto</th>
+        <th class="num" rowspan="2">Plasman</th>
+        <th class="num field-size-th" rowspan="2">Ukupno<br>igrača</th>
         <th class="num th-group" colspan="2">Bodovi</th>
       </tr>
       <tr>
@@ -223,6 +224,7 @@
         <td class="num {% if ed.rank == 1 %}rank-1{% elif ed.rank == 2 %}rank-2{% elif ed.rank == 3 %}rank-3{% elif ed.is_finalist %}rank-final{% endif %}">
           {{ ed.rank }}
         </td>
+        <td class="num field-size">{% if row.total_n %}{{ row.total_n }}{% else %}—{% endif %}</td>
         <td class="num">{% if ed.is_finalist %}{{ ed.regular }}{% elif ed.total is not none %}{{ ed.total }}{% endif %}</td>
         {% if is_hks_event(t.key) %}
         <td class="num col-final cell-blank"></td>
@@ -250,7 +252,11 @@
 {% endif %}
 
 {% if has_chart %}
-<h2>Individualni plasmani kroz vrijeme</h2>
+<h2>Individualni rezultati kroz vrijeme</h2>
+<div class="chart-toggle" id="chart-toggle" role="tablist" aria-label="Prikaz grafa">
+  <button type="button" class="chart-toggle-btn active" data-mode="percentile" role="tab" aria-selected="true">Centil</button>
+  <button type="button" class="chart-toggle-btn" data-mode="rank" role="tab" aria-selected="false">Plasman</button>
+</div>
 <div class="chart-wrap">
   <canvas id="rank-chart"></canvas>
 </div>
@@ -264,22 +270,40 @@
 (function () {
   const labels = {{ chart_labels_js }};
   const ranks = {{ chart_ranks_js }};
+  const totals = {{ chart_totals_js }};
+  const percentiles = {{ chart_percentiles_js }};
   const maxRank = {{ chart_max }};
   const ctx = document.getElementById('rank-chart');
+  const toggle = document.getElementById('chart-toggle');
   if (!ctx || typeof Chart === 'undefined') return;
-  new Chart(ctx, {
+
+  const RANK_COLOR = '#2563eb';
+  const PCT_COLOR  = '#0f766e';
+
+  function fmtTooltip(idx) {
+    const r = ranks[idx];
+    const n = totals[idx];
+    const p = percentiles[idx];
+    const lines = [];
+    lines.push('Plasman: ' + (r != null ? (r + (n ? ' / ' + n : '')) : '—'));
+    lines.push('Centil: ' + (p != null ? Number(p).toFixed(1) : '—'));
+    return lines;
+  }
+
+  const chart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: labels,
       datasets: [{
-        label: 'Plasman',
-        data: ranks,
-        borderColor: '#2563eb',
-        backgroundColor: 'rgba(37, 99, 235, 0.12)',
+        label: 'Centil',
+        data: percentiles,
+        borderColor: PCT_COLOR,
+        backgroundColor: 'rgba(15, 118, 110, 0.12)',
         tension: 0.25,
         fill: true,
         pointRadius: 4,
         pointHoverRadius: 6,
+        spanGaps: true,
       }]
     },
     options: {
@@ -287,11 +311,16 @@
       maintainAspectRatio: false,
       scales: {
         y: {
-          reverse: true,
-          min: 1,
-          max: Math.max(maxRank + 1, 3),
-          ticks: { maxTicksLimit: 14, precision: 0, color: '#5c6570' },
-          title: { display: true, text: 'Plasman (niže je bolje)', color: '#5c6570', font: { size: 11 } }
+          reverse: false,
+          min: 0,
+          max: 100,
+          ticks: {
+            maxTicksLimit: 6,
+            precision: 0,
+            color: '#5c6570',
+            callback: function (v) { return v; }
+          },
+          title: { display: true, text: 'Centil (više je bolje)', color: '#5c6570', font: { size: 11 } }
         },
         x: {
           ticks: { display: false },
@@ -303,12 +332,54 @@
         tooltip: {
           callbacks: {
             title: function (items) { return labels[items[0].dataIndex]; },
-            label: function (ctx) { return '#' + ctx.parsed.y; }
+            label: function (ctx) { return fmtTooltip(ctx.dataIndex); }
           }
         }
       }
     }
   });
+
+  function setMode(mode) {
+    const ds = chart.data.datasets[0];
+    if (mode === 'rank') {
+      ds.label = 'Plasman';
+      ds.data = ranks;
+      ds.borderColor = RANK_COLOR;
+      ds.backgroundColor = 'rgba(37, 99, 235, 0.12)';
+      chart.options.scales.y.reverse = true;
+      chart.options.scales.y.min = 1;
+      chart.options.scales.y.max = Math.max(maxRank + 1, 3);
+      chart.options.scales.y.ticks.maxTicksLimit = 14;
+      chart.options.scales.y.ticks.callback = function (v) { return v; };
+      chart.options.scales.y.title.text = 'Plasman';
+    } else {
+      ds.label = 'Centil';
+      ds.data = percentiles;
+      ds.borderColor = PCT_COLOR;
+      ds.backgroundColor = 'rgba(15, 118, 110, 0.12)';
+      chart.options.scales.y.reverse = false;
+      chart.options.scales.y.min = 0;
+      chart.options.scales.y.max = 100;
+      chart.options.scales.y.ticks.maxTicksLimit = 6;
+      chart.options.scales.y.ticks.callback = function (v) { return v; };
+      chart.options.scales.y.title.text = 'Centil';
+    }
+    chart.update();
+  }
+
+  if (toggle) {
+    toggle.addEventListener('click', function (e) {
+      const btn = e.target.closest('.chart-toggle-btn');
+      if (!btn) return;
+      toggle.querySelectorAll('.chart-toggle-btn').forEach(function (b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      setMode(btn.dataset.mode);
+    });
+  }
 })();
 </script>
 {% endif %}

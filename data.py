@@ -18,6 +18,12 @@ EXCEL_PATH = _BASE / "rank.xlsx"
 
 SKIP_SHEET_NAMES = frozenset({"results", "medals"})
 
+# Manual overrides for events whose sheet contains only a partial top-N list
+# (so the loaded row count understates the real field size).
+CONTESTANTS_OVERRIDES: dict[str, int] = {
+    "sova2024": 80,
+}
+
 
 # ── Series config loaded from series.json ──
 
@@ -231,6 +237,7 @@ class RankingData:
     tournaments: list[TournamentColumn]
     players: list[PlayerResult]
     sheet_by_key: dict[str, str]
+    contestants_count: dict[str, int] = field(default_factory=dict)
 
     @cached_property
     def tournament_labels(self) -> dict[str, str]:
@@ -316,10 +323,13 @@ def load_ranking_data(path: Path | None = None) -> RankingData:
         tournaments.sort(key=lambda t: tournament_sort_key(t.key))
 
         merged: dict[str, dict[str, Any]] = {}
+        contestants_count: dict[str, int] = {}
 
         for t in tournaments:
             ws = wb[t.label]
+            count = 0
             for rank, display, c_raw, d_raw in _iter_sheet_placement_rows(ws):
+                count += 1
                 c_pts = parse_points(c_raw)
                 d_pts = parse_points(d_raw)
                 is_finalist = c_pts is not None and d_pts is not None
@@ -339,6 +349,7 @@ def load_ranking_data(path: Path | None = None) -> RankingData:
                     regular=d_raw if is_finalist else None,
                     is_finalist=is_finalist,
                 )
+            contestants_count[t.key] = CONTESTANTS_OVERRIDES.get(t.key, count)
 
         players = [
             PlayerResult(
@@ -350,7 +361,12 @@ def load_ranking_data(path: Path | None = None) -> RankingData:
         ]
         players.sort(key=lambda p: p.name.lower())
 
-        return RankingData(tournaments=tournaments, players=players, sheet_by_key=sheet_by_key)
+        return RankingData(
+            tournaments=tournaments,
+            players=players,
+            sheet_by_key=sheet_by_key,
+            contestants_count=contestants_count,
+        )
     finally:
         wb.close()
 
