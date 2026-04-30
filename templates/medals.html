@@ -36,12 +36,12 @@
 
 {# ── Tier 1: root “All” (own row) ── #}
 <div class="tab-bar medals-filter-tier-all" id="T1">
-  <button type="button" class="tab-btn medals-btn-all active" data-t1="all">Sve</button>
+  <button type="button" class="tab-btn medals-btn-all" data-t1="all">Sve</button>
 </div>
 
 {# ── Tier 2: Individual | Pairs | Teams ── #}
 <div class="tab-bar medals-filter-root" id="T2">
-  <button type="button" class="tab-btn medals-btn-mode" data-t2="individual">Pojedinačno</button>
+  <button type="button" class="tab-btn medals-btn-mode active" data-t2="individual">Pojedinačno</button>
   <button type="button" class="tab-btn medals-btn-mode" data-t2="pairs">Parovi</button>
   <button type="button" class="tab-btn medals-btn-mode" data-t2="teams">Ekipno</button>
 </div>
@@ -172,7 +172,7 @@
     ]
   };
 
-  var cur2 = '', cur3 = '', cur4 = '';
+  var cur2 = 'individual', cur3 = 'all', cur4 = '';
 
   function panelKey() {
     if (!cur2) return 'all';
