@@ -476,19 +476,24 @@ def build(base_url: str = ""):
         chart_ranks: list[int] = []
         chart_totals: list[int | None] = []
         chart_percentiles: list[float | None] = []
+        chart_cats: list[str] = []
+        chart_series: list[str] = []
         for t in data.tournaments:
             ed = p.event_details.get(t.key)
             if ed is not None:
                 total_n = data.contestants_count.get(t.key)
                 pct = _percentile(ed.rank, total_n)
+                code = series_code_from_key(t.key)
+                s_info = SERIES_BY_CODE.get(code)
+                cat = "hks" if (s_info and s_info.category == "hks") else "live"
                 history.append({"t": t, "ed": ed, "total_n": total_n, "percentile": pct})
                 chart_labels.append(event_label(t.key, t.label))
                 chart_ranks.append(ed.rank)
                 chart_totals.append(total_n)
                 chart_percentiles.append(round(pct, 1) if pct is not None else None)
+                chart_cats.append(cat)
+                chart_series.append(code)
                 if ed.rank <= 3:
-                    code = series_code_from_key(t.key)
-                    s_info = SERIES_BY_CODE.get(code)
                     if s_info and s_info.category == "hks":
                         podium_hks.append({"t": t, "rank": ed.rank})
                     else:
@@ -502,6 +507,8 @@ def build(base_url: str = ""):
         chart_ranks_js = Markup(json.dumps(chart_ranks, ensure_ascii=False))
         chart_totals_js = Markup(json.dumps(chart_totals, ensure_ascii=False))
         chart_percentiles_js = Markup(json.dumps(chart_percentiles, ensure_ascii=False))
+        chart_cats_js = Markup(json.dumps(chart_cats, ensure_ascii=False))
+        chart_series_js = Markup(json.dumps(chart_series, ensure_ascii=False))
         chart_max = max(chart_ranks) if chart_ranks else 1
 
         tl_years, tl_live, tl_hks, tl_defunct = _build_timeline(
@@ -528,6 +535,8 @@ def build(base_url: str = ""):
             "chart_ranks_js": chart_ranks_js,
             "chart_totals_js": chart_totals_js,
             "chart_percentiles_js": chart_percentiles_js,
+            "chart_cats_js": chart_cats_js,
+            "chart_series_js": chart_series_js,
             "chart_max": chart_max,
             "has_chart": len(chart_ranks) >= 2,
             "tl_years": tl_years,
@@ -565,6 +574,8 @@ def build(base_url: str = ""):
             "chart_ranks_js": Markup("[]"),
             "chart_totals_js": Markup("[]"),
             "chart_percentiles_js": Markup("[]"),
+            "chart_cats_js": Markup("[]"),
+            "chart_series_js": Markup("[]"),
             "chart_max": 1,
             "has_chart": False,
             "tl_years": [],

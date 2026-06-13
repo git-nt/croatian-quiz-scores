@@ -253,6 +253,18 @@
 
 {% if has_chart %}
 <h2>Individualni rezultati kroz vrijeme</h2>
+<div class="tabs" id="chart-tabs">
+  <div class="results-filter-wrap">
+    <div class="results-tier-all">
+      <button class="results-btn results-btn-all active" data-tab="all">Sve</button>
+    </div>
+    <div class="results-tier-cats">
+      <button class="results-btn results-btn-cat" data-tab="live">Open kvizovi</button>
+      <button class="results-btn results-btn-cat" data-tab="hks">HKS</button>
+    </div>
+  </div>
+  <div class="pill-bar results-pill-bar" id="chart-series-pills" hidden></div>
+</div>
 <div class="chart-toggle" id="chart-toggle" role="tablist" aria-label="Prikaz grafa">
   <button type="button" class="chart-toggle-btn active" data-mode="percentile" role="tab" aria-selected="true">Centil</button>
   <button type="button" class="chart-toggle-btn" data-mode="rank" role="tab" aria-selected="false">Plasman</button>
@@ -268,17 +280,39 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
 <script>
 (function () {
-  const labels = {{ chart_labels_js }};
-  const ranks = {{ chart_ranks_js }};
-  const totals = {{ chart_totals_js }};
-  const percentiles = {{ chart_percentiles_js }};
-  const maxRank = {{ chart_max }};
+  const allLabels = {{ chart_labels_js }};
+  const allRanks = {{ chart_ranks_js }};
+  const allTotals = {{ chart_totals_js }};
+  const allPercentiles = {{ chart_percentiles_js }};
+  const allCats = {{ chart_cats_js }};
+  const allSeries = {{ chart_series_js }};
   const ctx = document.getElementById('rank-chart');
   const toggle = document.getElementById('chart-toggle');
   if (!ctx || typeof Chart === 'undefined') return;
 
   const RANK_COLOR = '#2563eb';
   const PCT_COLOR  = '#0f766e';
+  const seriesLabel = { sova:'SOVA', mmm:'MMM', oo:'Osijek Open', wqc:'WQC', cro:'Croatian Open', zimko:'ZIMKO', ovako:'OVaKO' };
+
+  // Active view arrays (filtered subset of the all* arrays).
+  let labels = allLabels, ranks = allRanks, totals = allTotals, percentiles = allPercentiles;
+  let mode = 'percentile';
+  let activeCat = 'all';
+  let activeSeries = '';
+
+  function applyFilter() {
+    labels = []; ranks = []; totals = []; percentiles = [];
+    for (let i = 0; i < allLabels.length; i++) {
+      const catMatch = activeCat === 'all' || allCats[i] === activeCat;
+      const seriesMatch = !activeSeries || allSeries[i] === activeSeries;
+      if (catMatch && seriesMatch) {
+        labels.push(allLabels[i]);
+        ranks.push(allRanks[i]);
+        totals.push(allTotals[i]);
+        percentiles.push(allPercentiles[i]);
+      }
+    }
+  }
 
   function fmtTooltip(idx) {
     const r = ranks[idx];
@@ -339,18 +373,19 @@
     }
   });
 
-  function setMode(mode) {
+  function render() {
     const ds = chart.data.datasets[0];
+    chart.data.labels = labels;
     if (mode === 'rank') {
       ds.label = 'Plasman';
       ds.data = ranks;
       ds.borderColor = RANK_COLOR;
       ds.backgroundColor = 'rgba(37, 99, 235, 0.12)';
+      const maxRank = ranks.reduce(function (m, r) { return (r != null && r > m) ? r : m; }, 1);
       chart.options.scales.y.reverse = true;
       chart.options.scales.y.min = 1;
       chart.options.scales.y.max = Math.max(maxRank + 1, 3);
       chart.options.scales.y.ticks.maxTicksLimit = 14;
-      chart.options.scales.y.ticks.callback = function (v) { return v; };
       chart.options.scales.y.title.text = 'Plasman';
     } else {
       ds.label = 'Centil';
@@ -361,7 +396,6 @@
       chart.options.scales.y.min = 0;
       chart.options.scales.y.max = 100;
       chart.options.scales.y.ticks.maxTicksLimit = 6;
-      chart.options.scales.y.ticks.callback = function (v) { return v; };
       chart.options.scales.y.title.text = 'Centil';
     }
     chart.update();
@@ -377,7 +411,59 @@
       });
       btn.classList.add('active');
       btn.setAttribute('aria-selected', 'true');
-      setMode(btn.dataset.mode);
+      mode = btn.dataset.mode;
+      render();
+    });
+  }
+
+  // Event-type / series filtering (mirrors the results table controls).
+  const chartTabs = document.getElementById('chart-tabs');
+  const chartPills = document.getElementById('chart-series-pills');
+
+  function buildPills(cat) {
+    chartPills.innerHTML = '';
+    const seen = [];
+    for (let i = 0; i < allCats.length; i++) {
+      if (allCats[i] === cat && seen.indexOf(allSeries[i]) === -1) seen.push(allSeries[i]);
+    }
+    if (seen.length <= 1) { chartPills.hidden = true; return; }
+    const allBtn = document.createElement('button');
+    allBtn.className = 'pill-btn active';
+    allBtn.textContent = 'Sve';
+    allBtn.dataset.series = '';
+    chartPills.appendChild(allBtn);
+    seen.forEach(function (code) {
+      const btn = document.createElement('button');
+      btn.className = 'pill-btn';
+      btn.textContent = seriesLabel[code] || code.toUpperCase();
+      btn.dataset.series = code;
+      chartPills.appendChild(btn);
+    });
+    chartPills.hidden = false;
+  }
+
+  if (chartTabs) {
+    chartTabs.addEventListener('click', function (e) {
+      const btn = e.target.closest('.results-btn');
+      if (!btn) return;
+      chartTabs.querySelectorAll('.results-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeCat = btn.dataset.tab;
+      activeSeries = '';
+      if (activeCat === 'all') { chartPills.hidden = true; chartPills.innerHTML = ''; }
+      else buildPills(activeCat);
+      applyFilter();
+      render();
+    });
+
+    chartPills.addEventListener('click', function (e) {
+      const btn = e.target.closest('.pill-btn');
+      if (!btn) return;
+      chartPills.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeSeries = btn.dataset.series;
+      applyFilter();
+      render();
     });
   }
 })();
