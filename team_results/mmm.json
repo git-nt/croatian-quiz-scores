@@ -70,5 +70,13 @@
       {"rank": 2, "team": "Johnny, Kare, Kina iiii mali Zeus", "members": ["Lovro Jurišić", "Karlo Plazina", "Domagoj Pozderac", "Neven Trgovec"]},
       {"rank": 3, "team": "Specijalna operacija", "members": ["Mario Ferenčak", "Vanja Galović", "Željko Pavić", "Ante Uzelac"]}
     ]
+  },
+  {
+    "year": 2026,
+    "podium": [
+      {"rank": 1, "team": "Zombi ujak", "members": ["Šime Gverić", "Dean Kotiga", "Sven Marcelić", "Neven Trgovec"]},
+      {"rank": 2, "team": "Guns of Brixton", "members": ["Stefan Grnčarski", "Sara Lukač", "Ivan Andonov", "Dušan Torbica"]},
+      {"rank": 3, "team": "Kiwizaši", "members": ["Dalibor Benković", "Lidija Benković", "Dražen Cukina", "Domagoj Pozderac"]}
+    ]
   }
 ]
