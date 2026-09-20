@@ -70,5 +70,13 @@
       {"rank": 2, "players": ["Ivan Jurić", "Lovro Jurišić"]},
       {"rank": 3, "players": ["Mia Miošić", "Lucian Šošić"]}
     ]
+  },
+  {
+    "year": 2026,
+    "podium": [
+      {"rank": 1, "players": ["Domagoj Pozderac", "Neven Trgovec"]},
+      {"rank": 2, "players": ["Dean Kotiga", "Lovro Jurišić"]},
+      {"rank": 3, "players": ["Mia Miošić", "Lucian Šošić"]}
+    ]
   }
 ]
