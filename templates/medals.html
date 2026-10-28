@@ -7,21 +7,25 @@
 <table class="data players-list sortable">
   <thead>
     <tr>
-      <th data-col="0" data-type="str">Igrač</th>
-      <th class="num rank-1" data-col="1" data-type="num">Z</th>
-      <th class="num rank-2" data-col="2" data-type="num">S</th>
-      <th class="num rank-3" data-col="3" data-type="num">B</th>
-      <th class="num" data-col="4" data-type="num">Σ</th>
+      <th class="num rank-col" data-col="0" data-type="num" data-dir="asc">#</th>
+      <th class="player-col" data-col="1" data-type="str">Igrač</th>
+      <th class="num rank-1" data-col="2" data-type="num">Z</th>
+      <th class="num rank-2" data-col="3" data-type="num">S</th>
+      <th class="num rank-3" data-col="4" data-type="num">B</th>
+      <th class="num" data-col="5" data-type="num">Σ</th>
     </tr>
   </thead>
   <tbody>
+    {% set ns = namespace(rank=0, prev=none) %}
     {% for name, g, s, b, t in medal_rows %}
+    {% if (g, s, b) != ns.prev %}{% set ns.rank = loop.index %}{% set ns.prev = (g, s, b) %}{% endif %}
     <tr>
-      <td><a href="{{ base_url }}/players/{{ player_slug(name) }}/">{{ name }}</a></td>
+      <td class="num rank-col{% if ns.rank <= 3 %} rank-{{ ns.rank }}{% endif %}">{{ ns.rank }}</td>
+      <td class="player-col"><a href="{{ base_url }}/players/{{ player_slug(name) }}/">{{ name }}</a></td>
       <td class="num">{{ g }}</td>
       <td class="num">{{ s }}</td>
       <td class="num">{{ b }}</td>
-      <td class="num"><strong>{{ t }}</strong></td>
+      <td class="num">{{ t }}</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -307,7 +311,7 @@
         var col = parseInt(th.dataset.col);
         var isNum = th.dataset.type === 'num';
         if (sortCol === col) { sortAsc = !sortAsc; }
-        else { sortCol = col; sortAsc = isNum ? false : true; }
+        else { sortCol = col; sortAsc = th.dataset.dir ? th.dataset.dir === 'asc' : !isNum; }
         headers.forEach(function (h) { h.classList.remove('sort-asc', 'sort-desc'); });
         th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
         var rows = Array.from(tbody.querySelectorAll('tr'));
