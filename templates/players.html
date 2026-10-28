@@ -33,7 +33,7 @@
 {% if latest_events %}
 <section class="latest-results">
 <h2>Najnoviji rezultati</h2>
-<div class="grid-2">
+<div>
   {% for ev in latest_events %}
   {% set d = event_date_for(ev.key) %}
   <div class="event-block latest-event">
