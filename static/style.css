@@ -349,11 +349,22 @@ table.data.players-list {
   min-width: 26rem;
 }
 
-table.data.players-list td:first-child,
-table.data.players-list th:first-child {
-  width: 16rem;
-  max-width: 16rem;
-  /* Never truncate names in the first column; allow wrapping. */
+/* Rank + name together keep the former 16rem name-column budget (rank: 1.9rem + 1.1rem padding). */
+table.data.players-list td.rank-col,
+table.data.players-list th.rank-col {
+  width: 1.9rem;
+  min-width: 1.9rem;
+}
+
+table.data.players-list td.rank-col {
+  font-weight: 700;
+}
+
+table.data.players-list td.player-col,
+table.data.players-list th.player-col {
+  width: 13rem;
+  max-width: 13rem;
+  /* Never truncate names; allow wrapping. */
   white-space: normal;
   overflow: visible;
   text-overflow: clip;
@@ -374,8 +385,8 @@ table.data.players-list th:first-child {
     max-width: 100%;
   }
 
-  table.data.players-list td:first-child,
-  table.data.players-list th:first-child {
+  table.data.players-list td.player-col,
+  table.data.players-list th.player-col {
     width: auto;
     max-width: none;
     min-width: 0;
@@ -387,6 +398,12 @@ table.data.players-list th:first-child {
     min-width: 2.75rem;
     padding-left: 0.3rem;
     padding-right: 0.3rem;
+  }
+
+  table.data.players-list td.rank-col,
+  table.data.players-list th.rank-col {
+    width: 1.75rem;
+    min-width: 1.75rem;
   }
 }
 
