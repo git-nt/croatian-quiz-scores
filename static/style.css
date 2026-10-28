@@ -844,30 +844,14 @@ td.medal-icon {
   padding: 4px 0.4rem;
 }
 
-span.medal-chip {
+span.medal-emoji {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 1.7rem;
   height: 1.7rem;
-  border-radius: 50%;
-  font-weight: 700;
-  font-size: 0.8rem;
-}
-
-span.medal-chip.medal-1 {
-  color: #92710a;
-  background: rgba(232, 197, 71, 0.4);
-}
-
-span.medal-chip.medal-2 {
-  color: #475569;
-  background: rgba(148, 163, 184, 0.4);
-}
-
-span.medal-chip.medal-3 {
-  color: #9a3412;
-  background: rgba(198, 125, 78, 0.35);
+  font-size: 1.55rem;
+  line-height: 1;
 }
 
 td.medal-event {
