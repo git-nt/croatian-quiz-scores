@@ -1363,6 +1363,143 @@ th.tl-series-defunct {
   font-weight: 600;
 }
 
+.medals-filter-sub[hidden],
+.medals-filter-pills[hidden] {
+  display: none;
+}
+
+/* Year span: two overlaid range inputs share one track */
+.medals-years {
+  display: flex;
+  justify-content: center;
+  margin: 0.15rem 0 1rem;
+}
+
+.year-range {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.year-val {
+  min-width: 2.2rem;
+  text-align: center;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.medals-years.narrowed .year-val {
+  color: var(--medal-sub-accent);
+  font-weight: 600;
+}
+
+.year-slider {
+  --thumb: 14px;
+  position: relative;
+  width: min(13rem, calc(100vw - 10rem));
+  height: var(--thumb);
+}
+
+.year-track {
+  position: absolute;
+  left: calc(var(--thumb) / 2);
+  right: calc(var(--thumb) / 2);
+  top: 50%;
+  height: 4px;
+  margin-top: -2px;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+.year-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 2px;
+  background: var(--medal-sub-accent);
+}
+
+.year-slider input[type="range"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: var(--thumb);
+  margin: 0;
+  background: none;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: none;
+}
+
+.year-slider input[type="range"]::-webkit-slider-runnable-track {
+  height: var(--thumb);
+  background: transparent;
+}
+
+.year-slider input[type="range"]::-moz-range-track {
+  background: transparent;
+}
+
+.year-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  box-sizing: border-box;
+  width: var(--thumb);
+  height: var(--thumb);
+  border-radius: 50%;
+  border: 2px solid var(--medal-sub-accent);
+  background: var(--surface);
+  cursor: grab;
+}
+
+.year-slider input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  box-sizing: border-box;
+  width: var(--thumb);
+  height: var(--thumb);
+  border-radius: 50%;
+  border: 2px solid var(--medal-sub-accent);
+  background: var(--surface);
+  cursor: grab;
+}
+
+.year-slider input[type="range"]:focus-visible {
+  outline: none;
+}
+
+.year-slider input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--medal-sub-accent-soft), 0 0 0 4px var(--medal-sub-accent);
+}
+
+.year-slider input[type="range"]:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--medal-sub-accent-soft), 0 0 0 4px var(--medal-sub-accent);
+}
+
+/* Sits outside the centred row so showing it doesn't shift the slider mid-drag */
+.medals-years-reset {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 0.4rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  padding: 0;
+  line-height: 1;
+  font-size: 0.85rem;
+  border-radius: 50%;
+  border: 1px solid var(--medal-sub-accent);
+  background: var(--medal-sub-accent-soft);
+  color: var(--medal-sub-accent);
+  cursor: pointer;
+}
+
+.medals-years-reset[hidden] {
+  display: none;
+}
+
 /* ── Sortable table headers (no arrows — pointer indicates sortable) ── */
 table.sortable th[data-col] {
   cursor: pointer;
