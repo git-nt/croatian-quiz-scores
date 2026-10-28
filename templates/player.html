@@ -130,6 +130,8 @@
       {% for c in row.cells %}
       {% if c.state == "no_event" %}
       <td class="tl-cell tl-no-event"></td>
+      {% elif c.state == "upcoming" %}
+      <td class="tl-cell tl-upcoming"></td>
       {% elif c.state == "absent" %}
       <td class="tl-cell tl-absent"><a href="{{ base_url }}/events/{{ c.key }}/">—</a></td>
       {% else %}
@@ -148,6 +150,8 @@
       {% for c in row.cells %}
       {% if c.state == "no_event" %}
       <td class="tl-cell tl-no-event"></td>
+      {% elif c.state == "upcoming" %}
+      <td class="tl-cell tl-upcoming"></td>
       {% elif c.state == "absent" %}
       <td class="tl-cell tl-absent"><a href="{{ base_url }}/events/{{ c.key }}/">—</a></td>
       {% else %}
@@ -166,6 +170,8 @@
       {% for c in row.cells %}
       {% if c.state == "no_event" %}
       <td class="tl-cell tl-no-event"></td>
+      {% elif c.state == "upcoming" %}
+      <td class="tl-cell tl-upcoming"></td>
       {% elif c.state == "absent" %}
       <td class="tl-cell tl-absent"><a href="{{ base_url }}/events/{{ c.key }}/">—</a></td>
       {% else %}

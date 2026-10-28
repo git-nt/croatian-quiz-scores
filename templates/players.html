@@ -27,6 +27,50 @@
   </div>
 </div>
 {% endif %}
+
+{% macro chip(rank) %}{% if rank == 1 %}🥇{% elif rank == 2 %}🥈{% else %}🥉{% endif %}{% endmacro %}
+
+{% if latest_events %}
+<section class="latest-results">
+<h2>Najnoviji rezultati</h2>
+<div>
+  {% for ev in latest_events %}
+  {% set d = event_date_for(ev.key) %}
+  <div class="event-block latest-event">
+    <h3><a href="{{ base_url }}/events/{{ ev.key }}/">{{ ev.label }}</a></h3>
+    {% if d %}<p class="sub">{{ d.date }}{% if d.location %} · {{ d.location }}{% endif %}</p>{% endif %}
+    {% if ev.individual %}
+    {% if ev.pairs or ev.teams %}<p class="latest-kind">Pojedinačno</p>{% endif %}
+    <ul class="latest-podium">
+      {% for pname, r in ev.individual %}
+      <li>{{ chip(r) }} <a href="{{ base_url }}/players/{{ player_slug(pname) }}/">{{ pname }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% if ev.pairs %}
+    <p class="latest-kind">Parovi</p>
+    <ul class="latest-podium">
+      {% for slot in ev.pairs %}
+      <li>{{ chip(slot.rank) }} {% for p in slot.players %}<a href="{{ base_url }}/players/{{ player_slug(p) }}/">{{ p }}</a>{% if not loop.last %} / {% endif %}{% endfor %}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% if ev.teams %}
+    <p class="latest-kind">Ekipno</p>
+    <ul class="latest-podium latest-teams">
+      {% for slot in ev.teams %}
+      <li class="latest-team">
+        {{ chip(slot.rank) }} <strong>{{ slot.team }}</strong>
+        <span class="latest-members">{% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+</section>
+{% endif %}
 {% endblock %}
 {% block extra_scripts %}
 <script src="{{ base_url }}/static/player-combobox.js" defer></script>

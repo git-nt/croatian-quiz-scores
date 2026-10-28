@@ -588,6 +588,47 @@ table.standings-detail tbody tr.row-finalist:nth-child(even) td {
   list-style: none;
 }
 
+.latest-results {
+  max-width: 560px;
+  margin: 2.5rem auto 0;
+}
+
+.latest-results h2 {
+  text-align: center;
+}
+
+.latest-event .latest-kind {
+  margin: 0.6rem 0 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+ul.latest-podium {
+  text-align: center;
+}
+
+ul.latest-podium li {
+  padding: 0.15rem 0;
+  font-size: 0.9rem;
+}
+
+ul.latest-podium li.latest-team {
+  padding: 0.25rem 0;
+}
+
+.latest-members {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.latest-members a {
+  white-space: nowrap;
+}
+
 .edp-block {
   max-width: 680px;
   margin-left: auto;
@@ -880,8 +921,16 @@ td.medal-event {
 .legend-swatch.rank-final {
   background: rgba(37, 99, 235, 0.28);
 }
-.legend-swatch.tl-no-event {
-  background: #e2e4e8;
+.legend-swatch.tl-no-event,
+td.tl-no-event {
+  /* Hatched so "not held" can't be mistaken for the solid silver of 2nd place. */
+  background: repeating-linear-gradient(
+    135deg,
+    #d9dce1,
+    #d9dce1 1px,
+    #e4e6ea 1px,
+    #e4e6ea 7px
+  );
 }
 
 .legend-dash {
@@ -954,9 +1003,8 @@ table.tl-grid th.tl-divider-label {
   text-align: left;
 }
 
-td.tl-no-event {
-  background: #e2e4e8;
-  color: #e2e4e8;
+td.tl-upcoming {
+  background: var(--surface);
 }
 
 td.tl-absent {
