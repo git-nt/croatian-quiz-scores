@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import shutil
@@ -144,6 +145,13 @@ def build(base_url: str = ""):
     env.globals["is_hks_event"] = is_hks_event
     env.globals["series_code_from_key"] = series_code_from_key
     env.globals["base_url"] = base_url
+
+    def static_url(name: str) -> str:
+        """URL for a file in static/, with a content hash so browsers refetch it after every change."""
+        digest = hashlib.sha1((static_src / name).read_bytes()).hexdigest()[:10]
+        return f"{base_url}/static/{name}?v={digest}"
+
+    env.globals["static_url"] = static_url
 
     def team_event_label(series_code: str, year: int) -> str:
         if series_code == "edp":
