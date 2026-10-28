@@ -1,42 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Medalje{% endblock %}
 {% block body %}
-{% macro medal_table(medal_rows, key) %}
-{% if medal_rows %}
-<div class="scroll-x players-list-wrap medal-panel" data-key="{{ key }}" hidden>
-<table class="data players-list sortable">
-  <thead>
-    <tr>
-      <th class="num rank-col" data-col="0" data-type="num" data-dir="asc">#</th>
-      <th class="player-col" data-col="1" data-type="str">Igrač</th>
-      <th class="num rank-1" data-col="2" data-type="num">Z</th>
-      <th class="num rank-2" data-col="3" data-type="num">S</th>
-      <th class="num rank-3" data-col="4" data-type="num">B</th>
-      <th class="num" data-col="5" data-type="num">Σ</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% set ns = namespace(rank=0, prev=none) %}
-    {% for name, g, s, b, t in medal_rows %}
-    {% if (g, s, b) != ns.prev %}{% set ns.rank = loop.index %}{% set ns.prev = (g, s, b) %}{% endif %}
-    <tr>
-      <td class="num rank-col{% if ns.rank <= 3 %} rank-{{ ns.rank }}{% endif %}">{{ ns.rank }}</td>
-      <td class="player-col"><a href="{{ base_url }}/players/{{ player_slug(name) }}/">{{ name }}</a></td>
-      <td class="num">{{ g }}</td>
-      <td class="num">{{ s }}</td>
-      <td class="num">{{ b }}</td>
-      <td class="num">{{ t }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-</div>
-{% else %}
-<div class="medal-panel" data-key="{{ key }}" hidden>
-<p class="muted">Nema zabilježenih plasmana na postolje.</p>
-</div>
-{% endif %}
-{% endmacro %}
 
 {# ── Tier 1: root “All” (own row) ── #}
 <div class="tab-bar medals-filter-tier-all" id="T1">
@@ -56,40 +20,47 @@
 {# ── Tier 4: series pills ── #}
 <div class="pill-bar medals-filter-pills" id="T4" hidden></div>
 
-{# ══════════ ALL MEDAL TABLES ══════════ #}
+{# ── Year span ── #}
+<div class="medals-years" id="years">
+  <div class="year-range">
+    <span class="year-val" id="year-from-val"></span>
+    <div class="year-slider">
+      <div class="year-track"><div class="year-fill" id="year-fill"></div></div>
+      <input type="range" id="year-a" step="1" aria-label="Raspon godina">
+      <input type="range" id="year-b" step="1" aria-label="Raspon godina">
+    </div>
+    <span class="year-val" id="year-to-val"></span>
+    <button type="button" class="medals-years-reset" id="years-reset" title="Sve godine" aria-label="Sve godine" hidden>×</button>
+  </div>
+</div>
 
-{{ medal_table(medals_combined, "all") }}
+{# ══════════ MEDAL TABLE (counted in the browser) ══════════ #}
 
-{{ medal_table(medals_all, "individual-all") }}
-{{ medal_table(medals_live, "individual-live-all") }}
-{% for s in series if s.category == "live" %}
-{{ medal_table(medals_by_series[s.code], "individual-live-" ~ s.code) }}
-{% endfor %}
-{{ medal_table(medals_hks, "individual-hks-all") }}
-{% for s in series if s.category == "hks" %}
-{{ medal_table(medals_by_series[s.code], "individual-hks-" ~ s.code) }}
-{% endfor %}
-
-{{ medal_table(team_medals_all, "teams-all") }}
-{{ medal_table(team_medals_live, "teams-live-all") }}
-{% for s in live_team_series %}
-{{ medal_table(team_medals_by_series[s.code], "teams-live-" ~ s.code) }}
-{% endfor %}
-{{ medal_table(team_medals_edp, "teams-edp") }}
-
-{{ medal_table(pair_medals_all, "pairs-all") }}
-{{ medal_table(pair_medals_live, "pairs-live-all") }}
-{% for s in live_pair_series %}
-{{ medal_table(pair_medals_by_series[s.code], "pairs-live-" ~ s.code) }}
-{% endfor %}
-{{ medal_table(pair_medals_php, "pairs-php") }}
+<div class="scroll-x players-list-wrap medal-panel" id="medal-table-wrap">
+<table class="data players-list sortable" id="medal-table">
+  <thead>
+    <tr>
+      <th class="num rank-col" data-col="0" data-type="num" data-dir="asc">#</th>
+      <th class="player-col" data-col="1" data-type="str">Igrač</th>
+      <th class="num rank-1" data-col="2" data-type="num">Z</th>
+      <th class="num rank-2" data-col="3" data-type="num">S</th>
+      <th class="num rank-3" data-col="4" data-type="num">B</th>
+      <th class="num" data-col="5" data-type="num">Σ</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+</div>
+<div class="medal-panel" id="medal-empty" hidden>
+<p class="muted">Nema zabilježenih plasmana na postolje.</p>
+</div>
 
 {# ══════════ PODIUM SECTIONS ══════════ #}
 
 <div class="podium-section" data-for="individual" hidden>
   <h2></h2>
   {% for t, podium in events_medals %}
-  <div class="event-block" data-cat="{{ 'hks' if is_hks_event(t.key) else 'live' }}" data-series="{{ series_code_from_key(t.key) }}">
+  <div class="event-block" data-cat="{{ 'hks' if is_hks_event(t.key) else 'live' }}" data-series="{{ series_code_from_key(t.key) }}" data-year="{{ t.year }}">
     <h3><a href="{{ base_url }}/events/{{ t.key }}/">{{ event_label(t.key, t.label) }}</a></h3>
     {% if podium %}
     <ul class="small">
@@ -107,7 +78,7 @@
 <div class="podium-section" data-for="teams" hidden>
   <h2>Medalje</h2>
   {% for entry in team_podiums_sorted %}
-  <div class="event-block edp-block" data-tcat="{{ entry.cat }}"{% if entry.cat == 'live' %} data-tseries="{{ entry.code }}"{% endif %}>
+  <div class="event-block edp-block" data-cat="{{ entry.cat }}" data-series="{{ entry.code }}" data-year="{{ entry.year }}">
     <h3><a href="{{ base_url }}/events/{{ entry.event_key }}/">{{ event_label(entry.event_key, entry.label) }}</a></h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
@@ -125,7 +96,7 @@
 <div class="podium-section" data-for="pairs" hidden>
   <h2>Medalje</h2>
   {% for entry in pair_podiums_sorted %}
-  <div class="event-block edp-block" data-pcat="{{ entry.cat }}"{% if entry.cat == 'live' %} data-pseries="{{ entry.code }}"{% endif %}>
+  <div class="event-block edp-block" data-cat="{{ entry.cat }}" data-series="{{ entry.code }}" data-year="{{ entry.year }}">
     <h3><a href="{{ base_url }}/events/{{ entry.event_key }}/">{{ event_label(entry.event_key, entry.label) }}</a></h3>
     <ul class="small edp-podium">
       {% for slot in entry.podium %}
@@ -139,17 +110,36 @@
   {% endfor %}
 </div>
 
+<script type="application/json" id="medal-data">{{ medal_data | tojson }}</script>
+
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
 (function () {
+  var BASE = {{ base_url | tojson }};
+  var DATA = JSON.parse(document.getElementById('medal-data').textContent);
+
   var T1  = document.getElementById('T1');
   var T2  = document.getElementById('T2');
   var T3  = document.getElementById('T3');
   var T4  = document.getElementById('T4');
-  var panels  = document.querySelectorAll('.medal-panel');
   var podiums = document.querySelectorAll('.podium-section');
+
+  var tableWrap = document.getElementById('medal-table-wrap');
+  var table     = document.getElementById('medal-table');
+  var tbody     = table.querySelector('tbody');
+  var headers   = table.querySelectorAll('thead th[data-col]');
+  var emptyMsg  = document.getElementById('medal-empty');
+
+  var years     = document.getElementById('years');
+  /* Either thumb can be the lower bound: the span is always [min, max] of the two */
+  var inA       = document.getElementById('year-a');
+  var inB       = document.getElementById('year-b');
+  var fromVal   = document.getElementById('year-from-val');
+  var toVal     = document.getElementById('year-to-val');
+  var yearFill  = document.getElementById('year-fill');
+  var yearsBtn  = document.getElementById('years-reset');
 
   var t3Opts = {
     individual: [{k:'all',l:'Sve'},{k:'live',l:'Open kvizovi'},{k:'hks',l:'HKS'}],
@@ -176,19 +166,47 @@
     ]
   };
 
-  var cur2 = 'individual', cur3 = 'all', cur4 = '';
+  var YEARS = [];
+  DATA.entries.forEach(function (e) { if (YEARS.indexOf(e.y) < 0) YEARS.push(e.y); });
+  YEARS.sort(function (a, b) { return a - b; });
+  var yMin = YEARS[0], yMax = YEARS[YEARS.length - 1];
 
-  function panelKey() {
-    if (!cur2) return 'all';
-    if (!cur3 || cur3 === 'all') return cur2 + '-all';
-    if (cur3 === 'edp' || cur3 === 'php') return cur2 + '-' + cur3;
-    if (!cur4) return cur2 + '-' + cur3 + '-all';
-    return cur2 + '-' + cur3 + '-' + cur4;
+  var cur2 = 'individual', cur3 = 'all', cur4 = '';
+  var yFrom = yMin, yTo = yMax;
+
+  /* ── State ↔ URL (?type=all|individual|pairs|teams&cat=&series=&from=&to=) ── */
+  function readUrl() {
+    var q = new URLSearchParams(location.search);
+    var type = q.get('type');
+    if (type === 'all') cur2 = '';
+    else if (t3Opts[type]) cur2 = type;
+    var cat = q.get('cat');
+    if (t3Opts[cur2] && t3Opts[cur2].some(function (o) { return o.k === cat; })) cur3 = cat;
+    var series = q.get('series');
+    var pills = t4Pills[cur2 + '-' + cur3];
+    if (series && pills && pills.some(function (p) { return p.c === series; })) cur4 = series;
+    var from = parseInt(q.get('from'), 10), to = parseInt(q.get('to'), 10);
+    if (YEARS.indexOf(from) >= 0) yFrom = from;
+    if (YEARS.indexOf(to) >= 0) yTo = to;
+    if (yFrom > yTo) { var t = yFrom; yFrom = yTo; yTo = t; }
   }
 
-  function showPanel() {
-    var key = panelKey();
-    panels.forEach(function (p) { p.hidden = (p.dataset.key !== key); });
+  function writeUrl() {
+    var q = new URLSearchParams();
+    if (cur2 !== 'individual') q.set('type', cur2 || 'all');
+    if (cur3 !== 'all') q.set('cat', cur3);
+    if (cur4) q.set('series', cur4);
+    if (yFrom !== yMin) q.set('from', yFrom);
+    if (yTo !== yMax) q.set('to', yTo);
+    var s = q.toString();
+    var search = s ? '?' + s : '';
+    if (search !== location.search) history.replaceState(null, '', location.pathname + search + location.hash);
+  }
+
+  /* ── Filter bars ── */
+  function syncTop() {
+    T1.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.toggle('active', !cur2); });
+    T2.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.t2 === cur2); });
   }
 
   function buildT3() {
@@ -201,7 +219,7 @@
       b.type = 'button';
       var isAll = o.k === 'all';
       b.className = 'tab-btn' + (isAll ? ' medals-sub-all' : ' medals-sub-cat') +
-        (o.k === (cur3 || 'all') ? ' active' : '');
+        (o.k === cur3 ? ' active' : '');
       b.dataset.t3 = o.k;
       b.textContent = o.l;
       T3.appendChild(b);
@@ -225,45 +243,115 @@
     });
   }
 
-  function updatePodiums() {
-    podiums.forEach(function (s) { s.hidden = !cur2 || s.dataset.for !== cur2; });
-    if (cur2 === 'individual') {
-      var sec = document.querySelector('.podium-section[data-for="individual"]');
-      if (sec) sec.querySelectorAll('.event-block').forEach(function (b) {
-        var c3 = cur3 || 'all';
-        var catOk = c3 === 'all' || b.dataset.cat === c3;
-        var serOk = !cur4 || b.dataset.series === cur4;
-        b.hidden = !(catOk && serOk);
-      });
-    } else if (cur2 === 'teams') {
-      var sec = document.querySelector('.podium-section[data-for="teams"]');
-      if (sec) sec.querySelectorAll('.edp-block').forEach(function (b) {
-        var c3 = cur3 || 'all';
-        var catOk = c3 === 'all' || b.dataset.tcat === c3;
-        var serOk = !cur4 || b.dataset.tseries === cur4;
-        b.hidden = !(catOk && serOk);
-      });
-    } else if (cur2 === 'pairs') {
-      var sec = document.querySelector('.podium-section[data-for="pairs"]');
-      if (sec) sec.querySelectorAll('.edp-block').forEach(function (b) {
-        var c3 = cur3 || 'all';
-        var catOk = c3 === 'all' || b.dataset.pcat === c3;
-        var serOk = !cur4 || b.dataset.pseries === cur4;
-        b.hidden = !(catOk && serOk);
-      });
-    }
+  function buildYears() {
+    [inA, inB].forEach(function (inp) { inp.min = yMin; inp.max = yMax; });
   }
 
-  function refresh() { buildT3(); buildT4(); showPanel(); updatePodiums(); }
+  function syncYears() {
+    var a = parseInt(inA.value, 10), b = parseInt(inB.value, 10);
+    if (Math.min(a, b) !== yFrom || Math.max(a, b) !== yTo) {
+      inA.value = yFrom;
+      inB.value = yTo;
+    }
+    fromVal.textContent = yFrom;
+    toVal.textContent = yTo;
+    var span = (yMax - yMin) || 1;
+    yearFill.style.left = ((yFrom - yMin) / span * 100) + '%';
+    yearFill.style.right = ((yMax - yTo) / span * 100) + '%';
+    var narrowed = yFrom !== yMin || yTo !== yMax;
+    years.classList.toggle('narrowed', narrowed);
+    yearsBtn.hidden = !narrowed;
+  }
+
+  /* ── Medal table ── */
+  function matches(e) {
+    if (e.y < yFrom || e.y > yTo) return false;
+    if (!cur2) return true;
+    if (e.k !== cur2) return false;
+    if (cur3 !== 'all' && e.c !== cur3) return false;
+    return !cur4 || e.s === cur4;
+  }
+
+  function cmpStr(a, b) { return a < b ? -1 : a > b ? 1 : 0; }
+
+  function computeRows() {
+    var counts = Object.create(null);
+    DATA.entries.forEach(function (e) {
+      if (!matches(e)) return;
+      e.n.forEach(function (n) { (counts[n] || (counts[n] = [0, 0, 0]))[e.r - 1]++; });
+    });
+    var rows = Object.keys(counts).map(function (n) {
+      var c = counts[n];
+      return {name: n, g: c[0], s: c[1], b: c[2]};
+    });
+    rows.sort(function (a, b) {
+      return (b.g - a.g) || (b.s - a.s) || (b.b - a.b) ||
+        cmpStr(a.name.toLowerCase(), b.name.toLowerCase());
+    });
+    rows.forEach(function (r, i) {
+      var p = rows[i - 1];
+      r.rank = (p && p.g === r.g && p.s === r.s && p.b === r.b) ? p.rank : i + 1;
+    });
+    return rows;
+  }
+
+  function cell(cls, text) {
+    var td = document.createElement('td');
+    if (cls) td.className = cls;
+    if (text !== undefined) td.textContent = text;
+    return td;
+  }
+
+  function renderTable() {
+    var rows = computeRows();
+    tableWrap.hidden = !rows.length;
+    emptyMsg.hidden = !!rows.length;
+    resetSort();
+    var frag = document.createDocumentFragment();
+    rows.forEach(function (r) {
+      var tr = document.createElement('tr');
+      tr.appendChild(cell('num rank-col' + (r.rank <= 3 ? ' rank-' + r.rank : ''), r.rank));
+      var nameTd = cell('player-col');
+      var a = document.createElement('a');
+      a.href = BASE + '/players/' + DATA.slugs[r.name] + '/';
+      a.textContent = r.name;
+      nameTd.appendChild(a);
+      tr.appendChild(nameTd);
+      tr.appendChild(cell('num', r.g));
+      tr.appendChild(cell('num', r.s));
+      tr.appendChild(cell('num', r.b));
+      tr.appendChild(cell('num', r.g + r.s + r.b));
+      frag.appendChild(tr);
+    });
+    tbody.innerHTML = '';
+    tbody.appendChild(frag);
+  }
+
+  /* ── Podium lists below the table ── */
+  function updatePodiums() {
+    podiums.forEach(function (sec) {
+      var on = !!cur2 && sec.dataset.for === cur2;
+      sec.hidden = !on;
+      if (!on) return;
+      sec.querySelectorAll('.event-block').forEach(function (b) {
+        var y = parseInt(b.dataset.year, 10);
+        b.hidden = !((cur3 === 'all' || b.dataset.cat === cur3) &&
+                     (!cur4 || b.dataset.series === cur4) &&
+                     y >= yFrom && y <= yTo);
+      });
+    });
+  }
+
+  function refresh() {
+    syncTop(); buildT3(); buildT4(); syncYears();
+    renderTable(); updatePodiums(); writeUrl();
+  }
 
   /* ── T1: root All ── */
   T1.addEventListener('click', function (e) {
     var btn = e.target.closest('.tab-btn');
     if (!btn || !btn.dataset.t1) return;
-    T1.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-    btn.classList.add('active');
-    T2.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-    cur2 = ''; cur3 = ''; cur4 = '';
+    cur2 = ''; cur3 = 'all'; cur4 = '';
     refresh();
   });
 
@@ -271,9 +359,6 @@
   T2.addEventListener('click', function (e) {
     var btn = e.target.closest('.tab-btn');
     if (!btn || !btn.dataset.t2) return;
-    T1.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-    T2.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-    btn.classList.add('active');
     cur2 = btn.dataset.t2; cur3 = 'all'; cur4 = '';
     refresh();
   });
@@ -282,50 +367,63 @@
   T3.addEventListener('click', function (e) {
     var btn = e.target.closest('.tab-btn');
     if (!btn || !btn.dataset.t3) return;
-    T3.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-    btn.classList.add('active');
     cur3 = btn.dataset.t3; cur4 = '';
-    buildT4(); showPanel(); updatePodiums();
+    refresh();
   });
 
   /* ── T4: series pills ── */
   T4.addEventListener('click', function (e) {
     var btn = e.target.closest('.pill-btn');
     if (!btn || btn.dataset.t4 === undefined) return;
-    T4.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
-    btn.classList.add('active');
     cur4 = btn.dataset.t4;
-    showPanel(); updatePodiums();
+    refresh();
   });
 
-  /* initial state */
-  refresh();
+  /* ── Year span ── */
+  function onYearInput() {
+    var a = parseInt(inA.value, 10), b = parseInt(inB.value, 10);
+    yFrom = Math.min(a, b);
+    yTo = Math.max(a, b);
+    refresh();
+  }
+  inA.addEventListener('input', onYearInput);
+  inB.addEventListener('input', onYearInput);
+  yearsBtn.addEventListener('click', function () {
+    yFrom = yMin; yTo = yMax;
+    refresh();
+  });
 
-  /* ── Sortable tables ── */
-  document.querySelectorAll('table.sortable').forEach(function (table) {
-    var headers = table.querySelectorAll('thead th[data-col]');
-    var tbody = table.querySelector('tbody');
-    var sortCol = -1, sortAsc = false;
-    headers.forEach(function (th) {
-      th.addEventListener('click', function () {
-        var col = parseInt(th.dataset.col);
-        var isNum = th.dataset.type === 'num';
-        if (sortCol === col) { sortAsc = !sortAsc; }
-        else { sortCol = col; sortAsc = th.dataset.dir ? th.dataset.dir === 'asc' : !isNum; }
-        headers.forEach(function (h) { h.classList.remove('sort-asc', 'sort-desc'); });
-        th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
-        var rows = Array.from(tbody.querySelectorAll('tr'));
-        rows.sort(function (a, b) {
-          var av, bv;
-          if (isNum) { av = parseInt(a.children[col].textContent) || 0; bv = parseInt(b.children[col].textContent) || 0; }
-          else { av = a.children[col].textContent.trim().toLowerCase(); bv = b.children[col].textContent.trim().toLowerCase(); }
-          var c = av < bv ? -1 : av > bv ? 1 : 0;
-          return sortAsc ? c : -c;
-        });
-        rows.forEach(function (r) { tbody.appendChild(r); });
+  /* ── Sortable header ── */
+  var sortCol = -1, sortAsc = false;
+
+  function resetSort() {
+    sortCol = -1;
+    headers.forEach(function (h) { h.classList.remove('sort-asc', 'sort-desc'); });
+  }
+
+  headers.forEach(function (th) {
+    th.addEventListener('click', function () {
+      var col = parseInt(th.dataset.col, 10);
+      var isNum = th.dataset.type === 'num';
+      if (sortCol === col) { sortAsc = !sortAsc; }
+      else { sortCol = col; sortAsc = th.dataset.dir ? th.dataset.dir === 'asc' : !isNum; }
+      headers.forEach(function (h) { h.classList.remove('sort-asc', 'sort-desc'); });
+      th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.sort(function (a, b) {
+        var av, bv;
+        if (isNum) { av = parseInt(a.children[col].textContent, 10) || 0; bv = parseInt(b.children[col].textContent, 10) || 0; }
+        else { av = a.children[col].textContent.trim().toLowerCase(); bv = b.children[col].textContent.trim().toLowerCase(); }
+        var c = cmpStr(av, bv);
+        return sortAsc ? c : -c;
       });
+      rows.forEach(function (r) { tbody.appendChild(r); });
     });
   });
+
+  buildYears();
+  readUrl();
+  refresh();
 })();
 </script>
 {% endblock %}

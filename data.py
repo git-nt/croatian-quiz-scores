@@ -385,37 +385,6 @@ def load_ranking_data(path: Path | None = None) -> RankingData:
         wb.close()
 
 
-def aggregate_medals(
-    data: RankingData,
-    filter_codes: set[str] | None = None,
-) -> list[tuple[str, int, int, int, int]]:
-    """Medalists only: placement 1–3 on any event sheet (G/S/B). Sorted by Σ, then G.
-
-    If filter_codes is given, only count events whose series code is in that set.
-    Excludes players with no podiums — derived from `PlayerResult.ranks`, not any summary sheet.
-    """
-    rows = []
-    for p in data.players:
-        if filter_codes is None:
-            g, s, b = p.medal_counts()
-        else:
-            g = s = b = 0
-            for tkey, rank in p.ranks.items():
-                if series_code_from_key(tkey) not in filter_codes:
-                    continue
-                if rank == 1:
-                    g += 1
-                elif rank == 2:
-                    s += 1
-                elif rank == 3:
-                    b += 1
-        if g + s + b == 0:
-            continue
-        rows.append((p.name, g, s, b, g + s + b))
-    rows.sort(key=lambda x: (-x[1], -x[2], -x[3], -x[4], x[0].lower()))
-    return rows
-
-
 def medalists_by_event(
     data: RankingData,
 ) -> list[tuple[TournamentColumn, list[tuple[str, int]]]]:

@@ -17,7 +17,6 @@ from markupsafe import Markup
 from data import (
     SERIES,
     SERIES_BY_CODE,
-    aggregate_medals,
     blurb_for_key,
     load_ranking_data,
     medalists_by_event,
@@ -167,12 +166,6 @@ def build(base_url: str = ""):
     env.globals["event_date_for"] = event_date_for
 
     data = load_ranking_data()
-    live_codes = {s.code for s in SERIES if s.category == "live"}
-    hks_codes  = {s.code for s in SERIES if s.category == "hks"}
-    medals_all  = aggregate_medals(data)
-    medals_live = aggregate_medals(data, filter_codes=live_codes)
-    medals_hks  = aggregate_medals(data, filter_codes=hks_codes)
-    medals_by_series = {s.code: aggregate_medals(data, filter_codes={s.code}) for s in SERIES}
     events_medals = list(reversed(medalists_by_event(data)))
 
     # ── Team championship data (all files in team_results/) ──
@@ -216,33 +209,6 @@ def build(base_url: str = ""):
     for _ml in _team_player_medals.values():
         _ml.sort(key=_medal_sort_key)
 
-    def _team_medal_table(entries_iter):
-        """(name, g, s, b, total) sorted by G desc from an iterable of {year,rank,…} dicts."""
-        _counts: dict[str, list] = {}
-        for e in entries_iter:
-            for slot in e["podium"]:
-                for member in slot["members"]:
-                    _counts.setdefault(member, [0, 0, 0])[slot["rank"] - 1] += 1
-        return sorted(
-            [(n, g, s, b, g+s+b) for n, (g, s, b) in _counts.items()],
-            key=lambda x: (-x[1], -x[2], -x[3], x[0].lower()),
-        )
-
-    # All team medals combined
-    team_medals_all = _team_medal_table(
-        e for entries in _all_team_raw.values() for e in entries
-    )
-    # EDP only
-    team_medals_edp = _team_medal_table(edp_raw)
-    # Per live-series team medals
-    team_medals_by_series = {
-        code: _team_medal_table(_all_team_raw[code])
-        for code in _live_team_codes
-    }
-    # Live Opens combined (all non-EDP)
-    team_medals_live = _team_medal_table(
-        e for code in _live_team_codes for e in _all_team_raw[code]
-    )
     # Live team series sorted by SERIES order for consistent display
     live_team_series = [s for s in SERIES if s.code in _live_team_codes]
 
@@ -308,50 +274,35 @@ def build(base_url: str = ""):
     for _ml in _pair_player_medals.values():
         _ml.sort(key=_medal_sort_key)
 
-    def _pair_medal_table(entries_iter):
-        """(name, g, s, b, total) sorted by G desc from pair entries."""
-        _counts: dict[str, list] = {}
-        for e in entries_iter:
-            for slot in e["podium"]:
-                for player in slot["players"]:
-                    _counts.setdefault(player, [0, 0, 0])[slot["rank"] - 1] += 1
-        return sorted(
-            [(n, g, s, b, g+s+b) for n, (g, s, b) in _counts.items()],
-            key=lambda x: (-x[1], -x[2], -x[3], x[0].lower()),
-        )
-
-    pair_medals_all  = _pair_medal_table(e for entries in _all_pair_raw.values() for e in entries)
-
-    # Combined medal table across individual + pairs + teams
-    def _combined_medal_table():
-        counts: dict[str, list] = {}
-        # Individual
-        for name, g, s, b, _ in medals_all:
-            counts.setdefault(name, [0, 0, 0])
-            counts[name][0] += g; counts[name][1] += s; counts[name][2] += b
-        # Teams
-        for e in (e for entries in _all_team_raw.values() for e in entries):
-            for slot in e["podium"]:
-                for m in slot["members"]:
-                    counts.setdefault(m, [0, 0, 0])[slot["rank"] - 1] += 1
-        # Pairs
-        for e in (e for entries in _all_pair_raw.values() for e in entries):
-            for slot in e["podium"]:
-                for p in slot["players"]:
-                    counts.setdefault(p, [0, 0, 0])[slot["rank"] - 1] += 1
-        return sorted(
-            [(n, g, s, b, g+s+b) for n, (g, s, b) in counts.items()],
-            key=lambda x: (-x[1], -x[2], -x[3], x[0].lower()),
-        )
-    medals_combined = _combined_medal_table()
-    pair_medals_php  = _pair_medal_table(php_raw)
-    pair_medals_live = _pair_medal_table(
-        e for code in _live_pair_codes for e in _all_pair_raw[code]
-    )
-    pair_medals_by_series = {
-        code: _pair_medal_table(_all_pair_raw[code]) for code in _live_pair_codes
-    }
     live_pair_series = [s for s in SERIES if s.code in _live_pair_codes]
+
+    # Flat medal list for the medals page; tables are counted in the browser so any year range works.
+    # k = kind, c = category, s = series, y = year, r = rank, n = medal holders
+    _year_by_key = {t.key: int(t.year) for t in data.tournaments}
+    medal_entries: list[dict] = []
+    for p in data.players:
+        for _tkey, _rank in p.ranks.items():
+            if _rank in (1, 2, 3):
+                _sc = series_code_from_key(_tkey)
+                medal_entries.append({
+                    "k": "individual", "c": SERIES_BY_CODE[_sc].category, "s": _sc,
+                    "y": _year_by_key[_tkey], "r": _rank, "n": [p.name],
+                })
+    for _kind, _raw, _hks_code, _holders in (
+        ("teams", _all_team_raw, "edp", "members"),
+        ("pairs", _all_pair_raw, "php", "players"),
+    ):
+        for _sc, _entries in _raw.items():
+            for _e in _entries:
+                for _slot in _e["podium"]:
+                    medal_entries.append({
+                        "k": _kind, "c": _hks_code if _sc == _hks_code else "live", "s": _sc,
+                        "y": _e["year"], "r": _slot["rank"], "n": _slot[_holders],
+                    })
+    medal_data = {
+        "entries": medal_entries,
+        "slugs": {n: player_slug(n) for e in medal_entries for n in e["n"]},
+    }
 
     # Combined chronological podium lists for medals page
     def _podium_chrono_key(e):
@@ -467,22 +418,10 @@ def build(base_url: str = ""):
 
     write_page("medals", "medals.html", {
         "title": "Medalje",
-        "medals_all": medals_all,
-        "medals_live": medals_live,
-        "medals_hks": medals_hks,
-        "medals_by_series": medals_by_series,
+        "medal_data": medal_data,
         "series": SERIES,
         "events_medals": events_medals,
-        "team_medals_all": team_medals_all,
-        "team_medals_edp": team_medals_edp,
-        "team_medals_live": team_medals_live,
-        "team_medals_by_series": team_medals_by_series,
         "live_team_series": live_team_series,
-        "medals_combined": medals_combined,
-        "pair_medals_all": pair_medals_all,
-        "pair_medals_php": pair_medals_php,
-        "pair_medals_live": pair_medals_live,
-        "pair_medals_by_series": pair_medals_by_series,
         "live_pair_series": live_pair_series,
         "team_podiums_sorted": team_podiums_sorted,
         "pair_podiums_sorted": pair_podiums_sorted,
