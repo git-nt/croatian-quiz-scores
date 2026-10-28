@@ -1072,12 +1072,6 @@ tr.tl-divider-live th.tl-divider-label {
   border-left: 3px solid #1d4ed8;
 }
 
-tr.tl-divider-hks th.tl-divider-label {
-  background: #eff6ff;
-  color: #1e3a8a;
-  border-left: 3px solid #1d4ed8;
-}
-
 tr.tl-divider-defunct th.tl-divider-label {
   background: #f8fafc;
   color: #475569;

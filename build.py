@@ -67,7 +67,7 @@ def _is_upcoming(code: str, year: int) -> bool:
     return (year, s.month_for_year(year)) >= (today.year, today.month)
 
 
-def _build_timeline(data, p, tl_live, tl_hks, tl_defunct):
+def _build_timeline(data, p, tl_active, tl_defunct):
     event_map: dict[tuple[str, int], str] = {}
     all_years: set[int] = set()
     for t in data.tournaments:
@@ -118,7 +118,7 @@ def _build_timeline(data, p, tl_live, tl_hks, tl_defunct):
                 rows.append({"code": code, "label": label, "cells": cells})
         return rows
 
-    return years, _make_cells(tl_live), _make_cells(tl_hks), _make_cells(tl_defunct)
+    return years, _make_cells(tl_active), _make_cells(tl_defunct)
 
 
 def build(base_url: str = ""):
@@ -437,9 +437,10 @@ def build(base_url: str = ""):
     })
 
     # ── Player detail pages ──
-    tl_live_series   = [(s.code, s.name) for s in SERIES if s.category == "live" and not s.defunct]
-    tl_hks_series    = [(s.code, s.name) for s in SERIES if s.category == "hks"]
-    tl_defunct_series = [(s.code, s.name) for s in SERIES if s.defunct]
+    # Timeline rows follow the calendar (open and HKS mixed), active series first
+    _by_month = sorted(SERIES, key=lambda s: s.month)
+    tl_active_series  = [(s.code, s.name) for s in _by_month if not s.defunct]
+    tl_defunct_series = [(s.code, s.name) for s in _by_month if s.defunct]
 
     def _percentile(rank: int | None, total: int | None) -> float | None:
         """Higher is better: 1st place → 100, last → 0. None when undefined."""
@@ -490,8 +491,8 @@ def build(base_url: str = ""):
         chart_series_js = Markup(json.dumps(chart_series, ensure_ascii=False))
         chart_max = max(chart_ranks) if chart_ranks else 1
 
-        tl_years, tl_live, tl_hks, tl_defunct = _build_timeline(
-            data, p, tl_live_series, tl_hks_series, tl_defunct_series
+        tl_years, tl_active, tl_defunct = _build_timeline(
+            data, p, tl_active_series, tl_defunct_series
         )
 
         write_page(f"players/{slug}", "player.html", {
@@ -518,8 +519,7 @@ def build(base_url: str = ""):
             "has_chart": len(chart_ranks) >= 2,
             "tl_years": tl_years,
             "series": SERIES,
-            "tl_live": tl_live,
-            "tl_hks": tl_hks,
+            "tl_active": tl_active,
             "tl_defunct": tl_defunct,
         })
 
@@ -555,9 +555,8 @@ def build(base_url: str = ""):
             "has_chart": False,
             "tl_years": [],
             "series": SERIES,
-            "tl_live": {},
-            "tl_hks": {},
-            "tl_defunct": {},
+            "tl_active": [],
+            "tl_defunct": [],
         })
 
     # ── Tournaments list ──

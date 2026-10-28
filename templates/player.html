@@ -109,9 +109,9 @@
   </thead>
   <tbody>
     <tr class="tl-divider tl-divider-live">
-      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Open kvizovi</th>
+      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Aktivni kvizovi</th>
     </tr>
-    {% for row in tl_live %}
+    {% for row in tl_active %}
     <tr>
       <th class="tl-series">{{ row.label }}</th>
       {% for c in row.cells %}
@@ -127,29 +127,10 @@
       {% endfor %}
     </tr>
     {% endfor %}
-    <tr class="tl-spacer"><td colspan="{{ tl_years | length + 1 }}"></td></tr>
-    <tr class="tl-divider tl-divider-hks">
-      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">HKS kvizovi</th>
-    </tr>
-    {% for row in tl_hks %}
-    <tr>
-      <th class="tl-series">{{ row.label }}</th>
-      {% for c in row.cells %}
-      {% if c.state == "no_event" %}
-      <td class="tl-cell tl-no-event"></td>
-      {% elif c.state == "upcoming" %}
-      <td class="tl-cell tl-upcoming"></td>
-      {% elif c.state == "absent" %}
-      <td class="tl-cell tl-absent"><a href="{{ base_url }}/events/{{ c.key }}/">—</a></td>
-      {% else %}
-      <td class="tl-cell {{ c.css }}"><a href="{{ base_url }}/events/{{ c.key }}/">{{ c.rank }}</a></td>
-      {% endif %}
-      {% endfor %}
-    </tr>
-    {% endfor %}
+    {% if tl_defunct %}
     <tr class="tl-spacer"><td colspan="{{ tl_years | length + 1 }}"></td></tr>
     <tr class="tl-divider tl-divider-defunct">
-      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Neaktivni openi</th>
+      <th class="tl-divider-label" colspan="{{ tl_years | length + 1 }}">Neaktivni kvizovi</th>
     </tr>
     {% for row in tl_defunct %}
     <tr>
@@ -167,6 +148,7 @@
       {% endfor %}
     </tr>
     {% endfor %}
+    {% endif %}
   </tbody>
 </table>
 </div>
