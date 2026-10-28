@@ -7,6 +7,7 @@ import re
 import shutil
 import sys
 import unicodedata
+from datetime import date
 from types import SimpleNamespace
 from pathlib import Path
 
@@ -57,6 +58,15 @@ def player_slug(name: str) -> str:
     return s.strip("-") or "player"
 
 
+def _is_upcoming(code: str, year: int) -> bool:
+    """Active series whose usual month for that year hasn't passed yet (as of build date)."""
+    s = SERIES_BY_CODE.get(code)
+    if s is None or s.defunct:
+        return False
+    today = date.today()
+    return (year, s.month_for_year(year)) >= (today.year, today.month)
+
+
 def _build_timeline(data, p, tl_live, tl_hks, tl_defunct):
     event_map: dict[tuple[str, int], str] = {}
     all_years: set[int] = set()
@@ -78,7 +88,8 @@ def _build_timeline(data, p, tl_live, tl_hks, tl_defunct):
             for yr in years:
                 tkey = event_map.get((code, yr))
                 if tkey is None:
-                    cells.append({"year": yr, "state": "no_event"})
+                    state = "upcoming" if _is_upcoming(code, yr) else "no_event"
+                    cells.append({"year": yr, "state": state})
                 else:
                     ed = p.event_details.get(tkey)
                     if ed is None:
@@ -103,7 +114,7 @@ def _build_timeline(data, p, tl_live, tl_hks, tl_defunct):
                         })
             # Only include a series row if the player was at least absent once
             # (i.e. the event was held at least once in their year range)
-            if any(c["state"] != "no_event" for c in cells):
+            if any(c["state"] in ("absent", "played") for c in cells):
                 rows.append({"code": code, "label": label, "cells": cells})
         return rows
 
@@ -396,10 +407,37 @@ def build(base_url: str = ""):
         {"name": n, "slug": player_slug(n)} for n in _extra_names
     ]
     player_options.sort(key=lambda o: o["name"].lower())
+
+    # Latest events (individual / pair / team podiums grouped per event)
+    _latest: dict[str, dict] = {}
+
+    def _latest_event(code: str, year: int, label: str) -> dict:
+        s = SERIES_BY_CODE.get(code)
+        month = s.month_for_year(year) if s else _special_months.get(code, 6)
+        return _latest.setdefault(f"{code}{year}", {
+            "key": f"{code}{year}", "year": year, "month": month, "label": label,
+            "individual": [], "pairs": [], "teams": [],
+        })
+
+    for _t, _podium in events_medals:
+        if _t.year is not None and _podium:
+            _code = series_code_from_key(_t.key)
+            _latest_event(_code, int(_t.year), event_label(_t.key, _t.label))["individual"] = _podium
+    for _sc, _entries in _all_pair_raw.items():
+        for _e in _entries:
+            _label = _e.get("label") or pair_event_label(_sc, _e["year"])
+            _latest_event(_sc, _e["year"], _label)["pairs"] = _e["podium"]
+    for _sc, _entries in _all_team_raw.items():
+        for _e in _entries:
+            _label = _e.get("label") or team_event_label(_sc, _e["year"])
+            _latest_event(_sc, _e["year"], _label)["teams"] = _e["podium"]
+    latest_events = sorted(_latest.values(), key=lambda e: (e["year"], e["month"]), reverse=True)[:4]
+
     write_page("", "players.html", {
         "title": "Svi igrači",
         "players": players_sorted,
         "player_options": player_options,
+        "latest_events": latest_events,
     })
 
     # ── Medals ──
