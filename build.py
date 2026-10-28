@@ -454,8 +454,7 @@ def build(base_url: str = ""):
         slug = player_slug(p.name)
         g, s, b = p.medal_counts()
 
-        podium_hks: list[dict] = []
-        podium_live: list[dict] = []
+        podium: list[dict] = []
         history: list[dict] = []
         chart_labels: list[str] = []
         chart_ranks: list[int] = []
@@ -479,13 +478,8 @@ def build(base_url: str = ""):
                 chart_cats.append(cat)
                 chart_series.append(code)
                 if ed.rank <= 3:
-                    if s_info and s_info.category == "hks":
-                        podium_hks.append({"t": t, "rank": ed.rank})
-                    else:
-                        podium_live.append({"t": t, "rank": ed.rank})
-        podium_hks.sort(key=lambda m: m["rank"])
-        podium_live.sort(key=lambda m: m["rank"])
-        podium = podium_hks + podium_live
+                    podium.append({"t": t, "rank": ed.rank, "series": code, "year": int(t.year)})
+        podium.sort(key=_medal_sort_key)
         edp_medals  = _team_player_medals.get(_pmk(p.name), [])
         pair_medals = _pair_player_medals.get(_pmk(p.name), [])
         chart_labels_js = Markup(json.dumps(chart_labels, ensure_ascii=False))
@@ -506,8 +500,6 @@ def build(base_url: str = ""):
             "current_slug": slug,
             "player_options": player_options,
             "podium": podium,
-            "podium_hks": podium_hks,
-            "podium_live": podium_live,
             "edp_medals": edp_medals,
             "pair_medals": pair_medals,
             "known_slugs": known_slugs,
@@ -547,8 +539,6 @@ def build(base_url: str = ""):
             "current_slug": _slug,
             "player_options": player_options,
             "podium": [],
-            "podium_hks": [],
-            "podium_live": [],
             "edp_medals": _tm,
             "pair_medals": _pm,
             "known_slugs": known_slugs | _seen_extra,
