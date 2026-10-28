@@ -32,24 +32,11 @@
 <div class="medal-box-wrap">
 <div class="medal-box">
   <div class="medal-box-header">Medalje</div>
-  {% if podium_live %}
-  <div class="medal-section-label">Individualni open kvizovi</div>
+  {% if podium %}
+  <div class="medal-section-label">Individualni kvizovi</div>
   <table class="medal-table">
     <tbody>
-      {% for m in podium_live %}
-      <tr>
-        <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{{ m.rank }}</span></td>
-        <td class="medal-event"><a href="{{ base_url }}/events/{{ m.t.key }}/">{{ event_label(m.t.key, m.t.label) }}</a></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% endif %}
-  {% if podium_hks %}
-  <div class="medal-section-label">Individualni HKS kvizovi</div>
-  <table class="medal-table">
-    <tbody>
-      {% for m in podium_hks %}
+      {% for m in podium %}
       <tr>
         <td class="medal-icon"><span class="medal-chip medal-{{ m.rank }}">{{ m.rank }}</span></td>
         <td class="medal-event"><a href="{{ base_url }}/events/{{ m.t.key }}/">{{ event_label(m.t.key, m.t.label) }}</a></td>
