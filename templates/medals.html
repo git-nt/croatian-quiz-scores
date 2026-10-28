@@ -20,7 +20,7 @@
     {% for name, g, s, b, t in medal_rows %}
     {% if (g, s, b) != ns.prev %}{% set ns.rank = loop.index %}{% set ns.prev = (g, s, b) %}{% endif %}
     <tr>
-      <td class="num rank-col">{{ ns.rank }}</td>
+      <td class="num rank-col{% if ns.rank <= 3 %} rank-{{ ns.rank }}{% endif %}">{{ ns.rank }}</td>
       <td class="player-col"><a href="{{ base_url }}/players/{{ player_slug(name) }}/">{{ name }}</a></td>
       <td class="num">{{ g }}</td>
       <td class="num">{{ s }}</td>

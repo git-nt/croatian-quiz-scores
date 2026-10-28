@@ -10,8 +10,8 @@
   --accent: #1d4ed8;
   --link: #1d4ed8;
   /* Filter buttons — dark red primary, dark blue secondary */
-  --medal-nav-accent: #991b1b;
-  --medal-nav-accent-soft: #fef2f2;
+  --medal-nav-accent: #1e3a5f;
+  --medal-nav-accent-soft: #eff6ff;
   --medal-sub-accent: #1e3a5f;
   --medal-sub-accent-soft: #eff6ff;
   --finalist-bg: rgba(37, 99, 235, 0.1);
@@ -358,6 +358,10 @@ table.data.players-list th.rank-col {
 
 table.data.players-list td.rank-col {
   font-weight: 700;
+}
+
+table.data.players-list tbody tr:hover td {
+  background: rgba(37, 99, 235, 0.07);
 }
 
 table.data.players-list td.player-col,
