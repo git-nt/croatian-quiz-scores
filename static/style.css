@@ -606,6 +606,10 @@ table.standings-detail tbody tr.row-finalist:nth-child(even) td {
   color: var(--muted);
 }
 
+.latest-event ul + .latest-kind {
+  margin-top: 1.1rem;
+}
+
 ul.latest-podium {
   text-align: center;
 }
