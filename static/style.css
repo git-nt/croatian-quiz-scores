@@ -626,15 +626,30 @@ ul.latest-podium li {
   font-size: 0.9rem;
 }
 
+ul.latest-podium.latest-teams {
+  width: auto;
+  text-align: center;
+}
+
 ul.latest-podium li.latest-team {
-  align-items: flex-start;
-  flex-wrap: nowrap;
+  display: block;
+  padding: 0.25rem 0;
+}
+
+.latest-team-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .latest-members {
   display: block;
   font-size: 0.82rem;
   color: var(--muted);
+}
+
+.latest-members a {
+  white-space: nowrap;
 }
 
 ul.latest-podium span.medal-chip {

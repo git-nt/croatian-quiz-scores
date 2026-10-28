@@ -57,13 +57,11 @@
     {% endif %}
     {% if ev.teams %}
     <p class="latest-kind">Ekipno</p>
-    <ul class="latest-podium">
+    <ul class="latest-podium latest-teams">
       {% for slot in ev.teams %}
-      <li class="latest-team">{{ chip(slot.rank) }}
-        <div>
-          <strong>{{ slot.team }}</strong>
-          <span class="latest-members">{% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</span>
-        </div>
+      <li class="latest-team">
+        <span class="latest-team-name">{{ chip(slot.rank) }} <strong>{{ slot.team }}</strong></span>
+        <span class="latest-members">{% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</span>
       </li>
       {% endfor %}
     </ul>
