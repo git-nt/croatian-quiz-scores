@@ -265,9 +265,23 @@ class RankingData:
                         is_finalist=is_finalist,
                     )
                 )
-            return out
+            return _sort_ties_by_name(out)
         finally:
             wb.close()
+
+
+def _sort_ties_by_name(rows: list[SheetStandingRow]) -> list[SheetStandingRow]:
+    """Order tied placements by name, matching podium order elsewhere on the site."""
+    out: list[SheetStandingRow] = []
+    i = 0
+    while i < len(rows):
+        j = i + 1
+        if rows[i].rank is not None:
+            while j < len(rows) and rows[j].rank == rows[i].rank:
+                j += 1
+        out.extend(sorted(rows[i:j], key=lambda r: r.name.lower()))
+        i = j
+    return out
 
 
 def _sheet_has_results(ws: Any) -> bool:
