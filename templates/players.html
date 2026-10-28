@@ -28,7 +28,7 @@
 </div>
 {% endif %}
 
-{% macro chip(rank) %}<span class="medal-chip medal-{{ rank }}">{% if rank == 1 %}Z{% elif rank == 2 %}S{% else %}B{% endif %}</span>{% endmacro %}
+{% macro chip(rank) %}{% if rank == 1 %}🥇{% elif rank == 2 %}🥈{% else %}🥉{% endif %}{% endmacro %}
 
 {% if latest_events %}
 <section class="latest-results">
@@ -60,7 +60,7 @@
     <ul class="latest-podium latest-teams">
       {% for slot in ev.teams %}
       <li class="latest-team">
-        <span class="latest-team-name">{{ chip(slot.rank) }} <strong>{{ slot.team }}</strong></span>
+        {{ chip(slot.rank) }} <strong>{{ slot.team }}</strong>
         <span class="latest-members">{% for m in slot.members %}<a href="{{ base_url }}/players/{{ player_slug(m) }}/">{{ m }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</span>
       </li>
       {% endfor %}
