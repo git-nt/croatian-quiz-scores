@@ -390,7 +390,7 @@ def build(base_url: str = ""):
         for _e in _entries:
             _label = _e.get("label") or team_event_label(_sc, _e["year"])
             _latest_event(_sc, _e["year"], _label)["teams"] = _e["podium"]
-    latest_events = sorted(_latest.values(), key=lambda e: (e["year"], e["month"]), reverse=True)[:4]
+    latest_events = sorted(_latest.values(), key=lambda e: (e["year"], e["month"]), reverse=True)[:7]
 
     write_page("", "players.html", {
         "title": "Svi igrači",
