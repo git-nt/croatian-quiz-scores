@@ -1,5 +1,13 @@
 [
   {
+    "year": 2026,
+    "podium": [
+      {"rank": 1, "team": "Crni sljezov kolačić", "members": ["Šime Gverić", "Mateja Iveta", "Karlo Plazina", "Krešimir Štimac", "Neven Trgovec"]},
+      {"rank": 2, "team": "Prevare", "members": ["Krešimir Melnik", "Boris Rauš", "Šimo Širanović", "Goran Vesić", "Filip Znaor"]},
+      {"rank": 3, "team": "KviZDe", "members": ["Lovro Jurišić", "Duško Lakić", "Dragan Gulam", "Ivan Jurić", "Roko Sven Surać"]}
+    ]
+  },
+  {
     "year": 2025,
     "external_link": "https://hrkviz.hr/izvjestaj/197_11__Ekipno_Drzavno_Prvenstvo_2025_",
     "podium": [
